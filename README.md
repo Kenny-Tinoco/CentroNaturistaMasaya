@@ -5,3 +5,4 @@ Este sistema informático es desarrollado como 'proyecto final de curso' en la s
 
 
 Diagrama de clases
+![CNM](https://user-images.githubusercontent.com/73072106/154870643-d3b05526-c98f-44d5-ac13-6cb3d73dd01b.svg)
