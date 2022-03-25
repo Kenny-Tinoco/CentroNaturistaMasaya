@@ -6,5 +6,6 @@ Este sistema informático es desarrollado como *proyecto final de curso* en la s
 
 
 - Diagrama de Paquetes
-![Packages](https://user-images.githubusercontent.com/73072106/159738203-af278d8a-3a2b-4cfc-bbec-92e75efecb5e.svg)
+- ![Packages](https://user-images.githubusercontent.com/73072106/160199242-05f0a2be-f239-47fe-9f79-00b9a199110c.svg)
+
 
