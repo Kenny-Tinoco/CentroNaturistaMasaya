@@ -10,3 +10,7 @@ El proyecto es desarrollado inicialmente para un entorno local de escritorio per
 - Diagrama de Paquetes
 ![Packages](https://user-images.githubusercontent.com/73072106/160249865-747cb0e8-3a3b-4ed0-8bc7-1fee1bb3260a.svg)
 
+- Casos de Uso
+
+![UseCase](https://user-images.githubusercontent.com/73072106/162113698-2443c7e3-b24b-4355-a7b6-fa118880dea7.svg)
+
