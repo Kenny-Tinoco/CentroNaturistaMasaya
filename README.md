@@ -12,5 +12,5 @@ El proyecto es desarrollado inicialmente para un entorno local de escritorio per
 
 - Casos de Uso
 
-![UseCase](https://user-images.githubusercontent.com/73072106/162113698-2443c7e3-b24b-4355-a7b6-fa118880dea7.svg)
+![UseCase](https://user-images.githubusercontent.com/73072106/165330551-b8d1f254-d97d-4aaf-8566-a6de60242cc8.svg)
 
