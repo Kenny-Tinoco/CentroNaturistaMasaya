@@ -1,0 +1,251 @@
+﻿<UserControl x:Class="WPF.View.ProductWindows.PresentationModal"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:userControls="clr-namespace:WPF.ViewComponents.UserControls" 
+             xmlns:custom="clr-namespace:WPF.ViewComponents.CustomControls"
+             mc:Ignorable="d">
+    <Grid>
+        <userControls:Popup
+            titleBar="{Binding titleBar}"
+            iconBar="/Resource/Image/presentation.png"
+            buttonExitCommand="{Binding ExitCommand}">
+
+            <userControls:Popup.popupContent>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="12"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="5"/>
+                    </Grid.RowDefinitions>
+
+                    <GroupBox
+                        Grid.Row="1"
+                        Header="Presentación"
+                        Style="{DynamicResource GroupBoxStyle}"
+                        >
+                        <Grid Margin="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition Height="20"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            
+                            <StackPanel
+                                Grid.Column="0"
+                                Margin="5 0 0 0">
+                                <TextBlock
+                                    Text="Código"
+                                    Style="{DynamicResource TextBlockStyle}"/>
+                                <TextBox
+                                    Text="{Binding logic.entity.idPresentation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    FontSize="17"
+                                    TextAlignment="Center"
+                                    IsEnabled="False"
+                                    Background="Transparent"/>
+                            </StackPanel>
+
+                            <StackPanel
+                                Grid.Column="2"
+                                Margin="0 0 5 0">
+                                <TextBlock
+                                    Text="Nombre"
+                                    Style="{DynamicResource TextBlockStyle}"/>
+                                
+                                <TextBox
+                                    Text="{Binding name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    FontSize="17"
+                                    FontWeight="Normal"
+                                    TextAlignment="Center"/>
+                            </StackPanel>
+                            
+                            <StackPanel
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="3"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Center">
+
+                                <Button
+                                    Content="Guardar"
+                                    FontWeight="Normal"
+                                    IsEnabled="{Binding canCreate}"
+                                    Command="{Binding SaveCommand}"
+                                    CommandParameter="{Binding isEditable}"
+                                    Style="{DynamicResource CustomButtonStyle}"
+                                    Foreground="White"
+                                    Width="75"/>
+
+                                <Button
+                                    Margin="30 0 0 0"
+                                    Content="Limpiar"
+                                    FontWeight="Normal"
+                                    Command="{Binding ResetCommand}"
+                                    Style="{DynamicResource CustomButtonStyle}"
+                                    Foreground="White"
+                                    Width="75"
+                                    Visibility="{Binding isEditable, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                
+                            </StackPanel>
+
+                        </Grid>
+                    </GroupBox>
+
+                    <GroupBox
+                        Grid.Row="3"
+                        Header="Lista de presentación"
+                        Style="{DynamicResource GroupBoxStyle}">
+
+                        <Grid Margin="5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+
+                            <custom:LoadingSpinner
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Diameter="60"
+                                IsLoading="{Binding IsLoading}"
+                                Thickness="5"
+                                Color="Black"/>
+
+                            <Grid
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Visibility="{Binding IsLoading, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                                
+                                <DataGrid
+                                    ItemsSource="{Binding catalogue}"
+                                    Style="{DynamicResource ElementsDataGrid}"
+                                    Margin="5 20 5 5"
+                                    Height="135"
+                                    CanUserResizeColumns="false"
+                                    Width="380"
+                                    >
+                                    <DataGrid.Resources>
+                                        <DataTemplate x:Key="optionsCell">
+                                            <StackPanel
+                                                HorizontalAlignment="Center"
+                                                Orientation="Horizontal">
+                                                <Button Content="Editar"
+                                                        Command="{Binding Path=DataContext.EditCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" 
+                                                        CommandParameter="{Binding}" 
+                                                        Style="{DynamicResource ButtonStyle}"
+                                                        Background="#2196F3"/>
+                                                <Button Content="Eliminar"
+                                                        Command="{Binding Path=DataContext.DeleteCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" 
+                                                        CommandParameter="{Binding}"
+                                                        Style="{DynamicResource ButtonStyle}"
+                                                        Margin="4 0 0 0"
+                                                        Background="#F44336"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGrid.Resources>
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Cód." Width="auto" Binding="{Binding idPresentation}"/>
+                                        <DataGridTextColumn Header="Nombre" Width="150" Binding="{Binding name}"/>
+                                        <DataGridTemplateColumn Header="Opciones" Width="*" CellTemplate="{StaticResource optionsCell}"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+
+                            </Grid>
+                        </Grid>
+                    </GroupBox>
+
+                </Grid>
+
+            </userControls:Popup.popupContent>
+
+        </userControls:Popup>
+
+    </Grid>
+    <UserControl.Resources>
+        <Style x:Key="GroupBoxStyle"
+               TargetType="GroupBox">
+            <Setter Property="FontSize" Value="16.5"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+        <Style x:Key="TextBlockStyle"
+               TargetType="TextBlock">
+            <Setter Property="FontSize" Value="17"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+        </Style>
+        <Style x:Key="ButtonStyle"
+               TargetType="Button">
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+
+                        <Border x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="4"
+                            Padding="8 0 8 0"
+                            BorderBrush="white"
+                            BorderThickness="0.6"
+                            SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" 
+                                          Focusable="False" 
+                                          HorizontalAlignment="Center"
+                                          Margin="1" 
+                                          RecognizesAccessKey="True" 
+                                          SnapsToDevicePixels="True" 
+                                          VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="white"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="black"/>
+                                <Setter Property="Foreground" Value="Black"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="White"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="Black"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Validation.ErrorTemplate">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <DockPanel LastChildFill="true">
+                            <Border Background="#2196F3"
+                                    DockPanel.Dock="Top"
+                                    Width="18"
+                                    Height="18"
+                                    HorizontalAlignment="Right"
+                                    CornerRadius="10"
+                                    ToolTip="{Binding ErrorContent}"
+                                    >
+                                <TextBlock Text="!" 
+                                           VerticalAlignment="center" 
+                                           HorizontalAlignment="center" 
+                                           FontWeight="Bold" Foreground="white"/>
+                            </Border>
+                            <AdornedElementPlaceholder Name="customAdorner" VerticalAlignment="Center" >
+                                <Border BorderBrush="#2196F3" BorderThickness="1" />
+                            </AdornedElementPlaceholder>
+                        </DockPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+</UserControl>

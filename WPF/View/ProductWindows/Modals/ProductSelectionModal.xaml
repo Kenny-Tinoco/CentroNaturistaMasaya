@@ -1,0 +1,110 @@
+﻿<UserControl x:Class="WPF.View.ProductWindows.ProductSelectionModal"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:userControls="clr-namespace:WPF.ViewComponents.UserControls">
+    <Grid
+        Height="400"
+        Width="800">
+        <userControls:Popup
+            titleBar="{Binding titleBar}"
+            iconBar="/Resource/Image/product.png"
+            buttonExitCommand="{Binding ExitCommand}">
+
+            <userControls:Popup.popupContent>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid
+                    Grid.Row="0">
+                        <userControls:SearchBar
+                    BarHeight="30"
+                    BarWidth="250"
+                    searchBarText="{Binding searchText, Mode=TwoWay}"
+                    Margin="0 0 20 0"
+                    />
+                    </Grid>
+
+                    <Grid
+                    Grid.Row="2">
+
+                        <DataGrid
+                        ItemsSource="{Binding entityStore._catalogue}"
+                        Style="{DynamicResource ElementsDataGrid}">
+
+                            <DataGrid.Resources>
+                                <DataTemplate x:Key="optionsCell">
+                                    <StackPanel
+                                    HorizontalAlignment="Center"
+                                    Orientation="Horizontal">
+                                        <Button Content="Ir"
+                                            Command="{Binding Path=DataContext.GoCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                            CommandParameter="{Binding}"
+                                            Style="{DynamicResource ButtonStyle}"
+                                            Background="#2196F3"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Cód." Width="auto" Binding="{Binding idProduct}"/>
+                                <DataGridTextColumn Header="Nombre" Width="180" Binding="{Binding name}"/>
+                                <DataGridTextColumn Header="Descripción" Width="*" Binding="{Binding description}"/>
+                                <DataGridTemplateColumn Header="Opciones" Width="auto" CellTemplate="{StaticResource optionsCell}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+
+                </Grid>
+
+            </userControls:Popup.popupContent>
+
+        </userControls:Popup>
+    </Grid>
+    <UserControl.Resources>
+        <Style x:Key="ButtonStyle"
+               TargetType="Button">
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+
+                        <Border x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="4"
+                            Padding="8 0 8 0"
+                            BorderBrush="white"
+                            BorderThickness="0.6"
+                            SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" 
+                                          Focusable="False" 
+                                          HorizontalAlignment="Center"
+                                          Margin="1" 
+                                          RecognizesAccessKey="True" 
+                                          SnapsToDevicePixels="True" 
+                                          VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="white"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="black"/>
+                                <Setter Property="Foreground" Value="Black"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="White"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="Black"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+</UserControl>

@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>MasayaNaturistCenter</id>
+    <version>1.0.0</version>
+    <authors>MasayaNaturistCenter</authors>
+    <description>Package Description</description>
+    <dependencies>
+      <group targetFramework="net6.0-windows7.0">
+        <dependency id="EntityFramework" version="6.4.4" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.EntityFrameworkCore" version="6.0.2" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.EntityFrameworkCore.SqlServer" version="6.0.2" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.VisualStudio.Web.CodeGeneration.Contracts" version="5.0.2" exclude="Build,Analyzers" />
+        <dependency id="SimpleModal.WPF" version="1.0.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+    <frameworkReferences>
+      <group targetFramework="net6.0-windows7.0">
+        <frameworkReference name="Microsoft.WindowsDesktop.App.WPF" />
+      </group>
+    </frameworkReferences>
+    <contentFiles>
+      <files include="any/net6.0-windows7.0/logo-cnm.ico" buildAction="Content" />
+      <files include="any/net6.0-windows7.0/View/Resource/Image/back-black.png" buildAction="Content" />
+      <files include="any/net6.0-windows7.0/View/Resource/Image/cnm-icon.png" buildAction="Content" />
+      <files include="any/net6.0-windows7.0/View/Resource/Image/search.png" buildAction="Content" />
+      <files include="any/net6.0-windows7.0/View/Resource/Image/buy.png" buildAction="Content" />
+      <files include="any/net6.0-windows7.0/View/Resource/Image/consult.png" buildAction="Content" />
+      <files include="any/net6.0-windows7.0/View/Resource/Image/edit.png" buildAction="Content" />
+      <files include="any/net6.0-windows7.0/View/Resource/Image/remove-red.png" buildAction="Content" />
+      <files include="any/net6.0-windows7.0/View/Resource/Image/employee-black.png" buildAction="Content" />
+      <files include="any/net6.0-windows7.0/View/Resource/Image/employee.png" buildAction="Content" />
+      <files include="any/net6.0-windows7.0/View/Resource/Image/arrow-right.png" buildAction="Content" />
+      <files include="any/net6.0-windows7.0/View/Resource/Image/save-black.png" buildAction="Content" />
+      <files include="any/net6.0-windows7.0/View/Resource/Image/save.png" buildAction="Content" />
+      <files include="any/net6.0-windows7.0/View/Resource/Image/help.png" buildAction="Content" />
+      <files include="any/net6.0-windows7.0/View/Resource/Image/home-black.png" buildAction="Content" />
+      <files include="any/net6.0-windows7.0/View/Resource/Image/home.png" buildAction="Content" />
+      <files include="any/net6.0-windows7.0/View/Resource/Image/minimize.png" buildAction="Content" />
+      <files include="any/net6.0-windows7.0/View/Resource/Image/patient.png" buildAction="Content" />
+      <files include="any/net6.0-windows7.0/View/Resource/Image/plus.png" buildAction="Content" />
+      <files include="any/net6.0-windows7.0/View/Resource/Image/presentation-black.png" buildAction="Content" />
+      <files include="any/net6.0-windows7.0/View/Resource/Image/presentation.png" buildAction="Content" />
+      <files include="any/net6.0-windows7.0/View/Resource/Image/product-black.png" buildAction="Content" />
+      <files include="any/net6.0-windows7.0/View/Resource/Image/product.png" buildAction="Content" />
+      <files include="any/net6.0-windows7.0/View/Resource/Image/provider-black.png" buildAction="Content" />
+      <files include="any/net6.0-windows7.0/View/Resource/Image/provider.png" buildAction="Content" />
+      <files include="any/net6.0-windows7.0/View/Resource/Image/record.png" buildAction="Content" />
+      <files include="any/net6.0-windows7.0/View/Resource/Image/sale.png" buildAction="Content" />
+      <files include="any/net6.0-windows7.0/View/Resource/Image/exit.png" buildAction="Content" />
+    </contentFiles>
+  </metadata>
+  <files>
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\bin\Debug\net6.0-windows\MasayaNaturistCenter.runtimeconfig.json" target="lib\net6.0-windows7.0\MasayaNaturistCenter.runtimeconfig.json" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\bin\Debug\net6.0-windows\MasayaNaturistCenter.dll" target="lib\net6.0-windows7.0\MasayaNaturistCenter.dll" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\logo-cnm.ico" target="content\logo-cnm.ico" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\logo-cnm.ico" target="contentFiles\any\net6.0-windows7.0\logo-cnm.ico" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\back-black.png" target="content\View\Resource\Image\back-black.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\back-black.png" target="contentFiles\any\net6.0-windows7.0\View\Resource\Image\back-black.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\cnm-icon.png" target="content\View\Resource\Image\cnm-icon.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\cnm-icon.png" target="contentFiles\any\net6.0-windows7.0\View\Resource\Image\cnm-icon.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\search.png" target="content\View\Resource\Image\search.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\search.png" target="contentFiles\any\net6.0-windows7.0\View\Resource\Image\search.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\buy.png" target="content\View\Resource\Image\buy.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\buy.png" target="contentFiles\any\net6.0-windows7.0\View\Resource\Image\buy.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\consult.png" target="content\View\Resource\Image\consult.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\consult.png" target="contentFiles\any\net6.0-windows7.0\View\Resource\Image\consult.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\edit.png" target="content\View\Resource\Image\edit.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\edit.png" target="contentFiles\any\net6.0-windows7.0\View\Resource\Image\edit.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\remove-red.png" target="content\View\Resource\Image\remove-red.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\remove-red.png" target="contentFiles\any\net6.0-windows7.0\View\Resource\Image\remove-red.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\employee-black.png" target="content\View\Resource\Image\employee-black.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\employee-black.png" target="contentFiles\any\net6.0-windows7.0\View\Resource\Image\employee-black.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\employee.png" target="content\View\Resource\Image\employee.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\employee.png" target="contentFiles\any\net6.0-windows7.0\View\Resource\Image\employee.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\arrow-right.png" target="content\View\Resource\Image\arrow-right.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\arrow-right.png" target="contentFiles\any\net6.0-windows7.0\View\Resource\Image\arrow-right.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\save-black.png" target="content\View\Resource\Image\save-black.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\save-black.png" target="contentFiles\any\net6.0-windows7.0\View\Resource\Image\save-black.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\save.png" target="content\View\Resource\Image\save.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\save.png" target="contentFiles\any\net6.0-windows7.0\View\Resource\Image\save.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\help.png" target="content\View\Resource\Image\help.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\help.png" target="contentFiles\any\net6.0-windows7.0\View\Resource\Image\help.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\home-black.png" target="content\View\Resource\Image\home-black.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\home-black.png" target="contentFiles\any\net6.0-windows7.0\View\Resource\Image\home-black.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\home.png" target="content\View\Resource\Image\home.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\home.png" target="contentFiles\any\net6.0-windows7.0\View\Resource\Image\home.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\minimize.png" target="content\View\Resource\Image\minimize.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\minimize.png" target="contentFiles\any\net6.0-windows7.0\View\Resource\Image\minimize.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\patient.png" target="content\View\Resource\Image\patient.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\patient.png" target="contentFiles\any\net6.0-windows7.0\View\Resource\Image\patient.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\plus.png" target="content\View\Resource\Image\plus.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\plus.png" target="contentFiles\any\net6.0-windows7.0\View\Resource\Image\plus.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\presentation-black.png" target="content\View\Resource\Image\presentation-black.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\presentation-black.png" target="contentFiles\any\net6.0-windows7.0\View\Resource\Image\presentation-black.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\presentation.png" target="content\View\Resource\Image\presentation.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\presentation.png" target="contentFiles\any\net6.0-windows7.0\View\Resource\Image\presentation.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\product-black.png" target="content\View\Resource\Image\product-black.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\product-black.png" target="contentFiles\any\net6.0-windows7.0\View\Resource\Image\product-black.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\product.png" target="content\View\Resource\Image\product.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\product.png" target="contentFiles\any\net6.0-windows7.0\View\Resource\Image\product.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\provider-black.png" target="content\View\Resource\Image\provider-black.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\provider-black.png" target="contentFiles\any\net6.0-windows7.0\View\Resource\Image\provider-black.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\provider.png" target="content\View\Resource\Image\provider.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\provider.png" target="contentFiles\any\net6.0-windows7.0\View\Resource\Image\provider.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\record.png" target="content\View\Resource\Image\record.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\record.png" target="contentFiles\any\net6.0-windows7.0\View\Resource\Image\record.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\sale.png" target="content\View\Resource\Image\sale.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\sale.png" target="contentFiles\any\net6.0-windows7.0\View\Resource\Image\sale.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\exit.png" target="content\View\Resource\Image\exit.png" />
+    <file src="C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\View\Resource\Image\exit.png" target="contentFiles\any\net6.0-windows7.0\View\Resource\Image\exit.png" />
+  </files>
+</package>

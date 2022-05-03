@@ -1,0 +1,275 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="MasayaNaturistCenterModelStoreContainer" CdmEntityContainer="MasayaNaturistCenterDataBase">
+    <EntitySetMapping Name="Account">
+      <EntityTypeMapping TypeName="MasayaNaturistCenterModel.Account">
+        <MappingFragment StoreEntitySet="Account">
+          <ScalarProperty Name="idAccount" ColumnName="idAccount" />
+          <ScalarProperty Name="idEmployee" ColumnName="idEmployee" />
+          <ScalarProperty Name="userName" ColumnName="userName" />
+          <ScalarProperty Name="password" ColumnName="password" />
+          <ScalarProperty Name="created" ColumnName="created" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Consult">
+      <EntityTypeMapping TypeName="MasayaNaturistCenterModel.Consult">
+        <MappingFragment StoreEntitySet="Consult">
+          <ScalarProperty Name="idConsult" ColumnName="idConsult" />
+          <ScalarProperty Name="idEmployee" ColumnName="idEmployee" />
+          <ScalarProperty Name="idPatient" ColumnName="idPatient" />
+          <ScalarProperty Name="symptom" ColumnName="symptom" />
+          <ScalarProperty Name="date" ColumnName="date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Employee">
+      <EntityTypeMapping TypeName="MasayaNaturistCenterModel.Employee">
+        <MappingFragment StoreEntitySet="Employee">
+          <ScalarProperty Name="idEmployee" ColumnName="idEmployee" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="lastName" ColumnName="lastName" />
+          <ScalarProperty Name="address" ColumnName="address" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Patient">
+      <EntityTypeMapping TypeName="MasayaNaturistCenterModel.Patient">
+        <MappingFragment StoreEntitySet="Patient">
+          <ScalarProperty Name="idPatient" ColumnName="idPatient" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="lastName" ColumnName="lastName" />
+          <ScalarProperty Name="address" ColumnName="address" />
+          <ScalarProperty Name="age" ColumnName="age" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PrescriptionProduct">
+      <EntityTypeMapping TypeName="MasayaNaturistCenterModel.PrescriptionProduct">
+        <MappingFragment StoreEntitySet="PrescriptionProduct">
+          <ScalarProperty Name="idPrescriptionProduct" ColumnName="idPrescriptionProduct" />
+          <ScalarProperty Name="idConsult" ColumnName="idConsult" />
+          <ScalarProperty Name="idProduct" ColumnName="idProduct" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Presentation">
+      <EntityTypeMapping TypeName="MasayaNaturistCenterModel.Presentation">
+        <MappingFragment StoreEntitySet="Presentation">
+          <ScalarProperty Name="idPresentation" ColumnName="idPresentation" />
+          <ScalarProperty Name="name" ColumnName="name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Product">
+      <EntityTypeMapping TypeName="MasayaNaturistCenterModel.Product">
+        <MappingFragment StoreEntitySet="Product">
+          <ScalarProperty Name="idProduct" ColumnName="idProduct" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="quantity" ColumnName="quantity" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Provider">
+      <EntityTypeMapping TypeName="MasayaNaturistCenterModel.Provider">
+        <MappingFragment StoreEntitySet="Provider">
+          <ScalarProperty Name="idProvider" ColumnName="idProvider" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="address" ColumnName="address" />
+          <ScalarProperty Name="ruc" ColumnName="ruc" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProviderPhone">
+      <EntityTypeMapping TypeName="MasayaNaturistCenterModel.ProviderPhone">
+        <MappingFragment StoreEntitySet="ProviderPhone">
+          <ScalarProperty Name="idProviderPhone" ColumnName="idProviderPhone" />
+          <ScalarProperty Name="idProvider" ColumnName="idProvider" />
+          <ScalarProperty Name="phone" ColumnName="phone" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Role">
+      <EntityTypeMapping TypeName="MasayaNaturistCenterModel.Role">
+        <MappingFragment StoreEntitySet="Role">
+          <ScalarProperty Name="idRole" ColumnName="idRole" />
+          <ScalarProperty Name="name" ColumnName="name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SaleDetail">
+      <EntityTypeMapping TypeName="MasayaNaturistCenterModel.SaleDetail">
+        <MappingFragment StoreEntitySet="SaleDetail">
+          <ScalarProperty Name="idSaleDetail" ColumnName="idSaleDetail" />
+          <ScalarProperty Name="idSell" ColumnName="idSell" />
+          <ScalarProperty Name="idStock" ColumnName="idStock" />
+          <ScalarProperty Name="quantity" ColumnName="quantity" />
+          <ScalarProperty Name="price" ColumnName="price" />
+          <ScalarProperty Name="total" ColumnName="total" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Sell">
+      <EntityTypeMapping TypeName="MasayaNaturistCenterModel.Sell">
+        <MappingFragment StoreEntitySet="Sell">
+          <ScalarProperty Name="idSell" ColumnName="idSell" />
+          <ScalarProperty Name="idEmployee" ColumnName="idEmployee" />
+          <ScalarProperty Name="date" ColumnName="date" />
+          <ScalarProperty Name="total" ColumnName="total" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Stock">
+      <EntityTypeMapping TypeName="MasayaNaturistCenterModel.Stock">
+        <MappingFragment StoreEntitySet="Stock">
+          <ScalarProperty Name="idStock" ColumnName="idStock" />
+          <ScalarProperty Name="idProduct" ColumnName="idProduct" />
+          <ScalarProperty Name="idPresentation" ColumnName="idPresentation" />
+          <ScalarProperty Name="quantity" ColumnName="quantity" />
+          <ScalarProperty Name="price" ColumnName="price" />
+          <ScalarProperty Name="entryDate" ColumnName="entryDate" />
+          <ScalarProperty Name="expiration" ColumnName="expiration" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Supply">
+      <EntityTypeMapping TypeName="MasayaNaturistCenterModel.Supply">
+        <MappingFragment StoreEntitySet="Supply">
+          <ScalarProperty Name="idSupply" ColumnName="idSupply" />
+          <ScalarProperty Name="idProvider" ColumnName="idProvider" />
+          <ScalarProperty Name="date" ColumnName="date" />
+          <ScalarProperty Name="total" ColumnName="total" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SupplyDetail">
+      <EntityTypeMapping TypeName="MasayaNaturistCenterModel.SupplyDetail">
+        <MappingFragment StoreEntitySet="SupplyDetail">
+          <ScalarProperty Name="idSupplyDetail" ColumnName="idSupplyDetail" />
+          <ScalarProperty Name="idSupply" ColumnName="idSupply" />
+          <ScalarProperty Name="idStock" ColumnName="idStock" />
+          <ScalarProperty Name="quantity" ColumnName="quantity" />
+          <ScalarProperty Name="price" ColumnName="price" />
+          <ScalarProperty Name="total" ColumnName="total" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ConsultView">
+      <EntityTypeMapping TypeName="MasayaNaturistCenterModel.ConsultView">
+        <MappingFragment StoreEntitySet="ConsultView">
+          <ScalarProperty Name="idConsult" ColumnName="idConsult" />
+          <ScalarProperty Name="idPatient" ColumnName="idPatient" />
+          <ScalarProperty Name="patientName" ColumnName="patientName" />
+          <ScalarProperty Name="idEmployee" ColumnName="idEmployee" />
+          <ScalarProperty Name="employeeName" ColumnName="employeeName" />
+          <ScalarProperty Name="symptom" ColumnName="symptom" />
+          <ScalarProperty Name="date" ColumnName="date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PrescriptionProductView">
+      <EntityTypeMapping TypeName="MasayaNaturistCenterModel.PrescriptionProductView">
+        <MappingFragment StoreEntitySet="PrescriptionProductView">
+          <ScalarProperty Name="idPrescriptionProduct" ColumnName="idPrescriptionProduct" />
+          <ScalarProperty Name="idProduct" ColumnName="idProduct" />
+          <ScalarProperty Name="productName" ColumnName="productName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SaleDetailView">
+      <EntityTypeMapping TypeName="MasayaNaturistCenterModel.SaleDetailView">
+        <MappingFragment StoreEntitySet="SaleDetailView">
+          <ScalarProperty Name="idSaleDetail" ColumnName="idSaleDetail" />
+          <ScalarProperty Name="idStock" ColumnName="idStock" />
+          <ScalarProperty Name="productName" ColumnName="productName" />
+          <ScalarProperty Name="productDescription" ColumnName="productDescription" />
+          <ScalarProperty Name="presentation" ColumnName="presentation" />
+          <ScalarProperty Name="quantity" ColumnName="quantity" />
+          <ScalarProperty Name="price" ColumnName="price" />
+          <ScalarProperty Name="total" ColumnName="total" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SellView">
+      <EntityTypeMapping TypeName="MasayaNaturistCenterModel.SellView">
+        <MappingFragment StoreEntitySet="SellView">
+          <ScalarProperty Name="idSell" ColumnName="idSell" />
+          <ScalarProperty Name="idEmployee" ColumnName="idEmployee" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="date" ColumnName="date" />
+          <ScalarProperty Name="total" ColumnName="total" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="StockView">
+      <EntityTypeMapping TypeName="MasayaNaturistCenterModel.StockView">
+        <MappingFragment StoreEntitySet="StockView">
+          <ScalarProperty Name="idStock" ColumnName="idStock" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="presentation" ColumnName="presentation" />
+          <ScalarProperty Name="price" ColumnName="price" />
+          <ScalarProperty Name="quantity" ColumnName="quantity" />
+          <ScalarProperty Name="entryDate" ColumnName="entryDate" />
+          <ScalarProperty Name="expiration" ColumnName="expiration" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SupplyDetailView">
+      <EntityTypeMapping TypeName="MasayaNaturistCenterModel.SupplyDetailView">
+        <MappingFragment StoreEntitySet="SupplyDetailView">
+          <ScalarProperty Name="idSupplyDetail" ColumnName="idSupplyDetail" />
+          <ScalarProperty Name="idStock" ColumnName="idStock" />
+          <ScalarProperty Name="productName" ColumnName="productName" />
+          <ScalarProperty Name="productDescription" ColumnName="productDescription" />
+          <ScalarProperty Name="presentation" ColumnName="presentation" />
+          <ScalarProperty Name="quantity" ColumnName="quantity" />
+          <ScalarProperty Name="price" ColumnName="price" />
+          <ScalarProperty Name="total" ColumnName="total" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SupplyView">
+      <EntityTypeMapping TypeName="MasayaNaturistCenterModel.SupplyView">
+        <MappingFragment StoreEntitySet="SupplyView">
+          <ScalarProperty Name="idSupply" ColumnName="idSupply" />
+          <ScalarProperty Name="idProvider" ColumnName="idProvider" />
+          <ScalarProperty Name="providerName" ColumnName="providerName" />
+          <ScalarProperty Name="date" ColumnName="date" />
+          <ScalarProperty Name="total" ColumnName="total" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="AccountRole" TypeName="MasayaNaturistCenterModel.AccountRole" StoreEntitySet="AccountRole">
+      <EndProperty Name="Account">
+        <ScalarProperty Name="idAccount" ColumnName="idAccount" />
+      </EndProperty>
+      <EndProperty Name="Role">
+        <ScalarProperty Name="idRole" ColumnName="idRole" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <FunctionImportMapping FunctionImportName="sp_DeleteByIdInEntity" FunctionName="MasayaNaturistCenterModel.Store.sp_DeleteByIdInEntity" />
+    <FunctionImportMapping FunctionImportName="sp_Presentation_TableManager" FunctionName="MasayaNaturistCenterModel.Store.sp_Presentation_TableManager">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MasayaNaturistCenterModel.sp_Presentation_TableManager_Result">
+          <ScalarProperty Name="idPresentation" ColumnName="idPresentation" />
+          <ScalarProperty Name="name" ColumnName="name" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_Stock_TableManager" FunctionName="MasayaNaturistCenterModel.Store.sp_Stock_TableManager">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MasayaNaturistCenterModel.sp_Stock_TableManager_Result">
+          <ScalarProperty Name="idStock" ColumnName="idStock" />
+          <ScalarProperty Name="idProduct" ColumnName="idProduct" />
+          <ScalarProperty Name="idPresentation" ColumnName="idPresentation" />
+          <ScalarProperty Name="quantity" ColumnName="quantity" />
+          <ScalarProperty Name="price" ColumnName="price" />
+          <ScalarProperty Name="entryDate" ColumnName="entryDate" />
+          <ScalarProperty Name="expiration" ColumnName="expiration" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+  </EntityContainerMapping>
+</Mapping>

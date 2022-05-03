@@ -1,0 +1,421 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MasayaNaturistCenterModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Account">
+    <Key>
+      <PropertyRef Name="idAccount" />
+    </Key>
+    <Property Name="idAccount" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="idEmployee" Type="Int32" Nullable="false" />
+    <Property Name="userName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="password" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="created" Type="DateTime" />
+    <NavigationProperty Name="Employee" Relationship="Self.FK__Account__idEmplo__5629CD9C" FromRole="Account" ToRole="Employee" />
+    <NavigationProperty Name="Role" Relationship="Self.AccountRole" FromRole="Account" ToRole="Role" />
+  </EntityType>
+  <EntityType Name="Consult">
+    <Key>
+      <PropertyRef Name="idConsult" />
+    </Key>
+    <Property Name="idConsult" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="idEmployee" Type="Int32" Nullable="false" />
+    <Property Name="idPatient" Type="Int32" Nullable="false" />
+    <Property Name="symptom" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+    <Property Name="date" Type="DateTime" Nullable="false" />
+    <NavigationProperty Name="Employee" Relationship="Self.FK__Consult__idEmplo__4E88ABD4" FromRole="Consult" ToRole="Employee" />
+    <NavigationProperty Name="Patient" Relationship="Self.FK__Consult__idPatie__4F7CD00D" FromRole="Consult" ToRole="Patient" />
+    <NavigationProperty Name="PrescriptionProduct" Relationship="Self.FK__Prescript__idCon__52593CB8" FromRole="Consult" ToRole="PrescriptionProduct" />
+  </EntityType>
+  <EntityType Name="Employee">
+    <Key>
+      <PropertyRef Name="idEmployee" />
+    </Key>
+    <Property Name="idEmployee" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="lastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="address" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Account" Relationship="Self.FK__Account__idEmplo__5629CD9C" FromRole="Employee" ToRole="Account" />
+    <NavigationProperty Name="Consult" Relationship="Self.FK__Consult__idEmplo__4E88ABD4" FromRole="Employee" ToRole="Consult" />
+    <NavigationProperty Name="Sell" Relationship="Self.FK__Sell__idEmployee__30F848ED" FromRole="Employee" ToRole="Sell" />
+  </EntityType>
+  <EntityType Name="Patient">
+    <Key>
+      <PropertyRef Name="idPatient" />
+    </Key>
+    <Property Name="idPatient" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="lastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="address" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="age" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Consult" Relationship="Self.FK__Consult__idPatie__4F7CD00D" FromRole="Patient" ToRole="Consult" />
+  </EntityType>
+  <EntityType Name="PrescriptionProduct">
+    <Key>
+      <PropertyRef Name="idPrescriptionProduct" />
+    </Key>
+    <Property Name="idPrescriptionProduct" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="idConsult" Type="Int32" Nullable="false" />
+    <Property Name="idProduct" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Consult" Relationship="Self.FK__Prescript__idCon__52593CB8" FromRole="PrescriptionProduct" ToRole="Consult" />
+    <NavigationProperty Name="Product" Relationship="Self.FK__Prescript__idPro__534D60F1" FromRole="PrescriptionProduct" ToRole="Product" />
+  </EntityType>
+  <EntityType Name="Presentation">
+    <Key>
+      <PropertyRef Name="idPresentation" />
+    </Key>
+    <Property Name="idPresentation" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Stock" Relationship="Self.FK__Stock__idPresent__3C69FB99" FromRole="Presentation" ToRole="Stock" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="idProduct" />
+    </Key>
+    <Property Name="idProduct" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="description" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="quantity" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="PrescriptionProduct" Relationship="Self.FK__Prescript__idPro__534D60F1" FromRole="Product" ToRole="PrescriptionProduct" />
+    <NavigationProperty Name="Stock" Relationship="Self.FK__Stock__idProduct__3B75D760" FromRole="Product" ToRole="Stock" />
+  </EntityType>
+  <EntityType Name="Provider">
+    <Key>
+      <PropertyRef Name="idProvider" />
+    </Key>
+    <Property Name="idProvider" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="address" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+    <Property Name="ruc" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="ProviderPhone" Relationship="Self.FK__ProviderP__idPro__38996AB5" FromRole="Provider" ToRole="ProviderPhone" />
+    <NavigationProperty Name="Supply" Relationship="Self.FK__Supply__idProvid__34C8D9D1" FromRole="Provider" ToRole="Supply" />
+  </EntityType>
+  <EntityType Name="ProviderPhone">
+    <Key>
+      <PropertyRef Name="idProviderPhone" />
+    </Key>
+    <Property Name="idProviderPhone" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="idProvider" Type="Int32" Nullable="false" />
+    <Property Name="phone" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Provider" Relationship="Self.FK__ProviderP__idPro__38996AB5" FromRole="ProviderPhone" ToRole="Provider" />
+  </EntityType>
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="idRole" />
+    </Key>
+    <Property Name="idRole" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Account" Relationship="Self.AccountRole" FromRole="Role" ToRole="Account" />
+  </EntityType>
+  <EntityType Name="SaleDetail">
+    <Key>
+      <PropertyRef Name="idSaleDetail" />
+    </Key>
+    <Property Name="idSaleDetail" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="idSell" Type="Int32" Nullable="false" />
+    <Property Name="idStock" Type="Int32" Nullable="false" />
+    <Property Name="quantity" Type="Int32" Nullable="false" />
+    <Property Name="price" Type="Double" Nullable="false" />
+    <Property Name="total" Type="Double" Nullable="false" />
+    <NavigationProperty Name="Sell" Relationship="Self.FK__SaleDetai__idSel__412EB0B6" FromRole="SaleDetail" ToRole="Sell" />
+    <NavigationProperty Name="Stock" Relationship="Self.FK__SaleDetai__idSto__4222D4EF" FromRole="SaleDetail" ToRole="Stock" />
+  </EntityType>
+  <EntityType Name="Sell">
+    <Key>
+      <PropertyRef Name="idSell" />
+    </Key>
+    <Property Name="idSell" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="idEmployee" Type="Int32" Nullable="false" />
+    <Property Name="date" Type="DateTime" Nullable="false" />
+    <Property Name="total" Type="Double" Nullable="false" />
+    <NavigationProperty Name="Employee" Relationship="Self.FK__Sell__idEmployee__30F848ED" FromRole="Sell" ToRole="Employee" />
+    <NavigationProperty Name="SaleDetail" Relationship="Self.FK__SaleDetai__idSel__412EB0B6" FromRole="Sell" ToRole="SaleDetail" />
+  </EntityType>
+  <EntityType Name="Stock">
+    <Key>
+      <PropertyRef Name="idStock" />
+    </Key>
+    <Property Name="idStock" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="idProduct" Type="Int32" Nullable="false" />
+    <Property Name="idPresentation" Type="Int32" Nullable="false" />
+    <Property Name="quantity" Type="Int32" Nullable="false" />
+    <Property Name="price" Type="Double" Nullable="false" />
+    <Property Name="entryDate" Type="DateTime" />
+    <Property Name="expiration" Type="DateTime" />
+    <NavigationProperty Name="Presentation" Relationship="Self.FK__Stock__idPresent__3C69FB99" FromRole="Stock" ToRole="Presentation" />
+    <NavigationProperty Name="Product" Relationship="Self.FK__Stock__idProduct__3B75D760" FromRole="Stock" ToRole="Product" />
+    <NavigationProperty Name="SaleDetail" Relationship="Self.FK__SaleDetai__idSto__4222D4EF" FromRole="Stock" ToRole="SaleDetail" />
+    <NavigationProperty Name="SupplyDetail" Relationship="Self.FK__SupplyDet__idSto__48CFD27E" FromRole="Stock" ToRole="SupplyDetail" />
+  </EntityType>
+  <EntityType Name="Supply">
+    <Key>
+      <PropertyRef Name="idSupply" />
+    </Key>
+    <Property Name="idSupply" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="idProvider" Type="Int32" Nullable="false" />
+    <Property Name="date" Type="DateTime" Nullable="false" />
+    <Property Name="total" Type="Double" Nullable="false" />
+    <NavigationProperty Name="Provider" Relationship="Self.FK__Supply__idProvid__34C8D9D1" FromRole="Supply" ToRole="Provider" />
+    <NavigationProperty Name="SupplyDetail" Relationship="Self.FK__SupplyDet__idSup__47DBAE45" FromRole="Supply" ToRole="SupplyDetail" />
+  </EntityType>
+  <EntityType Name="SupplyDetail">
+    <Key>
+      <PropertyRef Name="idSupplyDetail" />
+    </Key>
+    <Property Name="idSupplyDetail" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="idSupply" Type="Int32" Nullable="false" />
+    <Property Name="idStock" Type="Int32" Nullable="false" />
+    <Property Name="quantity" Type="Int32" Nullable="false" />
+    <Property Name="price" Type="Double" Nullable="false" />
+    <Property Name="total" Type="Double" Nullable="false" />
+    <NavigationProperty Name="Stock" Relationship="Self.FK__SupplyDet__idSto__48CFD27E" FromRole="SupplyDetail" ToRole="Stock" />
+    <NavigationProperty Name="Supply" Relationship="Self.FK__SupplyDet__idSup__47DBAE45" FromRole="SupplyDetail" ToRole="Supply" />
+  </EntityType>
+  <Association Name="FK__Account__idEmplo__5629CD9C">
+    <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+    <End Role="Account" Type="Self.Account" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="idEmployee" />
+      </Principal>
+      <Dependent Role="Account">
+        <PropertyRef Name="idEmployee" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Consult__idEmplo__4E88ABD4">
+    <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+    <End Role="Consult" Type="Self.Consult" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="idEmployee" />
+      </Principal>
+      <Dependent Role="Consult">
+        <PropertyRef Name="idEmployee" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Consult__idPatie__4F7CD00D">
+    <End Role="Patient" Type="Self.Patient" Multiplicity="1" />
+    <End Role="Consult" Type="Self.Consult" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Patient">
+        <PropertyRef Name="idPatient" />
+      </Principal>
+      <Dependent Role="Consult">
+        <PropertyRef Name="idPatient" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Prescript__idCon__52593CB8">
+    <End Role="Consult" Type="Self.Consult" Multiplicity="1" />
+    <End Role="PrescriptionProduct" Type="Self.PrescriptionProduct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Consult">
+        <PropertyRef Name="idConsult" />
+      </Principal>
+      <Dependent Role="PrescriptionProduct">
+        <PropertyRef Name="idConsult" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Sell__idEmployee__30F848ED">
+    <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+    <End Role="Sell" Type="Self.Sell" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="idEmployee" />
+      </Principal>
+      <Dependent Role="Sell">
+        <PropertyRef Name="idEmployee" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Prescript__idPro__534D60F1">
+    <End Role="Product" Type="Self.Product" Multiplicity="1" />
+    <End Role="PrescriptionProduct" Type="Self.PrescriptionProduct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="idProduct" />
+      </Principal>
+      <Dependent Role="PrescriptionProduct">
+        <PropertyRef Name="idProduct" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Stock__idPresent__3C69FB99">
+    <End Role="Presentation" Type="Self.Presentation" Multiplicity="1" />
+    <End Role="Stock" Type="Self.Stock" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Presentation">
+        <PropertyRef Name="idPresentation" />
+      </Principal>
+      <Dependent Role="Stock">
+        <PropertyRef Name="idPresentation" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Stock__idProduct__3B75D760">
+    <End Role="Product" Type="Self.Product" Multiplicity="1" />
+    <End Role="Stock" Type="Self.Stock" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="idProduct" />
+      </Principal>
+      <Dependent Role="Stock">
+        <PropertyRef Name="idProduct" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__ProviderP__idPro__38996AB5">
+    <End Role="Provider" Type="Self.Provider" Multiplicity="1" />
+    <End Role="ProviderPhone" Type="Self.ProviderPhone" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Provider">
+        <PropertyRef Name="idProvider" />
+      </Principal>
+      <Dependent Role="ProviderPhone">
+        <PropertyRef Name="idProvider" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Supply__idProvid__34C8D9D1">
+    <End Role="Provider" Type="Self.Provider" Multiplicity="1" />
+    <End Role="Supply" Type="Self.Supply" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Provider">
+        <PropertyRef Name="idProvider" />
+      </Principal>
+      <Dependent Role="Supply">
+        <PropertyRef Name="idProvider" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__SaleDetai__idSel__412EB0B6">
+    <End Role="Sell" Type="Self.Sell" Multiplicity="1" />
+    <End Role="SaleDetail" Type="Self.SaleDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Sell">
+        <PropertyRef Name="idSell" />
+      </Principal>
+      <Dependent Role="SaleDetail">
+        <PropertyRef Name="idSell" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__SaleDetai__idSto__4222D4EF">
+    <End Role="Stock" Type="Self.Stock" Multiplicity="1" />
+    <End Role="SaleDetail" Type="Self.SaleDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Stock">
+        <PropertyRef Name="idStock" />
+      </Principal>
+      <Dependent Role="SaleDetail">
+        <PropertyRef Name="idStock" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__SupplyDet__idSto__48CFD27E">
+    <End Role="Stock" Type="Self.Stock" Multiplicity="1" />
+    <End Role="SupplyDetail" Type="Self.SupplyDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Stock">
+        <PropertyRef Name="idStock" />
+      </Principal>
+      <Dependent Role="SupplyDetail">
+        <PropertyRef Name="idStock" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__SupplyDet__idSup__47DBAE45">
+    <End Role="Supply" Type="Self.Supply" Multiplicity="1" />
+    <End Role="SupplyDetail" Type="Self.SupplyDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Supply">
+        <PropertyRef Name="idSupply" />
+      </Principal>
+      <Dependent Role="SupplyDetail">
+        <PropertyRef Name="idSupply" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="AccountRole">
+    <End Role="Account" Type="Self.Account" Multiplicity="*" />
+    <End Role="Role" Type="Self.Role" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="MasayaNaturistCenterDataBase" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Account" EntityType="Self.Account" />
+    <EntitySet Name="Consult" EntityType="Self.Consult" />
+    <EntitySet Name="Employee" EntityType="Self.Employee" />
+    <EntitySet Name="Patient" EntityType="Self.Patient" />
+    <EntitySet Name="PrescriptionProduct" EntityType="Self.PrescriptionProduct" />
+    <EntitySet Name="Presentation" EntityType="Self.Presentation" />
+    <EntitySet Name="Product" EntityType="Self.Product" />
+    <EntitySet Name="Provider" EntityType="Self.Provider" />
+    <EntitySet Name="ProviderPhone" EntityType="Self.ProviderPhone" />
+    <EntitySet Name="Role" EntityType="Self.Role" />
+    <EntitySet Name="SaleDetail" EntityType="Self.SaleDetail" />
+    <EntitySet Name="Sell" EntityType="Self.Sell" />
+    <EntitySet Name="Stock" EntityType="Self.Stock" />
+    <EntitySet Name="Supply" EntityType="Self.Supply" />
+    <EntitySet Name="SupplyDetail" EntityType="Self.SupplyDetail" />
+    <AssociationSet Name="FK__Account__idEmplo__5629CD9C" Association="Self.FK__Account__idEmplo__5629CD9C">
+      <End Role="Employee" EntitySet="Employee" />
+      <End Role="Account" EntitySet="Account" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Consult__idEmplo__4E88ABD4" Association="Self.FK__Consult__idEmplo__4E88ABD4">
+      <End Role="Employee" EntitySet="Employee" />
+      <End Role="Consult" EntitySet="Consult" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Consult__idPatie__4F7CD00D" Association="Self.FK__Consult__idPatie__4F7CD00D">
+      <End Role="Patient" EntitySet="Patient" />
+      <End Role="Consult" EntitySet="Consult" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Prescript__idCon__52593CB8" Association="Self.FK__Prescript__idCon__52593CB8">
+      <End Role="Consult" EntitySet="Consult" />
+      <End Role="PrescriptionProduct" EntitySet="PrescriptionProduct" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Sell__idEmployee__30F848ED" Association="Self.FK__Sell__idEmployee__30F848ED">
+      <End Role="Employee" EntitySet="Employee" />
+      <End Role="Sell" EntitySet="Sell" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Prescript__idPro__534D60F1" Association="Self.FK__Prescript__idPro__534D60F1">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="PrescriptionProduct" EntitySet="PrescriptionProduct" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Stock__idPresent__3C69FB99" Association="Self.FK__Stock__idPresent__3C69FB99">
+      <End Role="Presentation" EntitySet="Presentation" />
+      <End Role="Stock" EntitySet="Stock" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Stock__idProduct__3B75D760" Association="Self.FK__Stock__idProduct__3B75D760">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="Stock" EntitySet="Stock" />
+    </AssociationSet>
+    <AssociationSet Name="FK__ProviderP__idPro__38996AB5" Association="Self.FK__ProviderP__idPro__38996AB5">
+      <End Role="Provider" EntitySet="Provider" />
+      <End Role="ProviderPhone" EntitySet="ProviderPhone" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Supply__idProvid__34C8D9D1" Association="Self.FK__Supply__idProvid__34C8D9D1">
+      <End Role="Provider" EntitySet="Provider" />
+      <End Role="Supply" EntitySet="Supply" />
+    </AssociationSet>
+    <AssociationSet Name="FK__SaleDetai__idSel__412EB0B6" Association="Self.FK__SaleDetai__idSel__412EB0B6">
+      <End Role="Sell" EntitySet="Sell" />
+      <End Role="SaleDetail" EntitySet="SaleDetail" />
+    </AssociationSet>
+    <AssociationSet Name="FK__SaleDetai__idSto__4222D4EF" Association="Self.FK__SaleDetai__idSto__4222D4EF">
+      <End Role="Stock" EntitySet="Stock" />
+      <End Role="SaleDetail" EntitySet="SaleDetail" />
+    </AssociationSet>
+    <AssociationSet Name="FK__SupplyDet__idSto__48CFD27E" Association="Self.FK__SupplyDet__idSto__48CFD27E">
+      <End Role="Stock" EntitySet="Stock" />
+      <End Role="SupplyDetail" EntitySet="SupplyDetail" />
+    </AssociationSet>
+    <AssociationSet Name="FK__SupplyDet__idSup__47DBAE45" Association="Self.FK__SupplyDet__idSup__47DBAE45">
+      <End Role="Supply" EntitySet="Supply" />
+      <End Role="SupplyDetail" EntitySet="SupplyDetail" />
+    </AssociationSet>
+    <AssociationSet Name="AccountRole" Association="Self.AccountRole">
+      <End Role="Account" EntitySet="Account" />
+      <End Role="Role" EntitySet="Role" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

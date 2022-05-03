@@ -1,0 +1,16 @@
+﻿<Application x:Class="WPF.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resource/Values/colors.xaml"/>
+                <ResourceDictionary Source="Resource/Values/dimens.xaml"/>
+                <ResourceDictionary Source="Resource/Values/strings.xaml"/>
+                <ResourceDictionary Source="Resource/Style/ControlStyles.xaml"/>
+                <ResourceDictionary Source="Resource/Resource.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
+

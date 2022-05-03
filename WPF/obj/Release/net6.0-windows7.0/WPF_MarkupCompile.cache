@@ -1,0 +1,20 @@
+﻿WPF
+
+
+winexe
+C#
+.cs
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Release\net6.0-windows7.0\
+WPF
+none
+false
+TRACE;RELEASE;NET;NET6_0;NETCOREAPP
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\App.xaml
+27-2026319888
+28-1822145881
+57-737698692
+248-300131988
+Resource\Resource.xaml;Resource\Style\ControlStyles.xaml;Resource\Values\colors.xaml;Resource\Values\dimens.xaml;Resource\Values\strings.xaml;Themes\Generic.xaml;ViewComponents\Menus\NavigationMenu.xaml;ViewComponents\Menus\TabControlMenu.xaml;ViewComponents\UserControls\BackButton.xaml;ViewComponents\UserControls\CustomButton.xaml;ViewComponents\UserControls\HomeButton.xaml;ViewComponents\UserControls\MenuButton.xaml;ViewComponents\UserControls\PageTitle.xaml;ViewComponents\UserControls\Popup.xaml;ViewComponents\UserControls\SearchBar.xaml;ViewComponents\UserControls\SpinBox.xaml;ViewComponents\UserControls\TitleBarButton.xaml;View\HomeWindows\HomeView.xaml;View\HomeWindows\SellView.xaml;View\ProductWindows\Modals\PresentationModal.xaml;View\ProductWindows\Modals\ProductModal.xaml;View\ProductWindows\Modals\ProductSelectionModal.xaml;View\ProductWindows\ProductPage.xaml;View\ProductWindows\ProductWindowsView.xaml;View\ProductWindows\StockForm.xaml;View\ProductWindows\StockPage.xaml;View\Startup.xaml;
+
+True
+

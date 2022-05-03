@@ -1,0 +1,253 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="SQLDataSourceStoreContainer" CdmEntityContainer="MasayaNaturistCenterDataBase">
+    <EntitySetMapping Name="Account">
+      <EntityTypeMapping TypeName="SQLDataSource.Account">
+        <MappingFragment StoreEntitySet="Account">
+          <ScalarProperty Name="idAccount" ColumnName="idAccount" />
+          <ScalarProperty Name="idEmployee" ColumnName="idEmployee" />
+          <ScalarProperty Name="userName" ColumnName="userName" />
+          <ScalarProperty Name="password" ColumnName="password" />
+          <ScalarProperty Name="created" ColumnName="created" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Consult">
+      <EntityTypeMapping TypeName="SQLDataSource.Consult">
+        <MappingFragment StoreEntitySet="Consult">
+          <ScalarProperty Name="idConsult" ColumnName="idConsult" />
+          <ScalarProperty Name="idEmployee" ColumnName="idEmployee" />
+          <ScalarProperty Name="idPatient" ColumnName="idPatient" />
+          <ScalarProperty Name="symptom" ColumnName="symptom" />
+          <ScalarProperty Name="date" ColumnName="date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Employee">
+      <EntityTypeMapping TypeName="SQLDataSource.Employee">
+        <MappingFragment StoreEntitySet="Employee">
+          <ScalarProperty Name="idEmployee" ColumnName="idEmployee" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="lastName" ColumnName="lastName" />
+          <ScalarProperty Name="address" ColumnName="address" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Patient">
+      <EntityTypeMapping TypeName="SQLDataSource.Patient">
+        <MappingFragment StoreEntitySet="Patient">
+          <ScalarProperty Name="idPatient" ColumnName="idPatient" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="lastName" ColumnName="lastName" />
+          <ScalarProperty Name="address" ColumnName="address" />
+          <ScalarProperty Name="age" ColumnName="age" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PrescriptionProduct">
+      <EntityTypeMapping TypeName="SQLDataSource.PrescriptionProduct">
+        <MappingFragment StoreEntitySet="PrescriptionProduct">
+          <ScalarProperty Name="idPrescriptionProduct" ColumnName="idPrescriptionProduct" />
+          <ScalarProperty Name="idConsult" ColumnName="idConsult" />
+          <ScalarProperty Name="idProduct" ColumnName="idProduct" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Presentation">
+      <EntityTypeMapping TypeName="SQLDataSource.Presentation">
+        <MappingFragment StoreEntitySet="Presentation">
+          <ScalarProperty Name="idPresentation" ColumnName="idPresentation" />
+          <ScalarProperty Name="name" ColumnName="name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Product">
+      <EntityTypeMapping TypeName="SQLDataSource.Product">
+        <MappingFragment StoreEntitySet="Product">
+          <ScalarProperty Name="idProduct" ColumnName="idProduct" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="quantity" ColumnName="quantity" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Provider">
+      <EntityTypeMapping TypeName="SQLDataSource.Provider">
+        <MappingFragment StoreEntitySet="Provider">
+          <ScalarProperty Name="idProvider" ColumnName="idProvider" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="address" ColumnName="address" />
+          <ScalarProperty Name="ruc" ColumnName="ruc" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProviderPhone">
+      <EntityTypeMapping TypeName="SQLDataSource.ProviderPhone">
+        <MappingFragment StoreEntitySet="ProviderPhone">
+          <ScalarProperty Name="idProviderPhone" ColumnName="idProviderPhone" />
+          <ScalarProperty Name="idProvider" ColumnName="idProvider" />
+          <ScalarProperty Name="phone" ColumnName="phone" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Role">
+      <EntityTypeMapping TypeName="SQLDataSource.Role">
+        <MappingFragment StoreEntitySet="Role">
+          <ScalarProperty Name="idRole" ColumnName="idRole" />
+          <ScalarProperty Name="name" ColumnName="name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SaleDetail">
+      <EntityTypeMapping TypeName="SQLDataSource.SaleDetail">
+        <MappingFragment StoreEntitySet="SaleDetail">
+          <ScalarProperty Name="idSaleDetail" ColumnName="idSaleDetail" />
+          <ScalarProperty Name="idSell" ColumnName="idSell" />
+          <ScalarProperty Name="idStock" ColumnName="idStock" />
+          <ScalarProperty Name="quantity" ColumnName="quantity" />
+          <ScalarProperty Name="price" ColumnName="price" />
+          <ScalarProperty Name="total" ColumnName="total" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Sell">
+      <EntityTypeMapping TypeName="SQLDataSource.Sell">
+        <MappingFragment StoreEntitySet="Sell">
+          <ScalarProperty Name="idSell" ColumnName="idSell" />
+          <ScalarProperty Name="idEmployee" ColumnName="idEmployee" />
+          <ScalarProperty Name="date" ColumnName="date" />
+          <ScalarProperty Name="total" ColumnName="total" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Stock">
+      <EntityTypeMapping TypeName="SQLDataSource.Stock">
+        <MappingFragment StoreEntitySet="Stock">
+          <ScalarProperty Name="idStock" ColumnName="idStock" />
+          <ScalarProperty Name="idProduct" ColumnName="idProduct" />
+          <ScalarProperty Name="idPresentation" ColumnName="idPresentation" />
+          <ScalarProperty Name="quantity" ColumnName="quantity" />
+          <ScalarProperty Name="price" ColumnName="price" />
+          <ScalarProperty Name="entryDate" ColumnName="entryDate" />
+          <ScalarProperty Name="expiration" ColumnName="expiration" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Supply">
+      <EntityTypeMapping TypeName="SQLDataSource.Supply">
+        <MappingFragment StoreEntitySet="Supply">
+          <ScalarProperty Name="idSupply" ColumnName="idSupply" />
+          <ScalarProperty Name="idProvider" ColumnName="idProvider" />
+          <ScalarProperty Name="date" ColumnName="date" />
+          <ScalarProperty Name="total" ColumnName="total" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SupplyDetail">
+      <EntityTypeMapping TypeName="SQLDataSource.SupplyDetail">
+        <MappingFragment StoreEntitySet="SupplyDetail">
+          <ScalarProperty Name="idSupplyDetail" ColumnName="idSupplyDetail" />
+          <ScalarProperty Name="idSupply" ColumnName="idSupply" />
+          <ScalarProperty Name="idStock" ColumnName="idStock" />
+          <ScalarProperty Name="quantity" ColumnName="quantity" />
+          <ScalarProperty Name="price" ColumnName="price" />
+          <ScalarProperty Name="total" ColumnName="total" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ConsultView">
+      <EntityTypeMapping TypeName="SQLDataSource.ConsultView">
+        <MappingFragment StoreEntitySet="ConsultView">
+          <ScalarProperty Name="idConsult" ColumnName="idConsult" />
+          <ScalarProperty Name="idPatient" ColumnName="idPatient" />
+          <ScalarProperty Name="Patient_name" ColumnName="Patient name" />
+          <ScalarProperty Name="idEmployee" ColumnName="idEmployee" />
+          <ScalarProperty Name="Employee_name" ColumnName="Employee name" />
+          <ScalarProperty Name="symptom" ColumnName="symptom" />
+          <ScalarProperty Name="time_and_date" ColumnName="time and date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PrescriptionProductView">
+      <EntityTypeMapping TypeName="SQLDataSource.PrescriptionProductView">
+        <MappingFragment StoreEntitySet="PrescriptionProductView">
+          <ScalarProperty Name="idPrescriptionProduct" ColumnName="idPrescriptionProduct" />
+          <ScalarProperty Name="idProduct" ColumnName="idProduct" />
+          <ScalarProperty Name="Product_name" ColumnName="Product name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SaleDetailView">
+      <EntityTypeMapping TypeName="SQLDataSource.SaleDetailView">
+        <MappingFragment StoreEntitySet="SaleDetailView">
+          <ScalarProperty Name="idSaleDetail" ColumnName="idSaleDetail" />
+          <ScalarProperty Name="idStock" ColumnName="idStock" />
+          <ScalarProperty Name="Product_name" ColumnName="Product name" />
+          <ScalarProperty Name="Product_description" ColumnName="Product description" />
+          <ScalarProperty Name="Presentation_product" ColumnName="Presentation product" />
+          <ScalarProperty Name="quantity" ColumnName="quantity" />
+          <ScalarProperty Name="price" ColumnName="price" />
+          <ScalarProperty Name="total" ColumnName="total" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SellView">
+      <EntityTypeMapping TypeName="SQLDataSource.SellView">
+        <MappingFragment StoreEntitySet="SellView">
+          <ScalarProperty Name="idSell" ColumnName="idSell" />
+          <ScalarProperty Name="idEmployee" ColumnName="idEmployee" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="date_and_time" ColumnName="date and time" />
+          <ScalarProperty Name="total" ColumnName="total" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="StockView">
+      <EntityTypeMapping TypeName="SQLDataSource.StockView">
+        <MappingFragment StoreEntitySet="StockView">
+          <ScalarProperty Name="idStock" ColumnName="idStock" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="presentation" ColumnName="presentation" />
+          <ScalarProperty Name="price" ColumnName="price" />
+          <ScalarProperty Name="quantity" ColumnName="quantity" />
+          <ScalarProperty Name="entryDate" ColumnName="entryDate" />
+          <ScalarProperty Name="expiration" ColumnName="expiration" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SupplyDetailView">
+      <EntityTypeMapping TypeName="SQLDataSource.SupplyDetailView">
+        <MappingFragment StoreEntitySet="SupplyDetailView">
+          <ScalarProperty Name="idSupplyDetail" ColumnName="idSupplyDetail" />
+          <ScalarProperty Name="idStock" ColumnName="idStock" />
+          <ScalarProperty Name="Product_name" ColumnName="Product name" />
+          <ScalarProperty Name="Product_description" ColumnName="Product description" />
+          <ScalarProperty Name="Presentation_product" ColumnName="Presentation product" />
+          <ScalarProperty Name="quantity" ColumnName="quantity" />
+          <ScalarProperty Name="price" ColumnName="price" />
+          <ScalarProperty Name="total" ColumnName="total" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SupplyView">
+      <EntityTypeMapping TypeName="SQLDataSource.SupplyView">
+        <MappingFragment StoreEntitySet="SupplyView">
+          <ScalarProperty Name="idSupply" ColumnName="idSupply" />
+          <ScalarProperty Name="idProvider" ColumnName="idProvider" />
+          <ScalarProperty Name="Provider_name" ColumnName="Provider name" />
+          <ScalarProperty Name="time_and_date" ColumnName="time and date" />
+          <ScalarProperty Name="total" ColumnName="total" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="AccountRole" TypeName="SQLDataSource.AccountRole" StoreEntitySet="AccountRole">
+      <EndProperty Name="Account">
+        <ScalarProperty Name="idAccount" ColumnName="idAccount" />
+      </EndProperty>
+      <EndProperty Name="Role">
+        <ScalarProperty Name="idRole" ColumnName="idRole" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping>

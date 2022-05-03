@@ -1,0 +1,37 @@
+﻿<Page x:Class="WPF.View.HomeWindows.SellView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WPF.View.HomeWindows" 
+      xmlns:usercontrols="clr-namespace:WPF.ViewComponents.UserControls"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="SellView">
+
+    <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="8"/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="8"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="8"/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition Height="8"/>
+        </Grid.RowDefinitions>
+
+        <usercontrols:BackButton
+            Grid.Row="0"
+            Grid.Column="1"
+            Grid.ColumnSpan="3"
+            Width="100"
+            HorizontalAlignment="Left"
+            />
+    </Grid> 
+</Page>

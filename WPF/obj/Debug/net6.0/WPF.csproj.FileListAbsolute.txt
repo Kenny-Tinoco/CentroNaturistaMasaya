@@ -1,0 +1,5 @@
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0\WPF.csproj.AssemblyReference.cache
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0\WPF.d-bfalse.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0\WPF.AssemblyInfoInputs.cache
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0\WPF.AssemblyInfo.cs
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0\WPF.csproj.CoreCompileInputs.cache

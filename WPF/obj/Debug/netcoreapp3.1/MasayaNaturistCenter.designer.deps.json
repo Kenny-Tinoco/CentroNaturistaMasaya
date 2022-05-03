@@ -1,0 +1,28 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.1",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "EntityFramework/4.3.0": {
+        "runtime": {
+          "lib/net40/EntityFramework.dll": {
+            "assemblyVersion": "4.3.0.0",
+            "fileVersion": "4.3.20127.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "EntityFramework/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Of7nR4MHm+R/OuA8HTuJtCrqHD5y+i1KzN7KtqFmU2b+piqsjj5uEqGjkv0pH6hJQXuwfNKjY18QS1uIMnZSwA==",
+      "path": "entityframework/4.3.0",
+      "hashPath": "entityframework.4.3.0.nupkg.sha512"
+    }
+  }
+}

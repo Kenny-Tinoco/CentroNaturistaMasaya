@@ -1,0 +1,20 @@
+﻿MasayaNaturistCenter
+1.0.0.0
+
+winexe
+C#
+.cs
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\obj\Release\net6.0-windows\
+MasayaNaturistCenter
+none
+false
+TRACE;RELEASE;NET;NET6_0;NETCOREAPP
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\CentroNaturistaMasaya\App.xaml
+34-1043476048
+27-1756877297
+83-63810591
+220-1448241514
+UI\Startup.xaml;UI\VentanaEmpleado\pEmpleado.xaml;UI\VentanaInicio\pCompra.xaml;UI\VentanaInicio\pConsulta.xaml;UI\VentanaInicio\pInicio.xaml;UI\VentanaInicio\pVenta.xaml;UI\VentanaProducto\agregarExistencia.xaml;UI\VentanaProducto\agregarPresentacion.xaml;UI\VentanaProducto\agregarProducto.xaml;UI\VentanaProducto\pExistencia.xaml;UI\VentanaProducto\pPresentacion.xaml;UI\VentanaProducto\pProducto.xaml;UI\VentanaProveedor\pProveedor.xaml;View\HomeWindows\HomeView.xaml;View\MenuBar\Layout.xaml;View\MenuBar\NavigationMenu.xaml;View\ProductWindows\ProductPage.xaml;View\ProductWindows\StockPage.xaml;View\ProductWindows\StockPageu.xaml;View\ProductWindows\StockPopup.xaml;View\Resource\Style\ControlStyles.xaml;View\Resource\Values\colors.xaml;View\Resource\Values\dimens.xaml;View\Resource\Values\strings.xaml;View\Startup.xaml;View\UserControls\BackButton.xaml;View\UserControls\CustomButton.xaml;View\UserControls\HomeButton.xaml;View\UserControls\MenuButton.xaml;View\UserControls\PageTitle.xaml;View\UserControls\Popup.xaml;View\UserControls\SearchBar.xaml;View\UserControls\SpinBox.xaml;View\UserControls\TitleBarButton.xaml;
+
+True
+

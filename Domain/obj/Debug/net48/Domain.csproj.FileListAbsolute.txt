@@ -1,0 +1,5 @@
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\Domain\obj\Debug\net48\Domain.csproj.AssemblyReference.cache
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\Domain\obj\Debug\net48\Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\Domain\obj\Debug\net48\Domain.AssemblyInfoInputs.cache
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\Domain\obj\Debug\net48\Domain.AssemblyInfo.cs
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\Domain\obj\Debug\net48\Domain.csproj.CoreCompileInputs.cache
