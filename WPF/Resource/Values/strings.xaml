@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:System="clr-namespace:System;assembly=mscorlib"
     >
-    <System:String x:Key="StockWindowTitle">Registros de existencias</System:String>
+    <System:String x:Key="StockWindowTitle">Registros de medicamentos existentes</System:String>
     <System:String x:Key="ProductWindowTitle">Registros de productos</System:String>
     <System:String x:Key="tituloVPPd">Lista datos de Productos</System:String>
     <System:String x:Key="tituloVPPs">Lista datos de Presentaciones</System:String>

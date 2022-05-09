@@ -10,16 +10,6 @@
       d:DesignHeight="550"
       d:DesignWidth="1200"
       Title="StockPage">
-    <Page.Resources>
-        <Style x:Key="StackPanelStyle"
-               TargetType="StackPanel">
-            <Setter Property="Grid.Row" Value="2"/>
-            <Setter Property="Grid.Column" Value="1"/>
-            <Setter Property="VerticalAlignment" Value="Bottom"/>
-            <Setter Property="Height" Value="32"/>
-            <Setter Property="Orientation" Value="Horizontal"/>
-        </Style>
-    </Page.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="15"/>
@@ -41,8 +31,7 @@
             Style="{DynamicResource StackPanelStyle}">
             <userControls:CustomButton
                 Title="Agregar Existencia"
-                buttonCommand="{Binding addCommand}"
-                buttonParameter="{Binding logic.entity}"
+                buttonCommand="{Binding AddCommand}"
                 ImageSource="/Resource/Image/plus.png"/>
         </StackPanel>
 
@@ -51,22 +40,12 @@
             HorizontalAlignment="Right"
             Margin="0,0,30,15"
             Style="{DynamicResource StackPanelStyle}">
-            <StackPanel Orientation="Horizontal">
-                <userControls:SearchBar
-                    BarHeight="30"
-                    BarWidth="250"
-                    searchBarText="{Binding searchText, Mode=TwoWay}"
-                    Margin="0 0 20 0"
-                    />
-                <userControls:CustomButton
-                    Title="Modificar"
-                    ImageSource="/Resource/Image/edit.png"/>
-                <userControls:CustomButton
-                    Title="Eliminar"
-                    ImageSource="/Resource/Image/remove-red.png"/>
-            </StackPanel>
+            <userControls:SearchBar BarHeight="30"
+                                    BarWidth="250"
+                                    searchBarText="{Binding searchText, Mode=TwoWay}"
+                                    />
         </StackPanel>
-        
+
         <TextBlock
             Grid.Row="2"
             Grid.Column="1"
@@ -88,23 +67,405 @@
             Grid.Row="3"
             Grid.Column="1"
             Visibility="{Binding IsLoading, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
 
             <DataGrid
+                Grid.Row="0"
                 x:Name="elementDataGrid"
                 ItemsSource="{Binding dataGridSource}"
                 Style="{DynamicResource ElementsDataGrid}"
+                RowDetailsVisibilityMode="Collapsed"
                 >
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Código" Width="auto" Binding="{Binding idStock}"/>
-                    <DataGridTextColumn Header="Nombre" Width="200" Binding="{Binding name}"/>
-                    <DataGridTextColumn Header="Descripción" Width="*" Binding="{Binding description}"/>
-                    <DataGridTextColumn Header="Presentación" Width="120" Binding="{Binding presentation}"/>
-                    <DataGridTextColumn Header="Cantidad" Width="auto" Binding="{Binding quantity}"/>
-                    <DataGridTextColumn Header="Precio" Width="auto" Binding="{Binding price}"/>
-                    <DataGridTextColumn Header="Entrada" Width="auto" Binding="{Binding entryDate}"/>
-                    <DataGridTextColumn Header="Caducidad" Width="auto" Binding="{Binding expiration}"/>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Expander Collapsed="Expander_Process" Expanded="Expander_Process"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Código" Width="auto" Binding="{Binding IdStock}" >
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="ToolTip" Value="" />
+                                <Setter Property="ToolTipService.InitialShowDelay" Value="100"/>
+                                <Setter Property="ToolTipService.HasDropShadow" Value="True"/>
+                                <Setter Property="ToolTipService.Placement" Value="Bottom"/>
+                                <Setter Property="ToolTipService.HorizontalOffset" Value="20"/>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Nombre" Width="200" Binding="{Binding Name}"/>
+                    <DataGridTextColumn Header="Descripción" Width="*" Binding="{Binding Description}"/>
+                    <DataGridTextColumn Header="Presentación" Width="120" Binding="{Binding Presentation}"/>
+                    <DataGridTextColumn Header="Cantidad" Width="auto" Binding="{Binding Quantity}"/>
+                    <DataGridTextColumn Header="Precio" Width="auto" Binding="{Binding Price}"/>
+                    <DataGridTextColumn Header="Entrada" Width="auto" Binding="{Binding EntryDate, StringFormat='dddd  dd/MMM/yyyy', ConverterCulture='es'}"/>
+                    <DataGridTextColumn Header="Caducidad" Width="auto" Binding="{Binding Expiration, StringFormat='dddd  dd/MMM/yyyy', ConverterCulture='es'}"/>
                 </DataGrid.Columns>
+                <DataGrid.RowDetailsTemplate>
+                    <DataTemplate>
+                        <Border Background="{DynamicResource colorBlancoFondo}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Grid Grid.Column="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <userControls:CustomButton 
+                                        Grid.Row="0"
+                                        buttonCommand="{Binding Path=DataContext.EditCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                        buttonParameter="{Binding}"
+                                        ImageSource="/Resource/Image/edit.png"/>
+                                    <userControls:CustomButton 
+                                        Grid.Row="1"
+                                        buttonCommand="{Binding Path=DataContext.DeleteCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                        buttonParameter="{Binding}"
+                                        ImageSource="/Resource/Image/remove-red.png"/>
+                                </Grid>
+                                <Border Grid.Column="1"
+                                        BorderBrush="Black"
+                                        BorderThickness="1"
+                                        Padding="5"
+                                        Background="White"
+                                        CornerRadius="6"
+                                        Margin="5 0"
+                                        Width="200"
+                                        Height="200">
+                                    <Image Source="{Binding Image}"/>
+                                </Border>
+                                <Grid Grid.Column="2"
+                                          Margin="5 0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Grid.Row="0"
+                                            Style="{DynamicResource textBlockListViewStyle}"
+                                            VerticalAlignment="Bottom">
+                                                <Run Text="Código:"/>
+                                                <Run Text="{Binding IdStock}" 
+                                                     FontWeight="SemiBold"/>
+                                    </TextBlock>
+                                    <TextBlock Grid.Row="1"
+                                                    Margin="0 5" 
+                                                   Style="{DynamicResource textBlockListViewStyle}"
+                                                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                   ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                                   TextWrapping="Wrap"
+                                                   TextAlignment="Justify">
+                                                <Run Text="Nombre:"/>
+                                                <Run Text="{Binding Name}"
+                                                     FontWeight="SemiBold"/>
+                                    </TextBlock>
+
+                                    <StackPanel Grid.Row="2"
+                                               Margin="0 5">
+                                        <TextBlock Text="Descripción"
+                                                   Style="{DynamicResource textBlockListViewStyle}"/>
+                                        <TextBox
+                                            HorizontalAlignment="Left"
+                                             IsReadOnly="True"
+                                             Text="{Binding Description}"
+                                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                             ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                             TextWrapping="Wrap"
+                                             TextAlignment="Justify"
+                                             Height="80"
+                                             Width="320"/>
+                                    </StackPanel>
+
+                                    <TextBlock Grid.Row="3"
+                                                       Style="{DynamicResource textBlockListViewStyle}"
+                                                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                       ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                                       TextWrapping="Wrap"
+                                                       TextAlignment="Justify">
+                                                <Run Text="Presentación:"/>
+                                                <Run Text="{Binding Presentation}"
+                                                     FontWeight="SemiBold"/>
+                                    </TextBlock>
+                                    <TextBlock Grid.Row="4"
+                                                   Style="{DynamicResource textBlockListViewStyle}"
+                                                   HorizontalAlignment="Right"
+                                                           VerticalAlignment="Bottom">
+                                                <Run Text="Estado: "/>
+                                                <Run Text="{Binding Status, Converter={StaticResource StatusValueConverter}}" 
+                                                     FontWeight="SemiBold"/>
+                                    </TextBlock>
+                                </Grid>
+                                <Grid Grid.Column="3"
+                                                  Grid.ColumnSpan="2"
+                                                  Grid.Row="2"
+                                                  Margin="5 5">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock
+                                                   Grid.Row="0"
+                                                   Style="{DynamicResource textBlockListViewStyle}">
+                                                <Run Text="Precio:"/>
+                                                <Run Text="{Binding Price}"
+                                                     FontWeight="SemiBold"/>
+                                                <Run Text="córdobas"
+                                                     FontWeight="SemiBold"/>
+                                    </TextBlock>
+                                    <TextBlock 
+                                                   Grid.Row="1"
+                                                   Style="{DynamicResource textBlockListViewStyle}">
+                                                <Run Text="En stock:"/>
+                                                <Run Text="{Binding Quantity}"
+                                                     FontWeight="SemiBold"/>
+                                    </TextBlock>
+
+                                    <TextBlock 
+                                                   Grid.Row="2"
+                                                   HorizontalAlignment="Right"
+                                                   Style="{DynamicResource textBlockListViewStyle}">
+                                                <Run Text="F. entrada:"/>
+                                                <Run Text="{Binding EntryDate, StringFormat='dddd  dd/MMM/yyyy', ConverterCulture='es'}"
+                                                     FontWeight="SemiBold"/>
+                                    </TextBlock>
+                                    <TextBlock 
+                                                   Grid.Row="3"
+                                                   HorizontalAlignment="Right"
+                                                   Style="{DynamicResource textBlockListViewStyle}">
+                                                <Run Text="Vecimiento:"/>
+                                                <Run Text="{Binding Expiration, StringFormat='dddd  dd/MMM/yyyy', ConverterCulture='es'}"
+                                                     FontWeight="SemiBold"/>
+                                    </TextBlock>
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </DataGrid.RowDetailsTemplate>
+                <DataGrid.Resources>
+                    <Style TargetType="ToolTip">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ToolTip">
+                                    <Border x:Name="border"
+                                            BorderBrush="{DynamicResource colorSecondaryDark}"
+                                            BorderThickness="1"
+                                            CornerRadius="6"
+                                            Background="{DynamicResource colorBlancoFondo}"
+                                            SnapsToDevicePixels="true">
+                                        <Grid Width="500"
+                                              Height="300">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="200"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto"/>
+                                                <RowDefinition Height="200"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+
+                                            <Border Grid.Column="0"
+                                                    Grid.ColumnSpan="2"
+                                                    Grid.Row="0"
+                                                    Background="{DynamicResource colorSecondaryDark}"
+                                                    Margin="0 0 0 5">
+                                                <DockPanel HorizontalAlignment="Center">
+                                                    <TextBlock Text="Cód: "
+                                                               Style="{DynamicResource textBlockListViewStyle}"
+                                                               Foreground="White"/>
+                                                    <TextBlock Text="{Binding IdStock}"
+                                                               Style="{DynamicResource textBlockListViewStyle}"
+                                                               FontWeight="SemiBold"
+                                                               Foreground="White"/>
+                                                </DockPanel>
+                                            </Border>
+
+                                            <Border Grid.Column="0"
+                                                    Grid.Row="1"
+                                                    BorderBrush="Black"
+                                                    BorderThickness="1"
+                                                    Padding="5"
+                                                    Background="White"
+                                                    CornerRadius="6"
+                                                    Margin="5 0">
+                                                <Image Source="{Binding Image}"/>
+                                            </Border>
+                                            <Grid Grid.Column="1"
+                                          Grid.Row="1"
+                                          Margin="5 0">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="auto"/>
+                                                    <RowDefinition Height="auto"/>
+                                                    <RowDefinition Height="auto"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+                                                <TextBlock Grid.Row="0"
+                                                    Margin="0 5" 
+                                                   Style="{DynamicResource textBlockListViewStyle}"
+                                                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                   ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                                   TextWrapping="Wrap"
+                                                   TextAlignment="Justify">
+                                                <Run Text="Nombre:"/>
+                                                <Run Text="{Binding Name}"
+                                                     FontWeight="SemiBold"/>
+                                                </TextBlock>
+                                                <TextBlock Grid.Row="1"
+                                                   Margin=" 0 5"
+                                                   Style="{DynamicResource textBlockListViewStyle}"
+                                                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                   ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                                   TextWrapping="Wrap"
+                                                   TextAlignment="Justify"
+                                                   Height="80">
+                                                <Run Text="Descripción:"/>
+                                                <Run Text="{Binding Description}"
+                                                     FontWeight="SemiBold"/>
+                                                </TextBlock>
+                                                <TextBlock Grid.Row="2"
+                                                       Style="{DynamicResource textBlockListViewStyle}"
+                                                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                       ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                                       TextWrapping="Wrap"
+                                                       TextAlignment="Justify">
+                                                <Run Text="Presentación:"/>
+                                                <Run Text="{Binding Presentation}"
+                                                     FontWeight="SemiBold"/>
+                                                </TextBlock>
+                                                <TextBlock Grid.Row="3"
+                                                   Style="{DynamicResource textBlockListViewStyle}"
+                                                   HorizontalAlignment="Right"
+                                                           VerticalAlignment="Bottom">
+                                                <Run Text="Estado: "/>
+                                                <Run Text="{Binding Status, Converter={StaticResource StatusValueConverter}}" 
+                                                     FontWeight="SemiBold"/>
+                                                </TextBlock>
+                                            </Grid>
+                                            <Grid Grid.Column="0"
+                                                  Grid.ColumnSpan="2"
+                                                  Grid.Row="2"
+                                                  Margin="5 5">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition/>
+                                                    <RowDefinition/>
+                                                </Grid.RowDefinitions>
+                                                <TextBlock Grid.Column="0"
+                                                   Grid.Row="0"
+                                                   Style="{DynamicResource textBlockListViewStyle}">
+                                                <Run Text="Precio:"/>
+                                                <Run Text="{Binding Price}"
+                                                     FontWeight="SemiBold"/>
+                                                <Run Text="córdobas"
+                                                     FontWeight="SemiBold"/>
+                                                </TextBlock>
+                                                <TextBlock Grid.Column="0"
+                                                   Grid.Row="1"
+                                                   Style="{DynamicResource textBlockListViewStyle}">
+                                                <Run Text="En stock:"/>
+                                                <Run Text="{Binding Quantity}"
+                                                     FontWeight="SemiBold"/>
+                                                </TextBlock>
+
+                                                <TextBlock Grid.Column="1"
+                                                   Grid.Row="0"
+                                                   HorizontalAlignment="Right"
+                                                   Style="{DynamicResource textBlockListViewStyle}">
+                                                <Run Text="F. entrada:"/>
+                                                <Run Text="{Binding EntryDate, StringFormat='dddd  dd/MMM/yyyy', ConverterCulture='es'}"
+                                                     FontWeight="SemiBold"/>
+                                                </TextBlock>
+                                                <TextBlock Grid.Column="1"
+                                                   Grid.Row="1"
+                                                   HorizontalAlignment="Right"
+                                                   Style="{DynamicResource textBlockListViewStyle}">
+                                                <Run Text="Vecimiento:"/>
+                                                <Run Text="{Binding Expiration, StringFormat='dddd  dd/MMM/yyyy', ConverterCulture='es'}"
+                                                     FontWeight="SemiBold"/>
+                                                </TextBlock>
+                                            </Grid>
+                                        </Grid>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </DataGrid.Resources>
+
             </DataGrid>
+
+            <WrapPanel
+                Grid.Row="1"
+                Margin="60 10"
+                >
+                <WrapPanel>
+                    <CheckBox Margin="0 0 5 0"
+                                 Command="{Binding GroupCommand}"
+                                 CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}"
+                                 Content="Agrupar/Ordenar"
+                                 Style="{DynamicResource CheckBoxStyle}">
+                        <CheckBox.ToolTip>
+                            <ToolTip>
+                                <TextBlock Text="Agrupar y ordenar por presentaciones" FontSize="16" Foreground="Black"/>
+                            </ToolTip>
+                        </CheckBox.ToolTip>
+                    </CheckBox>
+                </WrapPanel>
+
+                <WrapPanel>
+                    <CheckBox Margin="50 0 0 0"
+                                 Command="{Binding SortCommand}"
+                                 CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}"
+                                 Content="Ordenar"
+                                 Style="{DynamicResource CheckBoxStyle}">
+                        <CheckBox.ToolTip>
+                            <ToolTip>
+                                <TextBlock Text="Aplicar orden ascendente por código" FontSize="16" Foreground="Black"/>
+                            </ToolTip>
+                        </CheckBox.ToolTip>
+                    </CheckBox>
+                </WrapPanel>
+            </WrapPanel>
         </Grid>
+        
     </Grid>
+
+    <Page.Resources>
+        <Style x:Key="StackPanelStyle"
+               TargetType="StackPanel">
+            <Setter Property="Grid.Row" Value="2"/>
+            <Setter Property="Grid.Column" Value="1"/>
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Orientation" Value="Horizontal"/>
+        </Style>
+        <Style TargetType="CheckBox" x:Key="CheckBoxStyle">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontSize" Value="17"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="textBlockListViewStyle">
+            <Setter Property="FontSize" Value="17"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+    </Page.Resources>
 </Page>

@@ -3,4 +3,5 @@
                     xmlns:converters="clr-namespace:WPF.ViewComponents.Converters">
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
+    <converters:StatusValueConverter x:Key="StatusValueConverter"/>
 </ResourceDictionary>

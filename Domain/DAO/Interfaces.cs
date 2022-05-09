@@ -32,13 +32,22 @@ namespace Domain.DAO
 
     public interface StockDAO : BaseDAO<Stock, object>
     {
+        Stock getStock(int id);
     }
 
-    public interface TransactionDAO : BaseDAO<Transaction, object>
+    public interface SellDAO : BaseDAO<Sell, object>
     {
     }
 
-    public interface TransactionDetailDAO : BaseDAO<TransactionDetail, object>
+    public interface SaleDetailDAO : BaseDAO<SaleDetail, object>
+    {
+    }
+
+    public interface SupplyDAO : BaseDAO<Supply, object>
+    {
+    }
+
+    public interface SupplyDetailDAO : BaseDAO<SupplyDetail, object>
     {
     }
 }

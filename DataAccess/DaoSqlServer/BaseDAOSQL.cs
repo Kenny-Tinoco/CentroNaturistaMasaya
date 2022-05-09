@@ -51,13 +51,11 @@ namespace DataAccess.DaoSqlServer
             }
         }
 
-        public virtual async Task<Entity> read(object id)
+        public virtual async Task<Entity?> read(object id)
         {
             using (MasayaNaturistCenterDataBase context = _contextFactory.CreateDbContext())
             {
-                Entity element = await context.Set<Entity>().FirstOrDefaultAsync(item => validateEntity(item, id));
-                
-                return element = null!;
+                return await context.Set<Entity>().FindAsync((int)id);
             }
         }
 

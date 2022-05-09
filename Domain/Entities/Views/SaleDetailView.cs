@@ -2,13 +2,13 @@
 {
     public partial class SaleDetailView : BaseEntity
     {
-        public int idSaleDetail { get; set; }
-        public int idStock { get; set; }
-        public string productName { get; set; } = null!;
-        public string? productDescription { get; set; }
-        public string presentation { get; set; } = null!;
-        public int quantity { get; set; }
-        public double price { get; set; }
-        public double total { get; set; }
+        public int IdSaleDetail { get; set; }
+        public int IdStock { get; set; }
+        public string ProductName { get; set; } = null!;
+        public string? ProductDescription { get; set; }
+        public string Presentation { get; set; } = null!;
+        public int Quantity { get; set; }
+        public double Price { get; set; }
+        public double Total { get; set; }
     }
 }

@@ -15,10 +15,10 @@ namespace DataAccess.DaoSqlServer
         private ProductDAO _productDAO = null!;
         private ProviderDAO _providerDAO = null!;
         private StockDAO _stockDAO = null!;
-        private TransactionDAO _sellDAO = null!;
-        private TransactionDetailDAO _saleDetailDAO = null!;
-        private TransactionDAO _supplyDAO = null!;
-        private TransactionDetailDAO _supplyDetailDAO = null!;
+        private SellDAO _sellDAO = null!;
+        private SaleDetailDAO _saleDetailDAO = null!;
+        private SupplyDAO _supplyDAO = null!;
+        private SupplyDetailDAO _supplyDetailDAO = null!;
 
         public DAOFactorySQL(MasayaNaturistCenterDataBaseFactory contextFactory)
         {
@@ -113,7 +113,7 @@ namespace DataAccess.DaoSqlServer
             }
         }
 
-        public override TransactionDAO sellDAO
+        public override SellDAO sellDAO
         {
             get
             {
@@ -124,7 +124,7 @@ namespace DataAccess.DaoSqlServer
             }
         }
 
-        public override TransactionDetailDAO saleDetailDAO
+        public override SaleDetailDAO saleDetailDAO
         {
             get
             {
@@ -135,7 +135,7 @@ namespace DataAccess.DaoSqlServer
             }
         }
 
-        public override TransactionDAO supplyDAO
+        public override SupplyDAO supplyDAO
         {
             get
             {
@@ -146,7 +146,7 @@ namespace DataAccess.DaoSqlServer
             }
         }
 
-        public override TransactionDetailDAO supplyDetailDAO
+        public override SupplyDetailDAO supplyDetailDAO
         {
             get
             {

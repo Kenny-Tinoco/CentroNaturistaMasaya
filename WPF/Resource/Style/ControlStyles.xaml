@@ -3,7 +3,7 @@
     
     <Style x:Key="ElementsDataGrid"
            TargetType="DataGrid" >
-        <Setter Property="Margin" Value="30,10,30,40"/>
+        <Setter Property="Margin" Value="30,10,30,0"/>
         <Setter Property="AutoGenerateColumns" Value="False"/>
         <Setter Property="IsReadOnly" Value="True"/>
         <Setter Property="Background" Value="White"/>
@@ -14,6 +14,9 @@
         <Setter Property="HeadersVisibility" Value="Column"/>
         <Setter Property="HorizontalGridLinesBrush" Value="Black"/>
         <Setter Property="AlternatingRowBackground" Value="WhiteSmoke"/>
+        <Setter Property="SelectionMode" Value="Single"/>
+        <Setter Property="SelectionUnit" Value="FullRow"/>
+        <Setter Property="Focusable" Value="False"/>
         <Setter Property="ColumnHeaderStyle" Value="{DynamicResource ElementsDataGridColumnHeader}"/>
         <Setter Property="RowStyle" Value="{DynamicResource ElementsDataGridRowStyle}"/>
     </Style>
@@ -234,7 +237,7 @@
             <Setter.Value>
                 <ControlTemplate>
                     <TextBox x:Name="PART_TextBox"
-                             Text="{Binding Path=SelectedDate, StringFormat='dddd d/M/yyyy', ConverterCulture='es', RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}}" Style="{StaticResource DatePickerTextBoxStyle}" >
+                             Text="{Binding Path=SelectedDate, StringFormat='dddd dd/MMM/yyyy', ConverterCulture='es', RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}}" Style="{StaticResource DatePickerTextBoxStyle}" >
                     </TextBox>
                 </ControlTemplate>
             </Setter.Value>
@@ -251,6 +254,140 @@
                               BorderBrush="{TemplateBinding BorderBrush}"
                               BorderThickness="{TemplateBinding BorderThickness}"/>
                     </Viewbox>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="TextBox" x:Key="TextBoxStyle">
+        <Setter Property="Validation.ErrorTemplate">
+            <Setter.Value>
+                <ControlTemplate>
+                    <DockPanel LastChildFill="true">
+                        <AdornedElementPlaceholder Name="customAdorner" VerticalAlignment="Center" >
+                            <Border BorderBrush="#2196F3" BorderThickness="1" />
+                        </AdornedElementPlaceholder>
+                        <Border Background="#2196F3"
+                                    DockPanel.Dock="Right"
+                                    Width="18"
+                                    Height="18"
+                                    HorizontalAlignment="Right"
+                                    CornerRadius="10"
+                                    >
+                            <Border.ToolTip>
+                                <ToolTip>
+                                    <TextBlock Text="{Binding ErrorContent}" FontSize="16" Foreground="Black"/>
+                                </ToolTip>
+                            </Border.ToolTip>
+                            <TextBlock Text="!" 
+                                           VerticalAlignment="center" 
+                                           HorizontalAlignment="center" 
+                                           FontWeight="Bold" Foreground="white"/>
+                        </Border>
+                    </DockPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style TargetType="{x:Type CheckBox}" x:Key="StatusCheckBoxStyle">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="17"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type CheckBox}">
+                    <Border
+                        Padding="{TemplateBinding Padding}"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        >
+                        <ContentControl Content="{TemplateBinding Content}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding status}" Value="True">
+                <Setter Property="Background" Value="Green"/>
+                <Setter Property="Content" Value="Activo"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding status}" Value="False">
+                <Setter Property="Content" Value="Inactivo"/>
+                <Setter Property="Background" Value="Red"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    
+    <Style TargetType="{x:Type RibbonCheckBox}" x:Key="StatusCheckBoxDataGridStyle">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type CheckBox}">
+                    <Border x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="4"
+                            Padding="8 0 8 0"
+                            BorderBrush="white"
+                            BorderThickness="0.6"
+                            SnapsToDevicePixels="true">
+                        <ContentControl Content="{TemplateBinding Content}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Background" TargetName="border" Value="white"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="black"/>
+                            <Setter Property="Foreground" Value="Black"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter Property="Background" TargetName="border" Value="White"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="Black"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Status}" Value="True">
+                <Setter Property="Background" Value="Green"/>
+                <Setter Property="Content" Value="Activo"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Status}" Value="False">
+                <Setter Property="Content" Value="Inactivo"/>
+                <Setter Property="Background" Value="Red"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    
+    <Style x:Key="DeleteButtonStyle" TargetType="Button">
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+
+                    <Border x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="4"
+                            Padding="8 0 8 0"
+                            BorderBrush="white"
+                            BorderThickness="0.6"
+                            SnapsToDevicePixels="true">
+                        <ContentControl Content="{TemplateBinding Content}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Background" TargetName="border" Value="Transparent"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="Red"/>
+                            <Setter Property="Foreground" Value="Red"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter Property="Background" TargetName="border" Value="Transparent"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="Red"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

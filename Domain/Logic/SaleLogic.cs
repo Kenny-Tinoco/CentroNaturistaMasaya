@@ -1,14 +1,10 @@
-﻿using System.Diagnostics.Contracts;
-using System.Transactions;
-
-namespace Domain.Logic
+﻿namespace Domain.Logic
 {
-    public class SaleLogic : TransactionLogic
+    public class SaleLogic
     {
 
         public void makeSale()
         {
-            makeTransaction();
         }
 
         void reduceQuantityInProducts()

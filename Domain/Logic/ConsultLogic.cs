@@ -46,8 +46,8 @@ namespace Domain.Logic
         {
             return new PrescriptionProduct()
             {
-                idConsult = consult.idConsult,
-                idProduct = parameter.idProduct
+                IdConsult = consult.IdConsult,
+                IdProduct = parameter.IdProduct
             };
         }
     }

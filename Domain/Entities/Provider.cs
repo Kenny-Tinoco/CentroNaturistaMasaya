@@ -2,9 +2,19 @@
 {
     public partial class Provider : BaseEntity
     {
-        public int idProvider { get; set; }
-        public string name { get; set; } = null!;
-        public string? address { get; set; }
-        public string ruc { get; set; } = null!;
+        public Provider()
+        {
+            ProviderPhones = new HashSet<ProviderPhone>();
+            Supplies = new HashSet<Supply>();
+        }
+
+        public int IdProvider { get; set; }
+        public string Name { get; set; } = null!;
+        public string? Address { get; set; }
+        public string Ruc { get; set; } = null!;
+        public bool Status { get; set; }
+
+        public virtual ICollection<ProviderPhone> ProviderPhones { get; set; }
+        public virtual ICollection<Supply> Supplies { get; set; }
     }
 }

@@ -28,6 +28,7 @@
                 Orientation="Vertical"
                 RenderTransformOrigin="0.5,0.5"
                 Width="30"
+                Value="{Binding value, ElementName=root}"
                 VerticalAlignment="Center"
                 >
                 <ScrollBar.RenderTransform>

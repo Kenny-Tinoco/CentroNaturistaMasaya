@@ -2,12 +2,12 @@
 {
     public partial class ConsultView : BaseEntity
     {
-        public int idConsult { get; set; }
-        public int idPatient { get; set; }
-        public string? patientName { get; set; }
-        public int idEmployee { get; set; }
-        public string? employeeName { get; set; }
-        public string? symptom { get; set; }
-        public string? date { get; set; }
+        public int IdConsult { get; set; }
+        public int IdPatient { get; set; }
+        public string? PatientName { get; set; }
+        public int IdEmployee { get; set; }
+        public string? EmployeeName { get; set; }
+        public string? Symptom { get; set; }
+        public DateTime Date { get; set; }
     }
 }

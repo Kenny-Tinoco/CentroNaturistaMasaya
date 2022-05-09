@@ -2,8 +2,10 @@
 {
     public partial class ProviderPhone : BaseEntity
     {
-        public int idProviderPhone { get; set; }
-        public int idProvider { get; set; }
-        public string? phone { get; set; }
+        public int IdProviderPhone { get; set; }
+        public int IdProvider { get; set; }
+        public string? Phone { get; set; }
+
+        public virtual Provider IdProviderNavigation { get; set; } = null!;
     }
 }

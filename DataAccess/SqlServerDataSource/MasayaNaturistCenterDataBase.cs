@@ -28,42 +28,56 @@ namespace DataAccess.SqlServerDataSource
         public virtual DbSet<Provider> Providers { get; set; } = null!;
         public virtual DbSet<ProviderPhone> ProviderPhones { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
-        public virtual DbSet<TransactionDetail> SaleDetails { get; set; } = null!;
+        public virtual DbSet<SaleDetail> SaleDetails { get; set; } = null!;
         public virtual DbSet<SaleDetailView> SaleDetailViews { get; set; } = null!;
-        public virtual DbSet<Transaction> Sells { get; set; } = null!;
+        public virtual DbSet<Sell> Sells { get; set; } = null!;
         public virtual DbSet<SellView> SellViews { get; set; } = null!;
         public virtual DbSet<Stock> Stocks { get; set; } = null!;
         public virtual DbSet<StockView> StockViews { get; set; } = null!;
-        public virtual DbSet<Transaction> Supplies { get; set; } = null!;
-        public virtual DbSet<TransactionDetail> SupplyDetails { get; set; } = null!;
+        public virtual DbSet<Supply> Supplies { get; set; } = null!;
+        public virtual DbSet<SupplyDetail> SupplyDetails { get; set; } = null!;
         public virtual DbSet<SupplyDetailView> SupplyDetailViews { get; set; } = null!;
         public virtual DbSet<SupplyView> SupplyViews { get; set; } = null!;
+
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    if (!optionsBuilder.IsConfigured)
+        //    {
+        //        optionsBuilder.UseSqlServer("Server=(local)\\SQLEXPRESS;Database=MasayaNaturistCenter;Trusted_Connection=True;");
+        //    }
+        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Account>(entity =>
             {
-                entity.HasKey(e => e.idAccount)
-                    .HasName("PK__Account__DA18132CA168B70C");
+                entity.HasKey(e => e.IdAccount)
+                    .HasName("PK__Account__DA18132C515BF8B2");
 
                 entity.ToTable("Account");
 
-                entity.Property(e => e.idAccount).HasColumnName("idAccount");
+                entity.Property(e => e.IdAccount).HasColumnName("idAccount");
 
-                entity.Property(e => e.created)
+                entity.Property(e => e.Created)
                     .HasColumnType("datetime")
                     .HasColumnName("created");
 
-                entity.Property(e => e.idEmployee).HasColumnName("idEmployee");
+                entity.Property(e => e.IdEmployee).HasColumnName("idEmployee");
 
-                entity.Property(e => e.password)
+                entity.Property(e => e.Password)
                     .HasMaxLength(100)
                     .HasColumnName("password");
 
-                entity.Property(e => e.userName)
+                entity.Property(e => e.UserName)
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("userName");
+
+                entity.HasOne(d => d.IdEmployeeNavigation)
+                    .WithMany(p => p.Accounts)
+                    .HasForeignKey(d => d.IdEmployee)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Account__idEmplo__5629CD9C");
             });
 
             modelBuilder.Entity<AccountRole>(entity =>
@@ -72,32 +86,56 @@ namespace DataAccess.SqlServerDataSource
 
                 entity.ToTable("AccountRole");
 
-                entity.Property(e => e.idAccount).HasColumnName("idAccount");
+                entity.Property(e => e.IdAccount).HasColumnName("idAccount");
 
-                entity.Property(e => e.idRole).HasColumnName("idRole");
+                entity.Property(e => e.IdRole).HasColumnName("idRole");
+
+                entity.HasOne(d => d.IdAccountNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.IdAccount)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__AccountRo__idAcc__5AEE82B9");
+
+                entity.HasOne(d => d.IdRoleNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.IdRole)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__AccountRo__idRol__59FA5E80");
             });
 
             modelBuilder.Entity<Consult>(entity =>
             {
-                entity.HasKey(e => e.idConsult)
-                    .HasName("PK__Consult__39F4CA478675F0EB");
+                entity.HasKey(e => e.IdConsult)
+                    .HasName("PK__Consult__39F4CA471337D882");
 
                 entity.ToTable("Consult");
 
-                entity.Property(e => e.idConsult).HasColumnName("idConsult");
+                entity.Property(e => e.IdConsult).HasColumnName("idConsult");
 
-                entity.Property(e => e.date)
+                entity.Property(e => e.Date)
                     .HasColumnType("datetime")
                     .HasColumnName("date");
 
-                entity.Property(e => e.idEmployee).HasColumnName("idEmployee");
+                entity.Property(e => e.IdEmployee).HasColumnName("idEmployee");
 
-                entity.Property(e => e.idPatient).HasColumnName("idPatient");
+                entity.Property(e => e.IdPatient).HasColumnName("idPatient");
 
-                entity.Property(e => e.symptom)
+                entity.Property(e => e.Symptom)
                     .HasMaxLength(300)
                     .IsUnicode(false)
                     .HasColumnName("symptom");
+
+                entity.HasOne(d => d.IdEmployeeNavigation)
+                    .WithMany(p => p.Consults)
+                    .HasForeignKey(d => d.IdEmployee)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Consult__idEmplo__4E88ABD4");
+
+                entity.HasOne(d => d.IdPatientNavigation)
+                    .WithMany(p => p.Consults)
+                    .HasForeignKey(d => d.IdPatient)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Consult__idPatie__4F7CD00D");
             });
 
             modelBuilder.Entity<ConsultView>(entity =>
@@ -106,27 +144,27 @@ namespace DataAccess.SqlServerDataSource
 
                 entity.ToView("ConsultView");
 
-                entity.Property(e => e.date)
-                    .HasMaxLength(4000)
+                entity.Property(e => e.Date)
+                    .HasColumnType("datetime")
                     .HasColumnName("date");
 
-                entity.Property(e => e.employeeName)
+                entity.Property(e => e.EmployeeName)
                     .HasMaxLength(101)
                     .IsUnicode(false)
                     .HasColumnName("employeeName");
 
-                entity.Property(e => e.idConsult).HasColumnName("idConsult");
+                entity.Property(e => e.IdConsult).HasColumnName("idConsult");
 
-                entity.Property(e => e.idEmployee).HasColumnName("idEmployee");
+                entity.Property(e => e.IdEmployee).HasColumnName("idEmployee");
 
-                entity.Property(e => e.idPatient).HasColumnName("idPatient");
+                entity.Property(e => e.IdPatient).HasColumnName("idPatient");
 
-                entity.Property(e => e.patientName)
+                entity.Property(e => e.PatientName)
                     .HasMaxLength(101)
                     .IsUnicode(false)
                     .HasColumnName("patientName");
 
-                entity.Property(e => e.symptom)
+                entity.Property(e => e.Symptom)
                     .HasMaxLength(300)
                     .IsUnicode(false)
                     .HasColumnName("symptom");
@@ -134,68 +172,84 @@ namespace DataAccess.SqlServerDataSource
 
             modelBuilder.Entity<Employee>(entity =>
             {
-                entity.HasKey(e => e.idEmployee)
-                    .HasName("PK__Employee__227F26A55E02BD69");
+                entity.HasKey(e => e.IdEmployee)
+                    .HasName("PK__Employee__227F26A50788AFCE");
 
                 entity.ToTable("Employee");
 
-                entity.Property(e => e.idEmployee).HasColumnName("idEmployee");
+                entity.Property(e => e.IdEmployee).HasColumnName("idEmployee");
 
-                entity.Property(e => e.address)
+                entity.Property(e => e.Address)
                     .HasMaxLength(100)
                     .IsUnicode(false)
                     .HasColumnName("address");
 
-                entity.Property(e => e.lastName)
+                entity.Property(e => e.LastName)
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("lastName");
 
-                entity.Property(e => e.name)
+                entity.Property(e => e.Name)
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("name");
+
+                entity.Property(e => e.Status).HasColumnName("status");
             });
 
             modelBuilder.Entity<Patient>(entity =>
             {
-                entity.HasKey(e => e.idPatient)
-                    .HasName("PK__Patient__8C242805556FBD68");
+                entity.HasKey(e => e.IdPatient)
+                    .HasName("PK__Patient__8C242805FE62B9E2");
 
                 entity.ToTable("Patient");
 
-                entity.Property(e => e.idPatient).HasColumnName("idPatient");
+                entity.Property(e => e.IdPatient).HasColumnName("idPatient");
 
-                entity.Property(e => e.address)
+                entity.Property(e => e.Address)
                     .HasMaxLength(100)
                     .IsUnicode(false)
                     .HasColumnName("address");
 
-                entity.Property(e => e.age).HasColumnName("age");
+                entity.Property(e => e.Age).HasColumnName("age");
 
-                entity.Property(e => e.lastName)
+                entity.Property(e => e.LastName)
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("lastName");
 
-                entity.Property(e => e.name)
+                entity.Property(e => e.Name)
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("name");
+
+                entity.Property(e => e.Status).HasColumnName("status");
             });
 
             modelBuilder.Entity<PrescriptionProduct>(entity =>
             {
-                entity.HasKey(e => e.idPrescriptionProduct)
-                    .HasName("PK__Prescrip__081B6E5CFD02485A");
+                entity.HasKey(e => e.IdPrescriptionProduct)
+                    .HasName("PK__Prescrip__081B6E5C14116B2D");
 
                 entity.ToTable("PrescriptionProduct");
 
-                entity.Property(e => e.idPrescriptionProduct).HasColumnName("idPrescriptionProduct");
+                entity.Property(e => e.IdPrescriptionProduct).HasColumnName("idPrescriptionProduct");
 
-                entity.Property(e => e.idConsult).HasColumnName("idConsult");
+                entity.Property(e => e.IdConsult).HasColumnName("idConsult");
 
-                entity.Property(e => e.idProduct).HasColumnName("idProduct");
+                entity.Property(e => e.IdProduct).HasColumnName("idProduct");
+
+                entity.HasOne(d => d.IdConsultNavigation)
+                    .WithMany(p => p.PrescriptionProducts)
+                    .HasForeignKey(d => d.IdConsult)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Prescript__idCon__52593CB8");
+
+                entity.HasOne(d => d.IdProductNavigation)
+                    .WithMany(p => p.PrescriptionProducts)
+                    .HasForeignKey(d => d.IdProduct)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Prescript__idPro__534D60F1");
             });
 
             modelBuilder.Entity<PrescriptionProductView>(entity =>
@@ -204,11 +258,11 @@ namespace DataAccess.SqlServerDataSource
 
                 entity.ToView("PrescriptionProductView");
 
-                entity.Property(e => e.idPrescriptionProduct).HasColumnName("idPrescriptionProduct");
+                entity.Property(e => e.IdPrescriptionProduct).HasColumnName("idPrescriptionProduct");
 
-                entity.Property(e => e.idProduct).HasColumnName("idProduct");
+                entity.Property(e => e.IdProduct).HasColumnName("idProduct");
 
-                entity.Property(e => e.productName)
+                entity.Property(e => e.ProductName)
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("productName");
@@ -216,117 +270,141 @@ namespace DataAccess.SqlServerDataSource
 
             modelBuilder.Entity<Presentation>(entity =>
             {
-                entity.HasKey(e => e.idPresentation)
-                    .HasName("PK__Presenta__A3EA35C1F80BFD4C");
+                entity.HasKey(e => e.IdPresentation)
+                    .HasName("PK__Presenta__A3EA35C100ECE0C5");
 
                 entity.ToTable("Presentation");
 
-                entity.Property(e => e.idPresentation).HasColumnName("idPresentation");
+                entity.Property(e => e.IdPresentation).HasColumnName("idPresentation");
 
-                entity.Property(e => e.name)
+                entity.Property(e => e.Name)
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("name");
+
+                entity.Property(e => e.Status).HasColumnName("status");
             });
 
             modelBuilder.Entity<Product>(entity =>
             {
-                entity.HasKey(e => e.idProduct)
-                    .HasName("PK__Product__5EEC79D12730F083");
+                entity.HasKey(e => e.IdProduct)
+                    .HasName("PK__Product__5EEC79D1FE0B6F14");
 
                 entity.ToTable("Product");
 
-                entity.Property(e => e.idProduct).HasColumnName("idProduct");
+                entity.Property(e => e.IdProduct).HasColumnName("idProduct");
 
-                entity.Property(e => e.description)
+                entity.Property(e => e.Description)
                     .HasMaxLength(500)
                     .IsUnicode(false)
                     .HasColumnName("description");
 
-                entity.Property(e => e.name)
+                entity.Property(e => e.Name)
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("name");
 
-                entity.Property(e => e.quantity).HasColumnName("quantity");
+                entity.Property(e => e.Quantity).HasColumnName("quantity");
+
+                entity.Property(e => e.Status).HasColumnName("status");
             });
 
             modelBuilder.Entity<Provider>(entity =>
             {
-                entity.HasKey(e => e.idProvider)
-                    .HasName("PK__Provider__CFAFC10FF1E67E61");
+                entity.HasKey(e => e.IdProvider)
+                    .HasName("PK__Provider__CFAFC10F53051C1E");
 
                 entity.ToTable("Provider");
 
-                entity.HasIndex(e => e.ruc, "UQ__Provider__C2B74E61D5E7B176")
+                entity.HasIndex(e => e.Ruc, "UQ__Provider__C2B74E615C9EB988")
                     .IsUnique();
 
-                entity.Property(e => e.idProvider).HasColumnName("idProvider");
+                entity.Property(e => e.IdProvider).HasColumnName("idProvider");
 
-                entity.Property(e => e.address)
+                entity.Property(e => e.Address)
                     .HasMaxLength(150)
                     .IsUnicode(false)
                     .HasColumnName("address");
 
-                entity.Property(e => e.name)
+                entity.Property(e => e.Name)
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("name");
 
-                entity.Property(e => e.ruc)
+                entity.Property(e => e.Ruc)
                     .HasMaxLength(30)
                     .HasColumnName("ruc");
+
+                entity.Property(e => e.Status).HasColumnName("status");
             });
 
             modelBuilder.Entity<ProviderPhone>(entity =>
             {
-                entity.HasKey(e => e.idProviderPhone)
-                    .HasName("PK__Provider__FB3598A1EDD4DA0A");
+                entity.HasKey(e => e.IdProviderPhone)
+                    .HasName("PK__Provider__FB3598A1030B7A65");
 
                 entity.ToTable("ProviderPhone");
 
-                entity.Property(e => e.idProviderPhone).HasColumnName("idProviderPhone");
+                entity.Property(e => e.IdProviderPhone).HasColumnName("idProviderPhone");
 
-                entity.Property(e => e.idProvider).HasColumnName("idProvider");
+                entity.Property(e => e.IdProvider).HasColumnName("idProvider");
 
-                entity.Property(e => e.phone)
+                entity.Property(e => e.Phone)
                     .HasMaxLength(12)
                     .HasColumnName("phone");
+
+                entity.HasOne(d => d.IdProviderNavigation)
+                    .WithMany(p => p.ProviderPhones)
+                    .HasForeignKey(d => d.IdProvider)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__ProviderP__idPro__38996AB5");
             });
 
             modelBuilder.Entity<Role>(entity =>
             {
-                entity.HasKey(e => e.idRole)
-                    .HasName("PK__Role__E5045C544F2F9A40");
+                entity.HasKey(e => e.IdRole)
+                    .HasName("PK__Role__E5045C54D2A1DFF8");
 
                 entity.ToTable("Role");
 
-                entity.Property(e => e.idRole).HasColumnName("idRole");
+                entity.Property(e => e.IdRole).HasColumnName("idRole");
 
-                entity.Property(e => e.name)
+                entity.Property(e => e.Name)
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("name");
             });
 
-            modelBuilder.Entity<TransactionDetail>(entity =>
+            modelBuilder.Entity<SaleDetail>(entity =>
             {
-                entity.HasKey(e => e.idTransactionDetail)
-                    .HasName("PK__SaleDeta__B23385CD97B734AE");
+                entity.HasKey(e => e.IdSaleDetail)
+                    .HasName("PK__SaleDeta__B23385CD29B46516");
 
                 entity.ToTable("SaleDetail");
 
-                entity.Property(e => e.idTransactionDetail).HasColumnName("idSaleDetail");
+                entity.Property(e => e.IdSaleDetail).HasColumnName("idSaleDetail");
 
-                entity.Property(e => e.idTransaction).HasColumnName("idSell");
+                entity.Property(e => e.IdSell).HasColumnName("idSell");
 
-                entity.Property(e => e.idStock).HasColumnName("idStock");
+                entity.Property(e => e.IdStock).HasColumnName("idStock");
 
-                entity.Property(e => e.price).HasColumnName("price");
+                entity.Property(e => e.Price).HasColumnName("price");
 
-                entity.Property(e => e.quantity).HasColumnName("quantity");
+                entity.Property(e => e.Quantity).HasColumnName("quantity");
 
-                entity.Property(e => e.total).HasColumnName("total");
+                entity.Property(e => e.Total).HasColumnName("total");
+
+                entity.HasOne(d => d.IdSellNavigation)
+                    .WithMany(p => p.SaleDetails)
+                    .HasForeignKey(d => d.IdSell)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__SaleDetai__idSel__412EB0B6");
+
+                entity.HasOne(d => d.IdStockNavigation)
+                    .WithMany(p => p.SaleDetails)
+                    .HasForeignKey(d => d.IdStock)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__SaleDetai__idSto__4222D4EF");
             });
 
             modelBuilder.Entity<SaleDetailView>(entity =>
@@ -335,48 +413,54 @@ namespace DataAccess.SqlServerDataSource
 
                 entity.ToView("SaleDetailView");
 
-                entity.Property(e => e.idSaleDetail).HasColumnName("idSaleDetail");
+                entity.Property(e => e.IdSaleDetail).HasColumnName("idSaleDetail");
 
-                entity.Property(e => e.idStock).HasColumnName("idStock");
+                entity.Property(e => e.IdStock).HasColumnName("idStock");
 
-                entity.Property(e => e.presentation)
+                entity.Property(e => e.Presentation)
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("presentation");
 
-                entity.Property(e => e.price).HasColumnName("price");
+                entity.Property(e => e.Price).HasColumnName("price");
 
-                entity.Property(e => e.productDescription)
+                entity.Property(e => e.ProductDescription)
                     .HasMaxLength(500)
                     .IsUnicode(false)
                     .HasColumnName("productDescription");
 
-                entity.Property(e => e.productName)
+                entity.Property(e => e.ProductName)
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("productName");
 
-                entity.Property(e => e.quantity).HasColumnName("quantity");
+                entity.Property(e => e.Quantity).HasColumnName("quantity");
 
-                entity.Property(e => e.total).HasColumnName("total");
+                entity.Property(e => e.Total).HasColumnName("total");
             });
 
-            modelBuilder.Entity<Transaction>(entity =>
+            modelBuilder.Entity<Sell>(entity =>
             {
-                entity.HasKey(e => e.idTransaction)
-                    .HasName("PK__Sell__C5AEA0D36E35A861");
+                entity.HasKey(e => e.IdSell)
+                    .HasName("PK__Sell__C5AEA0D398F35ACB");
 
                 entity.ToTable("Sell");
 
-                entity.Property(e => e.idTransaction).HasColumnName("idSell");
+                entity.Property(e => e.IdSell).HasColumnName("idSell");
 
-                entity.Property(e => e.date)
+                entity.Property(e => e.Date)
                     .HasColumnType("datetime")
                     .HasColumnName("date");
 
-                entity.Property(e => e.idRelatedObjet).HasColumnName("idEmployee");
+                entity.Property(e => e.IdEmployee).HasColumnName("idEmployee");
 
-                entity.Property(e => e.total).HasColumnName("total");
+                entity.Property(e => e.Total).HasColumnName("total");
+
+                entity.HasOne(d => d.IdEmployeeNavigation)
+                    .WithMany(p => p.Sells)
+                    .HasForeignKey(d => d.IdEmployee)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Sell__idEmployee__30F848ED");
             });
 
             modelBuilder.Entity<SellView>(entity =>
@@ -385,46 +469,64 @@ namespace DataAccess.SqlServerDataSource
 
                 entity.ToView("SellView");
 
-                entity.Property(e => e.date)
-                    .HasMaxLength(4000)
+                entity.Property(e => e.Date)
+                    .HasColumnType("datetime")
                     .HasColumnName("date");
 
-                entity.Property(e => e.idEmployee).HasColumnName("idEmployee");
+                entity.Property(e => e.IdEmployee).HasColumnName("idEmployee");
 
-                entity.Property(e => e.idSell).HasColumnName("idSell");
+                entity.Property(e => e.IdSell).HasColumnName("idSell");
 
-                entity.Property(e => e.name)
+                entity.Property(e => e.Name)
                     .HasMaxLength(101)
                     .IsUnicode(false)
                     .HasColumnName("name");
 
-                entity.Property(e => e.total).HasColumnName("total");
+                entity.Property(e => e.Total).HasColumnName("total");
             });
 
             modelBuilder.Entity<Stock>(entity =>
             {
-                entity.HasKey(e => e.idStock)
-                    .HasName("PK__Stock__A4B76DE569C68715");
+                entity.HasKey(e => e.IdStock)
+                    .HasName("PK__Stock__A4B76DE5F42DC7EE");
 
                 entity.ToTable("Stock");
 
-                entity.Property(e => e.idStock).HasColumnName("idStock");
+                entity.Property(e => e.IdStock).HasColumnName("idStock");
 
-                entity.Property(e => e.entryDate)
+                entity.Property(e => e.EntryDate)
                     .HasColumnType("datetime")
                     .HasColumnName("entryDate");
 
-                entity.Property(e => e.expiration)
+                entity.Property(e => e.Expiration)
                     .HasColumnType("datetime")
                     .HasColumnName("expiration");
 
-                entity.Property(e => e.idPresentation).HasColumnName("idPresentation");
+                entity.Property(e => e.IdPresentation).HasColumnName("idPresentation");
 
-                entity.Property(e => e.idProduct).HasColumnName("idProduct");
+                entity.Property(e => e.IdProduct).HasColumnName("idProduct");
 
-                entity.Property(e => e.price).HasColumnName("price");
+                entity.Property(e => e.Image)
+                    .HasColumnType("image")
+                    .HasColumnName("image");
 
-                entity.Property(e => e.quantity).HasColumnName("quantity");
+                entity.Property(e => e.Price).HasColumnName("price");
+
+                entity.Property(e => e.Quantity).HasColumnName("quantity");
+
+                entity.Property(e => e.Status).HasColumnName("status");
+
+                entity.HasOne(d => d.PresentationNavigation)
+                    .WithMany(p => p.Stocks)
+                    .HasForeignKey(d => d.IdPresentation)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Stock__idPresent__3C69FB99");
+
+                entity.HasOne(d => d.ProductNavigation)
+                    .WithMany(p => p.Stocks)
+                    .HasForeignKey(d => d.IdProduct)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Stock__idProduct__3B75D760");
             });
 
             modelBuilder.Entity<StockView>(entity =>
@@ -433,72 +535,96 @@ namespace DataAccess.SqlServerDataSource
 
                 entity.ToView("StockView");
 
-                entity.Property(e => e.description)
+                entity.Property(e => e.Description)
                     .HasMaxLength(500)
                     .IsUnicode(false)
                     .HasColumnName("description");
 
-                entity.Property(e => e.entryDate)
-                    .HasMaxLength(4000)
+                entity.Property(e => e.EntryDate)
+                    .HasColumnType("datetime")
                     .HasColumnName("entryDate");
 
-                entity.Property(e => e.expiration)
-                    .HasMaxLength(4000)
+                entity.Property(e => e.Expiration)
+                    .HasColumnType("datetime")
                     .HasColumnName("expiration");
 
-                entity.Property(e => e.idStock).HasColumnName("idStock");
+                entity.Property(e => e.IdStock).HasColumnName("idStock");
 
-                entity.Property(e => e.name)
+                entity.Property(e => e.Image)
+                    .HasColumnType("image")
+                    .HasColumnName("image");
+
+                entity.Property(e => e.Name)
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("name");
 
-                entity.Property(e => e.presentation)
+                entity.Property(e => e.Presentation)
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("presentation");
 
-                entity.Property(e => e.price).HasColumnName("price");
+                entity.Property(e => e.Price).HasColumnName("price");
 
-                entity.Property(e => e.quantity).HasColumnName("quantity");
+                entity.Property(e => e.Quantity).HasColumnName("quantity");
+
+                entity.Property(e => e.Status).HasColumnName("status");
             });
 
-            modelBuilder.Entity<Transaction>(entity =>
+            modelBuilder.Entity<Supply>(entity =>
             {
-                entity.HasKey(e => e.idTransaction)
-                    .HasName("PK__Supply__E94C3637E4F27BE9");
+                entity.HasKey(e => e.IdSupply)
+                    .HasName("PK__Supply__E94C363742BAFE36");
 
                 entity.ToTable("Supply");
 
-                entity.Property(e => e.idTransaction).HasColumnName("idSupply");
+                entity.Property(e => e.IdSupply).HasColumnName("idSupply");
 
-                entity.Property(e => e.date)
+                entity.Property(e => e.Date)
                     .HasColumnType("datetime")
                     .HasColumnName("date");
 
-                entity.Property(e => e.idRelatedObjet).HasColumnName("idProvider");
+                entity.Property(e => e.IdProvider).HasColumnName("idProvider");
 
-                entity.Property(e => e.total).HasColumnName("total");
+                entity.Property(e => e.Total).HasColumnName("total");
+
+                entity.HasOne(d => d.IdProviderNavigation)
+                    .WithMany(p => p.Supplies)
+                    .HasForeignKey(d => d.IdProvider)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Supply__idProvid__34C8D9D1");
             });
 
-            modelBuilder.Entity<TransactionDetail>(entity =>
+            modelBuilder.Entity<SupplyDetail>(entity =>
             {
-                entity.HasKey(e => e.idTransactionDetail)
-                    .HasName("PK__SupplyDe__B6029C4B35C5A282");
+                entity.HasKey(e => e.IdSupplyDetail)
+                    .HasName("PK__SupplyDe__B6029C4B59C433B3");
 
                 entity.ToTable("SupplyDetail");
 
-                entity.Property(e => e.idTransactionDetail).HasColumnName("idSupplyDetail");
+                entity.Property(e => e.IdSupplyDetail).HasColumnName("idSupplyDetail");
 
-                entity.Property(e => e.idStock).HasColumnName("idStock");
+                entity.Property(e => e.IdStock).HasColumnName("idStock");
 
-                entity.Property(e => e.idTransaction).HasColumnName("idSupply");
+                entity.Property(e => e.IdSupply).HasColumnName("idSupply");
 
-                entity.Property(e => e.price).HasColumnName("price");
+                entity.Property(e => e.Price).HasColumnName("price");
 
-                entity.Property(e => e.quantity).HasColumnName("quantity");
+                entity.Property(e => e.Quantity).HasColumnName("quantity");
 
-                entity.Property(e => e.total).HasColumnName("total");
+                entity.Property(e => e.Total).HasColumnName("total");
+
+                entity.HasOne(d => d.IdStockNavigation)
+                    .WithMany(p => p.SupplyDetails)
+                    .HasForeignKey(d => d.IdStock)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__SupplyDet__idSto__48CFD27E");
+
+                entity.HasOne(d => d.IdSupplyNavigation)
+                    .WithMany(p => p.SupplyDetails)
+                    .HasForeignKey(d => d.IdSupply)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__SupplyDet__idSup__47DBAE45");
             });
 
             modelBuilder.Entity<SupplyDetailView>(entity =>
@@ -507,30 +633,30 @@ namespace DataAccess.SqlServerDataSource
 
                 entity.ToView("SupplyDetailView");
 
-                entity.Property(e => e.idStock).HasColumnName("idStock");
+                entity.Property(e => e.IdStock).HasColumnName("idStock");
 
-                entity.Property(e => e.idSupplyDetail).HasColumnName("idSupplyDetail");
+                entity.Property(e => e.IdSupplyDetail).HasColumnName("idSupplyDetail");
 
-                entity.Property(e => e.presentation)
+                entity.Property(e => e.Presentation)
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("presentation");
 
-                entity.Property(e => e.price).HasColumnName("price");
+                entity.Property(e => e.Price).HasColumnName("price");
 
-                entity.Property(e => e.productDescription)
+                entity.Property(e => e.ProductDescription)
                     .HasMaxLength(500)
                     .IsUnicode(false)
                     .HasColumnName("productDescription");
 
-                entity.Property(e => e.productName)
+                entity.Property(e => e.ProductName)
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("productName");
 
-                entity.Property(e => e.quantity).HasColumnName("quantity");
+                entity.Property(e => e.Quantity).HasColumnName("quantity");
 
-                entity.Property(e => e.total).HasColumnName("total");
+                entity.Property(e => e.Total).HasColumnName("total");
             });
 
             modelBuilder.Entity<SupplyView>(entity =>
@@ -539,20 +665,20 @@ namespace DataAccess.SqlServerDataSource
 
                 entity.ToView("SupplyView");
 
-                entity.Property(e => e.date)
-                    .HasMaxLength(4000)
+                entity.Property(e => e.Date)
+                    .HasColumnType("datetime")
                     .HasColumnName("date");
 
-                entity.Property(e => e.idProvider).HasColumnName("idProvider");
+                entity.Property(e => e.IdProvider).HasColumnName("idProvider");
 
-                entity.Property(e => e.idSupply).HasColumnName("idSupply");
+                entity.Property(e => e.IdSupply).HasColumnName("idSupply");
 
-                entity.Property(e => e.providerName)
+                entity.Property(e => e.ProviderName)
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("providerName");
 
-                entity.Property(e => e.total).HasColumnName("total");
+                entity.Property(e => e.Total).HasColumnName("total");
             });
 
             OnModelCreatingPartial(modelBuilder);

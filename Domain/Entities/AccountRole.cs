@@ -2,7 +2,10 @@
 {
     public partial class AccountRole : BaseEntity
     {
-        public int idRole { get; set; }
-        public int idAccount { get; set; }
+        public int IdRole { get; set; }
+        public int IdAccount { get; set; }
+
+        public virtual Account IdAccountNavigation { get; set; } = null!;
+        public virtual Role IdRoleNavigation { get; set; } = null!;
     }
 }

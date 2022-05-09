@@ -31,14 +31,14 @@ namespace DataAccess.DaoSqlServer
 
         protected override bool validateEntity(Presentation item, object id)
         {
-            if(item.idPresentation == (int)id)
+            if(item.IdPresentation == (int)id)
                 return true;
 
             return false;
         }
         protected override async Task<Presentation> getEntityById(object id, MasayaNaturistCenterDataBase context)
         {
-            return await context.Set<Presentation>().FirstOrDefaultAsync((e) => e.idPresentation == (int)id);
+            return await context.Set<Presentation>().FirstOrDefaultAsync((e) => e.IdPresentation == (int)id);
         }
     }
 
@@ -48,14 +48,14 @@ namespace DataAccess.DaoSqlServer
 
         protected override bool validateEntity(Product item, object id)
         {
-            if (item.idProduct == (int)id)
+            if (item.IdProduct == (int)id)
                 return true;
 
             return false;
         }
         protected override async Task<Product> getEntityById(object id, MasayaNaturistCenterDataBase context)
         {
-            return await context.Set<Product>().FirstOrDefaultAsync((e) => e.idProduct == (int)id);
+            return await context.Set<Product>().FirstOrDefaultAsync((e) => e.IdProduct == (int)id);
         }
     }
 
@@ -64,12 +64,12 @@ namespace DataAccess.DaoSqlServer
         public ProviderDAOSQL(MasayaNaturistCenterDataBaseFactory dataBaseContext) : base(dataBaseContext) { }
     }
 
-    public class SaleDetailDAOSQL : BaseDAOSQL<TransactionDetail>, TransactionDetailDAO
+    public class SaleDetailDAOSQL : BaseDAOSQL<SaleDetail>, SaleDetailDAO
     {
         public SaleDetailDAOSQL(MasayaNaturistCenterDataBaseFactory dataBaseContext) : base(dataBaseContext) { }
     }
 
-    public class SellDAOSQL : BaseDAOSQL<Transaction>, TransactionDAO
+    public class SellDAOSQL : BaseDAOSQL<Sell>, SellDAO
     {
         public SellDAOSQL(MasayaNaturistCenterDataBaseFactory dataBaseContext) : base(dataBaseContext) { }
     }
@@ -77,14 +77,39 @@ namespace DataAccess.DaoSqlServer
     public class StockDAOSQL : BaseDAOSQL<Stock>, StockDAO
     {
         public StockDAOSQL(MasayaNaturistCenterDataBaseFactory dataBaseContext) : base(dataBaseContext) { }
+        
+        protected override bool validateEntity(Stock item, object id)
+        {
+            if (item.IdStock == (int)id)
+                return true;
+
+            return false;
+        }
+        protected override async Task<Stock> getEntityById(object id, MasayaNaturistCenterDataBase context)
+        {
+            return await context.Set<Stock>().FirstOrDefaultAsync((e) => validateEntity(e, id));
+        }
+
+        public Stock getStock(int id)
+        {
+            using (MasayaNaturistCenterDataBase context = _contextFactory.CreateDbContext())
+            {
+                var element = context.Stocks.Single(item => item.IdStock == id);
+
+                context.Entry(element).Reference(s => s.ProductNavigation).Load();
+                context.Entry(element).Reference(s => s.PresentationNavigation).Load();
+
+                return element;
+            }
+        }
     }
 
-    public class SupplyDAOSQL : BaseDAOSQL<Transaction>, TransactionDAO
+    public class SupplyDAOSQL : BaseDAOSQL<Supply>, SupplyDAO
     {
         public SupplyDAOSQL(MasayaNaturistCenterDataBaseFactory dataBaseContext) : base(dataBaseContext) { }
     }
 
-    public class SupplyDetailDAOSQL : BaseDAOSQL<TransactionDetail>, TransactionDetailDAO
+    public class SupplyDetailDAOSQL : BaseDAOSQL<SupplyDetail>, SupplyDetailDAO
     {
         public SupplyDetailDAOSQL(MasayaNaturistCenterDataBaseFactory dataBaseContext) : base(dataBaseContext) { }
     }

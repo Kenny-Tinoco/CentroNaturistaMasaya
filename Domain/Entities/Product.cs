@@ -2,9 +2,19 @@
 {
     public partial class Product : BaseEntity
     {
-        public int idProduct { get; set; }
-        public string name { get; set; } = null!;
-        public string description { get; set; } = null!;
-        public int quantity { get; set; }
+        public Product()
+        {
+            PrescriptionProducts = new HashSet<PrescriptionProduct>();
+            Stocks = new HashSet<Stock>();
+        }
+
+        public int IdProduct { get; set; }
+        public string Name { get; set; } = null!;
+        public string? Description { get; set; }
+        public int Quantity { get; set; }
+        public bool Status { get; set; }
+
+        public virtual ICollection<PrescriptionProduct> PrescriptionProducts { get; set; }
+        public virtual ICollection<Stock> Stocks { get; set; }
     }
 }

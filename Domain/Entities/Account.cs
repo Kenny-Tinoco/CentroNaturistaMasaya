@@ -2,10 +2,12 @@
 {
     public partial class Account : BaseEntity
     {
-        public int idAccount { get; set; }
-        public int idEmployee { get; set; }
-        public string userName { get; set; } = null!;
-        public string password { get; set; } = null!;
-        public DateTime? created { get; set; }
+        public int IdAccount { get; set; }
+        public int IdEmployee { get; set; }
+        public string UserName { get; set; } = null!;
+        public string Password { get; set; } = null!;
+        public DateTime? Created { get; set; }
+
+        public virtual Employee IdEmployeeNavigation { get; set; } = null!;
     }
 }

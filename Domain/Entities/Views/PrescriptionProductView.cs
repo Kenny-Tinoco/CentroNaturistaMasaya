@@ -2,8 +2,8 @@
 {
     public partial class PrescriptionProductView : BaseEntity
     {
-        public int idPrescriptionProduct { get; set; }
-        public int idProduct { get; set; }
-        public string productName { get; set; } = null!;
+        public int IdPrescriptionProduct { get; set; }
+        public int IdProduct { get; set; }
+        public string ProductName { get; set; } = null!;
     }
 }

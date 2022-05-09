@@ -1,0 +1,26 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "bd85041b-69bd-4604-8a3f-d9c34f86f516": {
+      "ProjectGuid": "bd85041b-69bd-4604-8a3f-d9c34f86f516",
+      "DisplayName": "WPF",
+      "ColorIndex": 0
+    },
+    "ce8cd781-d2d5-46ea-b547-8ff02ef6b3a6": {
+      "ProjectGuid": "ce8cd781-d2d5-46ea-b547-8ff02ef6b3a6",
+      "DisplayName": "Domain",
+      "ColorIndex": 1
+    },
+    "5c6af8ad-49eb-4158-ae2d-3f11c9b12f5c": {
+      "ProjectGuid": "5c6af8ad-49eb-4158-ae2d-3f11c9b12f5c",
+      "DisplayName": "DataAccess",
+      "ColorIndex": 2
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Archivos varios",
+      "ColorIndex": -1
+    }
+  },
+  "NextColorIndex": 3
+}

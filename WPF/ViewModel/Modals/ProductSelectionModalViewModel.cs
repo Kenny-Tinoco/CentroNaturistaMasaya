@@ -72,8 +72,8 @@ namespace WPF.ViewModel
             return false;
         }
         public bool searchLogic(Product element, string parameter) =>
-            element.idProduct.ToString().Contains(parameter.Trim()) ||
-            element.name.ToLower().StartsWith(parameter.Trim().ToLower());
+            element.IdProduct.ToString().Contains(parameter.Trim()) ||
+            element.Name.ToLower().StartsWith(parameter.Trim().ToLower());
 
 
         public ICollectionView dataGridSource => CollectionViewSource.GetDefaultView(entityStore._catalogue);

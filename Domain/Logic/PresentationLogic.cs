@@ -14,15 +14,16 @@ namespace Domain.Logic
         {
             var element = new Presentation
             {
-                idPresentation = 0,
-                name = ""
+                IdPresentation = 0,
+                Name = "",
+                Status = true
             };
             entity = element;
         }
 
         public override int getId(Presentation parameter)
         {
-            return parameter.idPresentation;
+            return parameter.IdPresentation;
         }
     }
 }

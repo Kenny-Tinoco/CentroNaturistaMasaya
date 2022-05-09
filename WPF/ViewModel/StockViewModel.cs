@@ -3,7 +3,6 @@ using Domain.Entities.Views;
 using Domain.Logic;
 using MVVMGenericStructure.Commands;
 using MVVMGenericStructure.Services;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
@@ -11,32 +10,27 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using WPF.Command.CRUD;
+using WPF.Command.Navigation;
 using WPF.Stores;
 
 namespace WPF.ViewModel
 {
     public class StockViewModel : ViewModelGeneric<Stock>
     {
+        private ICommand OpenFormCommand { get; }
 
-        public ICommand addCommand { get; }
-        public ICommand saveCommand { get; }
-        public ICommand deleteCommand { get; }
-
-        private EntityStore entityStore;
+        private readonly EntityStore entityStore;
         public IEnumerable<StockView> StockViewCatalog { get; set; }
 
-        public INavigationService navigationService;
 
-
-        public StockViewModel(BaseLogic<Stock> parameter, EntityStore _entityStore, INavigationService addStockNavigationService) : base((StockLogic)parameter)
+        public StockViewModel(BaseLogic<Stock> parameter, EntityStore _entityStore, INavigationService FormNavigationService) : base((StockLogic)parameter)
         {
-            addCommand = new NavigateCommand(addStockNavigationService);
-            saveCommand = new SaveCommand<Stock>(logic, canCreate);
-            deleteCommand = new DeleteCommand<Stock>(logic);
+            OpenFormCommand = new NavigateCommand(FormNavigationService);
 
             entityStore = _entityStore;
-            entityStore.Refresh += RefreshChanges;
+            entityStore.RefreshStock += RefreshStockChanges;
         }
+
 
         public static StockViewModel LoadViewModel(BaseLogic<Stock> parameter, EntityStore _entityStore, INavigationService addStockNavigationService)
         {
@@ -47,25 +41,85 @@ namespace WPF.ViewModel
             return viewModel;
         }
 
-
-
         public override async Task Initialize()
         {
             StockViewCatalog = await ((StockLogic)logic).viewsCollections.StockViewCatalog();
-            DataGridSource.Source = StockViewCatalog;
-            dataGridSource = DataGridSource.View;
+            dataGridSource = CollectionViewSource.GetDefaultView(StockViewCatalog);
+            sort(false);
         }
 
 
-
-        private string _searchText;
-
-        public string searchText
+        private ICommand _editCommand;
+        public ICommand EditCommand
         {
             get
             {
-                return _searchText;
+                if (_editCommand is null)
+                    _editCommand = new RelayCommand(parameter => edit((StockView)parameter));
+
+                return _editCommand;
             }
+        }
+        private void edit(StockView parameter)
+        {
+            entityStore.entity = ((StockLogic)logic).getStock(parameter.IdStock);
+            entityStore.isEdition = true;
+            OpenFormCommand.Execute(-1);
+        }
+
+
+        private ICommand _addCommand;
+        public ICommand AddCommand
+        {
+            get
+            {
+                if (_addCommand is null)
+                    _addCommand = new RelayCommand(parameter => add());
+
+                return _addCommand;
+            }
+        }
+        private void add()
+        {
+            entityStore.entity = null;
+            entityStore.isEdition = false;
+            OpenFormCommand.Execute(-1);
+        }
+
+
+        private ICommand _deleteCommand;
+        public ICommand DeleteCommand
+        {
+            get
+            {
+                if (_deleteCommand is null)
+                    _deleteCommand = new RelayCommand(parameter => delete((StockView)parameter));
+
+                return _deleteCommand;
+            }
+        }
+        private async void delete(StockView parameter)
+        {
+            var element = await logic.getById(parameter.IdStock);
+            var result = MessageBox
+                .Show("¿Está seguro de eliminar esta existencia?\n" +
+                      "Se desencadenará una eliminación en cascada de todos los registros que tengan alguna relación con esta existencia.\n\n" +
+                      "Antes de eliminarla considere la opción de deshabilitar esta existencia, dicha opción oculta todas las ocurrencias de " +
+                      "la sin hacer eliminaciones.",
+                      "Confirmar Eliminación",
+                       MessageBoxButton.YesNo);
+
+            if (result == MessageBoxResult.Yes)
+                await new DeleteCommand<Stock>(logic).ExecuteAsync(element);
+
+            await Initialize();
+        }
+
+
+        private string _searchText;
+        public string searchText
+        {
+            get => _searchText;
             set
             {
                 _searchText = value;
@@ -77,67 +131,116 @@ namespace WPF.ViewModel
         {
             if (validateSearchString(searchText))
             {
-                DataGridSource.Filter += new FilterEventHandler(DataGridSource_Filter);
+                dataGridSource.Filter = filter;
             }
             else if (searchText.Equals(""))
             {
-                DataGridSource.Filter += null;
+                dataGridSource.Filter = null;
             }
         }
 
-        private void DataGridSource_Filter(object sender, FilterEventArgs e)
+        private bool filter(object parameter)
         {
-            StockView element = e.Item as StockView;
-            if (element != null)
+            if (parameter is StockView element)
             {
-                if (((StockLogic)logic).searchLogic(element, searchText))
-                {
-                    e.Accepted = true;
-                }
-                else
-                {
-                    e.Accepted = false;
-                }
+                return ((StockLogic)logic).searchLogic(element, searchText);
             }
+
+            return false;
         }
 
 
-        private ICollectionView _dataGridSourceView;
-        public ICollectionView dataGridSource
+        private ICommand _sortCommand;
+        public ICommand SortCommand
         {
             get
             {
-                return _dataGridSourceView;
+                if (_sortCommand is null)
+                    _sortCommand = new RelayCommand(parameter => sort((bool)parameter));
+
+                return _sortCommand;
             }
-            set
+        }
+        private void sort(bool parameter)
+        {
+            _dataGridSource.SortDescriptions.Clear();
+            if (parameter)
             {
-                _dataGridSourceView = value;
-                OnPropertyChanged(nameof(dataGridSource));
+                _dataGridSource
+                     .SortDescriptions
+                    .Add(new SortDescription(nameof(StockView.IdStock), ListSortDirection.Ascending));
+            }
+            else
+            {
+                _dataGridSource
+                     .SortDescriptions
+                     .Add(new SortDescription(nameof(StockView.IdStock), ListSortDirection.Descending));
             }
         }
 
-        private CollectionViewSource _dataGridSource;
-        private CollectionViewSource DataGridSource
+
+        private ICommand _groupSortCommand;
+        public ICommand GroupCommand
+        {
+            get
+            {
+                if (_groupSortCommand is null)
+                    _groupSortCommand = new RelayCommand(parameter => groupSort((bool)parameter));
+
+                return _groupSortCommand;
+            }
+        }
+        private void groupSort(bool parameter)
+        {
+            _dataGridSource.GroupDescriptions.Clear();
+            _dataGridSource.SortDescriptions.Clear();
+            if (parameter)
+            {
+                _dataGridSource
+                    .GroupDescriptions
+                    .Add(new PropertyGroupDescription(nameof(StockView.Presentation)));
+                _dataGridSource
+                     .SortDescriptions
+                     .Add(new SortDescription(nameof(StockView.Presentation), ListSortDirection.Ascending));
+            }
+            else
+                sort(false);
+        }
+
+
+        private ICollectionView _dataGridSource;
+        public ICollectionView dataGridSource
         {
             get
             {
                 if (_dataGridSource == null)
                 {
-                    _dataGridSource = new CollectionViewSource();
-                    _dataGridSource.Source = catalogue;
+                    _dataGridSource = CollectionViewSource.GetDefaultView(StockViewCatalog);
                 }
+                sort(false);
                 return _dataGridSource;
             }
             set
             {
                 _dataGridSource = value;
+                OnPropertyChanged(nameof(dataGridSource));
             }
         }
 
-        private async void RefreshChanges()
+
+        private async void RefreshStockChanges()
         {
             await Initialize();
         }
 
+
+        public override void Dispose()
+        {
+            dataGridSource.Filter = null;
+            dataGridSource.SortDescriptions.Clear();
+            dataGridSource.GroupDescriptions.Clear();
+
+            base.Dispose();
+        }
     }
 }

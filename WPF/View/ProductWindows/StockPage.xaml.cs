@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 
 namespace WPF.View.ProductWindows
 {
@@ -7,6 +8,17 @@ namespace WPF.View.ProductWindows
         public StockPage()
         {
             InitializeComponent();
+        }
+
+        private void Expander_Process(object sender, RoutedEventArgs e)
+        {
+            if (sender is Expander expander)
+            {
+                var row = DataGridRow.GetRowContainingElement(expander);
+
+                row.DetailsVisibility = expander.IsExpanded ? Visibility.Visible
+                                                            : Visibility.Collapsed;
+            }
         }
     }
 }

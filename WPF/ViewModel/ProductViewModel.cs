@@ -28,12 +28,12 @@ namespace WPF.ViewModel
 
             AddModalCommand = new RelayCommand(parameter => addModal());
             EditModalCommand = new RelayCommand(parameter => editModal((Product)parameter)); 
-            DeleteCommand = new RelayCommand(parameter => delete((Product)parameter));
 
 
             entityStore = _entityStore;
             entityStore.EntityEdited += OnEntityEdited;
             entityStore.EntityCreated += OnEntityCreated;
+            entityStore.EntityDeleted += OnEntityDeleted;
         }
 
 
@@ -103,22 +103,48 @@ namespace WPF.ViewModel
         }
 
 
-        public ICommand DeleteCommand { get; }
-        public async void delete(Product parameter)
+        private ICommand _changeStatusCommand;
+        public ICommand ChangeStatusCommand
         {
-            var result = MessageBox
-                .Show("¿Está seguro de eliminar este producto?", "Confirmar Eliminación", MessageBoxButton.YesNo);
+            get
+            {
+                if (_changeStatusCommand is null)
+                    _changeStatusCommand = new RelayCommand(parameter => changeStatus((Product)parameter));
 
-            if (result == MessageBoxResult.Yes)
-                await new DeleteCommand<Product>(logic).ExecuteAsync(parameter);
+                return _changeStatusCommand;
+            }
+        }
+        private void changeStatus(Product parameter)
+        {
+            if (parameter == null)
+                return;
 
-            await updateCatalogue();
+            bool flag = parameter.Status;
+
+            if (parameter.Status)
+            {
+                var result = MessageBox
+                    .Show("¿Está seguro de desactivar el producto '" + parameter.Name +
+                    "'?\nTodas las ocurrencias de este producto serán ocultadas de los catalogos donde aparezca",
+                    "Confirmar desactivación", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes) parameter.Status = false;
+            }
+            else
+                parameter.Status = true;
+
+            if (flag != parameter.Status)
+            {
+                entityStore.isEdition = true;
+                OnEntityEdited(parameter);
+            }
         }
 
         public override void Dispose()
         {
             entityStore.EntityEdited -= OnEntityEdited;
             entityStore.EntityCreated -= OnEntityCreated;
+            entityStore.entity = null;
             base.Dispose();
         }
 
@@ -131,11 +157,20 @@ namespace WPF.ViewModel
         {
             SaveCommand((Product)parameter);
         }
+        
+        private async void OnEntityDeleted(BaseEntity parameter)
+        {
+            await new DeleteCommand<Product>(logic).ExecuteAsync((Product)parameter);
+
+            await updateCatalogue();
+        }
+
         private async void SaveCommand(Product parameter)
         {
             logic.entity = parameter;
             await new SaveCommand<Product>(logic, canCreate).ExecuteAsync(entityStore.isEdition);
-            await updateCatalogue();
+            //entityStore.RefreshChanges();
+            await Initialize();
         }
     }
 }

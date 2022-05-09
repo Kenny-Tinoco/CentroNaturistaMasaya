@@ -5,7 +5,7 @@ namespace Domain.Logic
 {
     public class BaseLogic<Entity> where Entity : BaseEntity
     {
-        private BaseDAO<Entity, object> _dao;
+        protected BaseDAO<Entity, object> _dao;
 
         public BaseLogic(BaseDAO<Entity, object> parameter)
         {
@@ -33,6 +33,11 @@ namespace Domain.Logic
         public virtual int getId(Entity parameter)
         {
             throw new NotImplementedException();
+        }
+
+        public virtual async Task<Entity> getById(object parameter)
+        {
+            return await _dao.read(parameter);
         }
 
         public async Task<IEnumerable<Entity>> getAll()

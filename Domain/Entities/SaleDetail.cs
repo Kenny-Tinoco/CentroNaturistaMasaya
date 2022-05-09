@@ -8,5 +8,8 @@
         public int Quantity { get; set; }
         public double Price { get; set; }
         public double Total { get; set; }
+
+        public virtual Sell IdSellNavigation { get; set; } = null!;
+        public virtual Stock IdStockNavigation { get; set; } = null!;
     }
 }

@@ -2,10 +2,10 @@
 {
     public partial class SellView : BaseEntity
     {
-        public int idSell { get; set; }
-        public int idEmployee { get; set; }
-        public string? name { get; set; }
-        public string? date { get; set; }
-        public double total { get; set; }
+        public int IdSell { get; set; }
+        public int IdEmployee { get; set; }
+        public string? Name { get; set; }
+        public DateTime Date { get; set; }
+        public double Total { get; set; }
     }
 }

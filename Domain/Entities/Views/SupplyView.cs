@@ -2,10 +2,10 @@
 {
     public partial class SupplyView : BaseEntity
     {
-        public int idSupply { get; set; }
-        public int idProvider { get; set; }
-        public string providerName { get; set; } = null!;
-        public string? date { get; set; }
-        public double total { get; set; }
+        public int IdSupply { get; set; }
+        public int IdProvider { get; set; }
+        public string ProviderName { get; set; } = null!;
+        public DateTime Date { get; set; }
+        public double Total { get; set; }
     }
 }

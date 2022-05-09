@@ -1,7 +1,6 @@
 ﻿using Domain.Entities;
 using System;
-using System.Collections.ObjectModel;
-using System.Windows;
+using System.Collections.Generic;
 
 namespace WPF.Stores
 {
@@ -9,12 +8,14 @@ namespace WPF.Stores
     {
         public bool isEdition { get; set; }
         public BaseEntity entity;
-        public ObservableCollection<BaseEntity> _catalogue { get; set; }
+        public IEnumerable<BaseEntity> _catalogue { get; set; }
 
 
         public event Action<BaseEntity> EntityCreated;
         public event Action<BaseEntity> EntityEdited;
         public event Action<BaseEntity> EntitySelected;
+        public event Action<BaseEntity> EntityDeleted;
+        public event Action RefreshStock;
         public event Action Refresh;
 
         public void CreateEntity(BaseEntity parameter)
@@ -29,12 +30,20 @@ namespace WPF.Stores
 
         public void SelectEntity(BaseEntity parameter)
         {
-            EntitySelected.Invoke(parameter);
+            EntitySelected?.Invoke(parameter);
+        }
+        public void DeleteEntity(BaseEntity parameter)
+        {
+            EntityDeleted?.Invoke(parameter);
         }
 
         public void RefreshChanges()
         {
             Refresh.Invoke();
+        }
+        public void RefreshStockChanges()
+        {
+            RefreshStock.Invoke();
         }
     }
 }

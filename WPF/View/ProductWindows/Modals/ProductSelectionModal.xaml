@@ -51,9 +51,9 @@
                                 </DataTemplate>
                             </DataGrid.Resources>
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Cód." Width="auto" Binding="{Binding idProduct}"/>
-                                <DataGridTextColumn Header="Nombre" Width="180" Binding="{Binding name}"/>
-                                <DataGridTextColumn Header="Descripción" Width="*" Binding="{Binding description}"/>
+                                <DataGridTextColumn Header="Cód." Width="auto" Binding="{Binding IdProduct}"/>
+                                <DataGridTextColumn Header="Nombre" Width="180" Binding="{Binding Name}"/>
+                                <DataGridTextColumn Header="Descripción" Width="*" Binding="{Binding Description}"/>
                                 <DataGridTemplateColumn Header="Opciones" Width="auto" CellTemplate="{StaticResource optionsCell}"/>
                             </DataGrid.Columns>
                         </DataGrid>

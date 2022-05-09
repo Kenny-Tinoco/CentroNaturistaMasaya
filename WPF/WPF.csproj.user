@@ -5,6 +5,9 @@
     <Compile Update="ViewComponents\Menus\TabControlMenu.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="ViewComponents\UserControls\ListViewControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="View\HomeWindows\SellView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -68,6 +71,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="ViewComponents\Menus\TabControlMenu.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="ViewComponents\UserControls\ListViewControl.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\HomeWindows\HomeView.xaml">

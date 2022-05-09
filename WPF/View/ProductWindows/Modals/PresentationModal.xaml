@@ -47,7 +47,7 @@
                                     Text="Código"
                                     Style="{DynamicResource TextBlockStyle}"/>
                                 <TextBox
-                                    Text="{Binding logic.entity.idPresentation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Text="{Binding id}"
                                     FontSize="17"
                                     TextAlignment="Center"
                                     IsEnabled="False"
@@ -62,9 +62,10 @@
                                     Style="{DynamicResource TextBlockStyle}"/>
                                 
                                 <TextBox
-                                    Text="{Binding name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Text="{Binding name, UpdateSourceTrigger=PropertyChanged}"
                                     FontSize="17"
                                     FontWeight="Normal"
+                            Style="{DynamicResource TextBoxStyle}"
                                     TextAlignment="Center"/>
                             </StackPanel>
                             
@@ -94,7 +95,15 @@
                                     Foreground="White"
                                     Width="75"
                                     Visibility="{Binding isEditable, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                
+
+                                <Button
+                                    Margin="30 0 0 0"
+                                    Content="Eliminar"
+                                    Command="{Binding DeleteCommand}"
+                                    Background="#F44336"
+                                    Style="{DynamicResource DeleteButtonStyle}"
+                                    Visibility="{Binding isEditable, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
                             </StackPanel>
 
                         </Grid>
@@ -140,19 +149,17 @@
                                                         Command="{Binding Path=DataContext.EditCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" 
                                                         CommandParameter="{Binding}" 
                                                         Style="{DynamicResource ButtonStyle}"
-                                                        Background="#2196F3"/>
-                                                <Button Content="Eliminar"
-                                                        Command="{Binding Path=DataContext.DeleteCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" 
-                                                        CommandParameter="{Binding}"
-                                                        Style="{DynamicResource ButtonStyle}"
-                                                        Margin="4 0 0 0"
-                                                        Background="#F44336"/>
+                                                        Background="#2196F3"
+                                                        Margin="0 0 5 0"/>
+                                                <RibbonCheckBox Command="{Binding Path=DataContext.ChangeStatusCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                                          CommandParameter="{Binding}" 
+                                                          Style="{DynamicResource StatusCheckBoxDataGridStyle}"/>
                                             </StackPanel>
                                         </DataTemplate>
                                     </DataGrid.Resources>
                                     <DataGrid.Columns>
-                                        <DataGridTextColumn Header="Cód." Width="auto" Binding="{Binding idPresentation}"/>
-                                        <DataGridTextColumn Header="Nombre" Width="150" Binding="{Binding name}"/>
+                                        <DataGridTextColumn Header="Cód." Width="auto" Binding="{Binding IdPresentation}"/>
+                                        <DataGridTextColumn Header="Nombre" Width="150" Binding="{Binding Name}"/>
                                         <DataGridTemplateColumn Header="Opciones" Width="*" CellTemplate="{StaticResource optionsCell}"/>
                                     </DataGrid.Columns>
                                 </DataGrid>
@@ -185,7 +192,6 @@
                TargetType="Button">
             <Setter Property="FontSize" Value="15"/>
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontWeight" Value="Normal"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -197,13 +203,7 @@
                             BorderBrush="white"
                             BorderThickness="0.6"
                             SnapsToDevicePixels="true">
-                            <ContentPresenter x:Name="contentPresenter" 
-                                          Focusable="False" 
-                                          HorizontalAlignment="Center"
-                                          Margin="1" 
-                                          RecognizesAccessKey="True" 
-                                          SnapsToDevicePixels="True" 
-                                          VerticalAlignment="Center"/>
+                            <ContentControl Content="{TemplateBinding Content}"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="true">
@@ -217,32 +217,6 @@
                             </Trigger>
                         </ControlTemplate.Triggers>
 
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style TargetType="TextBox">
-            <Setter Property="Validation.ErrorTemplate">
-                <Setter.Value>
-                    <ControlTemplate>
-                        <DockPanel LastChildFill="true">
-                            <Border Background="#2196F3"
-                                    DockPanel.Dock="Top"
-                                    Width="18"
-                                    Height="18"
-                                    HorizontalAlignment="Right"
-                                    CornerRadius="10"
-                                    ToolTip="{Binding ErrorContent}"
-                                    >
-                                <TextBlock Text="!" 
-                                           VerticalAlignment="center" 
-                                           HorizontalAlignment="center" 
-                                           FontWeight="Bold" Foreground="white"/>
-                            </Border>
-                            <AdornedElementPlaceholder Name="customAdorner" VerticalAlignment="Center" >
-                                <Border BorderBrush="#2196F3" BorderThickness="1" />
-                            </AdornedElementPlaceholder>
-                        </DockPanel>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>

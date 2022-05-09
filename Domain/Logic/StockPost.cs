@@ -16,7 +16,7 @@ namespace Domain.Logic
         public void associateStockToProduct(Product productDTO)
         {
             Contract.Requires(productDTO != null);
-            stock.idProduct = productDTO.idProduct;
+            stock.IdProduct = productDTO.IdProduct;
         }
 
         public Stock stock
@@ -36,24 +36,24 @@ namespace Domain.Logic
         {
             get
             {
-                return stock.price;
+                return stock.Price;
             }
 
             set
             {
                 Contract.Requires(value >= 0);
-                stock.price = value;
+                stock.Price = value;
             }
         }
         public void reduceQuantity()
         {
-            if (stock.quantity > 0)
-                stock.quantity--;
+            if (stock.Quantity > 0)
+                stock.Quantity--;
         }
 
         public void increaseQuantity()
         {
-            stock.quantity++;
+            stock.Quantity++;
         }
     }
 }

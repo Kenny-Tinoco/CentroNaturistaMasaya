@@ -2,10 +2,19 @@
 {
     public partial class Consult : BaseEntity
     {
-        public int idConsult { get; set; }
-        public int idEmployee { get; set; }
-        public int idPatient { get; set; }
-        public string? symptom { get; set; }
-        public DateTime date { get; set; }
+        public Consult()
+        {
+            PrescriptionProducts = new HashSet<PrescriptionProduct>();
+        }
+
+        public int IdConsult { get; set; }
+        public int IdEmployee { get; set; }
+        public int IdPatient { get; set; }
+        public string? Symptom { get; set; }
+        public DateTime Date { get; set; }
+
+        public virtual Employee IdEmployeeNavigation { get; set; } = null!;
+        public virtual Patient IdPatientNavigation { get; set; } = null!;
+        public virtual ICollection<PrescriptionProduct> PrescriptionProducts { get; set; }
     }
 }

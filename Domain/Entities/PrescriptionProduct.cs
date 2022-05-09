@@ -2,8 +2,11 @@
 {
     public partial class PrescriptionProduct : BaseEntity
     {
-        public int idPrescriptionProduct { get; set; }
-        public int idConsult { get; set; }
-        public int idProduct { get; set; }
+        public int IdPrescriptionProduct { get; set; }
+        public int IdConsult { get; set; }
+        public int IdProduct { get; set; }
+
+        public virtual Consult IdConsultNavigation { get; set; } = null!;
+        public virtual Product IdProductNavigation { get; set; } = null!;
     }
 }

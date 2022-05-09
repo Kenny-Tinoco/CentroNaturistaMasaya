@@ -2,7 +2,7 @@
 {
     public partial class Role : BaseEntity
     {
-        public int idRole { get; set; }
-        public string name { get; set; } = null!;
+        public int IdRole { get; set; }
+        public string Name { get; set; } = null!;
     }
 }

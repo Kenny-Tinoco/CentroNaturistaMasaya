@@ -12,23 +12,23 @@ namespace Domain.Logic
         public bool searchLogic(Product element, string parameter)
         {
             return
-                element.idProduct.ToString().Contains(parameter.Trim()) ||
-                element.name.ToLower().StartsWith(parameter.Trim().ToLower());
+                element.IdProduct.ToString().Contains(parameter.Trim()) ||
+                element.Name.ToLower().StartsWith(parameter.Trim().ToLower());
         }
         public override void resetEntity()
         {
             var element = new Product
             {
-                idProduct = 0,
-                name = "",
-                description = ""
+                IdProduct = 0,
+                Name = "",
+                Description = ""
             };
             entity = element;
         }
 
         public override int getId(Product parameter)
         {
-            return parameter.idProduct;
+            return parameter.IdProduct;
         }
 
     }

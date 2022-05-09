@@ -16,26 +16,19 @@ namespace WPF.ViewModel
         private ICommand Save;
 
         private ICommand CloseModalCommand;
-        
+
         private EntityStore entityStore;
 
         public PresentationModalViewModel(BaseLogic<Presentation> parameter, EntityStore _entityStore, INavigationService closeModalNavigationService) : base((PresentationLogic)parameter)
         {
             entityStore = _entityStore;
-            InitializeCommands(closeModalNavigationService);
-        }
 
-        private void InitializeCommands(INavigationService closeModalNavigationService)
-        {
             Save = new SaveCommand<Presentation>(logic, canCreate);
             CloseModalCommand = new ExitModalCommand(closeModalNavigationService);
 
-            SaveCommand = new RelayCommand(parameter => save((bool)parameter));
-            ResetCommand = new RelayCommand(parameter => reset());
-            EditCommand = new RelayCommand(parameter => edit((Presentation)parameter));
-            DeleteCommand = new RelayCommand(parameter => delete((Presentation)parameter));
+            if(!isEditable)
+                reset();
         }
-
 
         public static PresentationModalViewModel LoadViewModel(BaseLogic<Presentation> parameter, EntityStore _entityStore, INavigationService closeModalNavigationService)
         {
@@ -47,14 +40,39 @@ namespace WPF.ViewModel
         }
 
 
-
-        public ICommand SaveCommand { get; set; }
-        private async void save(bool parameter)
+        private ICommand _saveCommand;
+        public ICommand SaveCommand
         {
-            await ((SaveCommand<Presentation>)Save).ExecuteAsync(parameter);
+            get
+            {
+                if (_saveCommand is null)
+                    _saveCommand = new RelayCommand(parameter => save((bool)parameter));
+
+                return _saveCommand;
+            }
+        }
+        private void save(bool parameter)
+        {
+            saveAux(parameter);
             reset();
+        }
+
+        private async void saveAux(bool parameter)
+        {
+            logic.entity = getEntity();
+            Save.Execute(parameter);
             await updateCatalogue();
-            entityStore.RefreshChanges();
+            //entityStore.RefreshChanges();
+        }
+        
+        private Presentation getEntity()
+        {
+            return new Presentation()
+            {
+                IdPresentation = id,
+                Name = name,
+                Status = status
+            };
         }
 
         public ICommand ExitCommand => new RelayCommand(parameter => exit());
@@ -65,62 +83,153 @@ namespace WPF.ViewModel
         }
 
 
-        public ICommand ResetCommand { get; set; }
+        private ICommand _resetCommand;
+        public ICommand ResetCommand
+        {
+            get
+            {
+                if (_resetCommand is null)
+                    _resetCommand = new RelayCommand(parameter => reset());
+
+                return _resetCommand;
+            }
+        }
         private void reset()
         {
-            logic.resetEntity();
-            name = logic.entity.name;
+            id = 0;
+            name = string.Empty;
+            status = true;
             isEditable = false;
         }
 
 
-        public ICommand EditCommand { get; set; }
+        private ICommand _editCommand;
+        public ICommand EditCommand
+        {
+            get
+            {
+                if (_editCommand is null)
+                    _editCommand = new RelayCommand(parameter => edit((Presentation)parameter));
+
+                return _editCommand;
+            }
+        }
         private void edit(Presentation parameter)
         {
-            name = parameter.name;
-
-            logic.entity = new Presentation
-            {
-                idPresentation = parameter.idPresentation,
-                name = parameter.name
-            };
+            id = parameter.IdPresentation;
+            name = parameter.Name;
+            status = parameter.Status;
 
             isEditable = true;
         }
 
 
-        public ICommand DeleteCommand { get; set; }
-        private async void delete(Presentation parameter)
-        {
-            var result = MessageBox
-                .Show("¿Está seguro de eliminar esta presentación?", "Confirmar Eliminación", MessageBoxButton.YesNo);
-
-            if (result == MessageBoxResult.Yes)
-                await new DeleteCommand<Presentation>(logic).ExecuteAsync(parameter);
-
-            await updateCatalogue();
-        }
-
-
-        public string name
+        private ICommand _deleteCommand;
+        public ICommand DeleteCommand
         {
             get
             {
-                if (string.IsNullOrEmpty(logic.entity.name))
-                    _errorsViewModel.AddError(nameof(name), "El nombre es nulo o vacio");
+                if (_deleteCommand is null)
+                    _deleteCommand = new RelayCommand(parameter => delete());
 
-                return logic.entity.name;
+                return _deleteCommand;
             }
+        }
+        private async void delete()
+        {
+            var result = MessageBox
+                .Show("¿Está seguro de eliminar esta presentación?\n" +
+                      "Se desencadenará una eliminación en cascada de todos los registros que tengan alguna relación con esta presentación.\n\n" +
+                      "Antes de eliminarla considere la opción de deshabilitar esta presentación, dicha opción oculta todas las ocurrencias de la " +
+                      "sin hacer eliminaciones.",
+                      "Confirmar Eliminación", MessageBoxButton.YesNo);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                await new DeleteCommand<Presentation>(logic).ExecuteAsync(entity);
+
+                reset();
+                await updateCatalogue();
+            }
+        }
+
+
+        private ICommand _changeStatusCommand;
+        public ICommand ChangeStatusCommand
+        {
+            get
+            {
+                if (_changeStatusCommand is null)
+                    _changeStatusCommand = new RelayCommand(parameter => changeStatus((Presentation)parameter));
+
+                return _changeStatusCommand;
+            }
+        }
+        private void changeStatus(Presentation parameter)
+        {
+            if (parameter == null)
+                return;
+
+            bool flag = parameter.Status;
+
+            if (parameter.Status)
+            {
+                var result = MessageBox
+                    .Show("¿Está seguro de desactivar la presentacion '" + parameter.Name +
+                    "'?\nTodas las ocurrencias de esta presentación serán ocultadas de los catalogos donde aparezca",
+                    "Confirmar desactivación", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes) parameter.Status = false;
+            }
+            else
+                parameter.Status = true;
+
+            if (flag != parameter.Status)
+            {
+                edit(parameter);
+                saveAux(true);
+            }
+        }
+
+
+        private Presentation _entity;
+        private Presentation entity
+        {
+            get
+            {
+                if (_entity is null)
+                    _entity = new Presentation();
+                return _entity;
+            }
+        }
+
+        public int id
+        {
+            get => entity.IdPresentation;
             set
             {
-                logic.entity.name = value;
+                entity.IdPresentation = value;
+                OnPropertyChanged(nameof(id));
+            }
+        }
+        public string name
+        {
+            get => entity.Name;
+            set
+            {
+                entity.Name = value;
                 _errorsViewModel.ClearErrors(nameof(name));
 
-                if (string.IsNullOrEmpty(logic.entity.name))
+                if (string.IsNullOrEmpty(entity.Name))
                     _errorsViewModel.AddError(nameof(name), "Debe ingresar un nombre");
 
                 OnPropertyChanged(nameof(name));
             }
+        }
+        private bool status
+        {
+            get => entity.Status;
+            set => entity.Status = value;
         }
     }
 }

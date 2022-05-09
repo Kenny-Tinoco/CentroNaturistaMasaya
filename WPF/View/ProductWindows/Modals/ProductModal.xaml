@@ -42,7 +42,7 @@
                                     Text="Código"
                                     Style="{DynamicResource TextBlockStyle}"/>
                             <TextBox
-                                    Text="{Binding entity.idProduct, Mode=TwoWay}"
+                                    Text="{Binding entity.IdProduct, Mode=TwoWay}"
                                     FontSize="17"
                                     TextAlignment="Center"
                                     IsEnabled="False"
@@ -59,6 +59,7 @@
                                     Text="{Binding name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                     FontSize="17"
                                     FontWeight="Normal"
+                            Style="{DynamicResource TextBoxStyle}"
                                     TextAlignment="Center"/>
                         </StackPanel>
 
@@ -81,6 +82,7 @@
                                 Grid.Row="1"
                                 Text="{Binding description, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                 FontSize="17"
+                            Style="{DynamicResource TextBoxStyle}"
                                 FontWeight="Normal"
                                 VerticalContentAlignment="Top"
                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -89,24 +91,30 @@
                                 TextAlignment="Justify"/>
                         </Grid>
 
-                        <StackPanel
+                        <DockPanel
                                 Grid.Row="3"
                                 Grid.Column="0"
                                 Grid.ColumnSpan="3"
-                                Orientation="Horizontal"
                                 HorizontalAlignment="Center">
 
                             <Button
                                 Content="Guardar"
                                 FontWeight="Normal"
-                                Command="{Binding EntityStoreCommand}"
+                                Command="{Binding SaveCommand}"
                                 CommandParameter="{Binding _entityStore.isEdition}"
                                 Style="{DynamicResource CustomButtonStyle}"
                                 Foreground="White"
                                 FontSize="15"
                                 Width="75"
                                 IsEnabled="{Binding canCreate}"/>
-                        </StackPanel>
+                            <Button
+                                    Margin="30 0 0 0"
+                                    Content="Eliminar"
+                                    Command="{Binding DeleteCommand}"
+                                    Background="#F44336"
+                                    Style="{DynamicResource DeleteButtonStyle}"
+                                    Visibility="{Binding _entityStore.isEdition, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        </DockPanel>
 
                     </Grid>
                 </Grid>
@@ -128,32 +136,6 @@
             <Setter Property="FontSize" Value="17"/>
             <Setter Property="Foreground" Value="Black"/>
             <Setter Property="FontWeight" Value="Normal"/>
-        </Style>
-        <Style TargetType="TextBox">
-            <Setter Property="Validation.ErrorTemplate">
-                <Setter.Value>
-                    <ControlTemplate>
-                        <DockPanel LastChildFill="true">
-                            <AdornedElementPlaceholder Name="customAdorner" VerticalAlignment="Center" >
-                                <Border BorderBrush="#2196F3" BorderThickness="1" />
-                            </AdornedElementPlaceholder>
-                            <Border Background="#2196F3"
-                                    DockPanel.Dock="Right"
-                                    Width="18"
-                                    Height="18"
-                                    HorizontalAlignment="Right"
-                                    CornerRadius="10"
-                                    ToolTip="{Binding ErrorContent}"
-                                    >
-                                <TextBlock Text="!" 
-                                           VerticalAlignment="center" 
-                                           HorizontalAlignment="center" 
-                                           FontWeight="Bold" Foreground="white"/>
-                            </Border>
-                        </DockPanel>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
         </Style>
     </UserControl.Resources>
 </UserControl>

@@ -10,9 +10,9 @@
         public virtual ProductDAO productDAO { get; } = null!;
         public virtual ProviderDAO providerDAO { get; } = null!;
         public virtual StockDAO stockDAO { get; } = null!;
-        public virtual TransactionDAO sellDAO { get; } = null!;
-        public virtual TransactionDetailDAO saleDetailDAO { get; } = null!;
-        public virtual TransactionDAO supplyDAO { get; } = null!;
-        public virtual TransactionDetailDAO supplyDetailDAO { get; } = null!;
+        public virtual SellDAO sellDAO { get; } = null!;
+        public virtual SaleDetailDAO saleDetailDAO { get; } = null!;
+        public virtual SupplyDAO supplyDAO { get; } = null!;
+        public virtual SupplyDetailDAO supplyDetailDAO { get; } = null!;
     }
 }
