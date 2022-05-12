@@ -1,9 +1,10 @@
 ﻿using Domain.Entities;
 using MVVMGenericStructure.Services;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using WPF.Command;
 using WPF.Command.Navigation;
+using WPF.Services;
 using WPF.Stores;
 using WPF.ViewModel.Base;
 
@@ -11,44 +12,55 @@ namespace WPF.ViewModel
 {
     public class ProductModalFormViewModel : ModalFormViewModel
     {
-        public EntityStore _entityStore { get; set; }
-        public ICommand SaveCommand { get; }
+        private readonly IMessenger messenger;
+        public productMessage message { get; private set; }
 
-        public ProductModalFormViewModel(EntityStore parameter, INavigationService closeNavigationService) : base(closeNavigationService)
+
+        public ProductModalFormViewModel(IMessenger messenger, INavigationService closeModal) : base(closeModal)
         {
-            _entityStore = parameter;
-            SaveCommand = new SaveEntityCommand(this, parameter);
+            this.messenger = messenger;
+            this.messenger.Subscribe<productMessage>(this, ProductMessageSent);
+        }
 
-            if (_entityStore.entity != null)
-                entity = _entityStore.entity;
-            else
+
+        private void ProductMessageSent(object parameter)
+        {
+            message = (productMessage)parameter;
+
+            if (message.entity is null)
                 ResetEntity();
+            else
+                entity = message.entity;
         }
 
         public override void ResetEntity()
         {
-            entity = new Product();
-            ((Product)entity).IdProduct = 0;
-            name = "";
-            description = "";
-            ((Product)entity).Status = true;
+            entity = new Product()
+            {
+                IdProduct = 0,
+                Name = "",
+                Description = "",
+                Status = true
+            };
+
+            OnPropertyChanged(nameof(name));
+            OnPropertyChanged(nameof(description));
         }
 
-        public string titleBar => _entityStore.isEdition ? 
-            "Editar Producto" : "Agregar Producto";
+        public string titleBar => message.isEdition ? "Editar Producto" : "Agregar Producto";
 
         public ICommand _deleteCommand;
-        public ICommand DeleteCommand 
-        { 
+        public ICommand DeleteCommand
+        {
             get
             {
-                if(_deleteCommand is null)
-                    _deleteCommand = new RelayCommand(parameter => delete((Product)parameter));
-                
+                if (_deleteCommand is null)
+                    _deleteCommand = new RelayCommand(o => Delete());
+
                 return _deleteCommand;
             }
         }
-        public void delete(Product parameter)
+        public void Delete()
         {
             var result = MessageBox
                 .Show("¿Está seguro de eliminar este producto?\n" +
@@ -57,8 +69,41 @@ namespace WPF.ViewModel
                       "mismo sin hacer eliminaciones.",
                       "Confirmar Eliminación", MessageBoxButton.YesNo);
 
-            if (result == MessageBoxResult.Yes)
-                new DeleteEntityCommand(this, _entityStore).Execute();
+            if (result != MessageBoxResult.Yes)
+                return;
+            
+            messenger.Send(new productModalMessage((Product)entity, Operation.delete));
+            ExitCommand.Execute(null);
+        }
+
+
+        public ICommand _saveCommand;
+        public ICommand SaveCommand
+        {
+            get
+            {
+                if (_saveCommand is null)
+                    _saveCommand = new RelayCommand(parameter => Save((bool)parameter));
+
+                return _saveCommand;
+            }
+        }
+        public async void Save(bool isEdition)
+        {
+            if (!isEdition)
+            {
+                messenger.Send(new productModalMessage((Product)entity, Operation.create));
+                ResetEntity();
+
+                notification = "Guardado con éxito";
+                await Task.Delay(3000);
+                notification = "";
+            }
+            else
+            {
+                messenger.Send(new productModalMessage((Product)entity, Operation.update));
+                ExitCommand.Execute(null);
+            }
         }
 
 
@@ -82,7 +127,6 @@ namespace WPF.ViewModel
                 OnPropertyChanged(nameof(name));
             }
         }
-
         public string description
         {
             get
@@ -104,22 +148,15 @@ namespace WPF.ViewModel
             }
         }
 
-        private string _submitErrorMessage;
-        public string SubmitErrorMessage
+        private string _notification;
+        public string notification
         {
-            get
-            {
-                return _submitErrorMessage;
-            }
+            get => _notification;
             set
             {
-                _submitErrorMessage = value;
-                OnPropertyChanged(nameof(SubmitErrorMessage));
-
-                OnPropertyChanged(nameof(HasSubmitErrorMessage));
+                _notification = value;
+                OnPropertyChanged(nameof(notification));
             }
         }
-
-        public bool HasSubmitErrorMessage => !string.IsNullOrEmpty(SubmitErrorMessage);
     }
 }

@@ -15,7 +15,7 @@ namespace Domain.Logic
                 element.IdProduct.ToString().Contains(parameter.Trim()) ||
                 element.Name.ToLower().StartsWith(parameter.Trim().ToLower());
         }
-        public override void resetEntity()
+        public override void ResetEntity()
         {
             var element = new Product
             {
@@ -25,11 +25,5 @@ namespace Domain.Logic
             };
             entity = element;
         }
-
-        public override int getId(Product parameter)
-        {
-            return parameter.IdProduct;
-        }
-
     }
 }

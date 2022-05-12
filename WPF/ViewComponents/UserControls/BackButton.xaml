@@ -4,30 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              x:Name="root"
-             mc:Ignorable="d" 
-             d:DesignHeight="30" d:DesignWidth="100">
+             mc:Ignorable="d">
     <Grid>
         <Button x:Name="backButton"
-                Margin="10 0"
-                Height="30"
-                Width="auto"
                 BorderBrush="Transparent"
                 Background="Transparent"
                 Command="{Binding buttonCommand, ElementName=root}"
-                VerticalAlignment="Center"
                 Style="{DynamicResource CustomButtonBackStyle}"
+                Padding="3"
                 >
-            <StackPanel Orientation="Horizontal">
-                <Image Source="/Resource/Image/back-black.png"/>
-
-                <TextBlock
-                    Margin="0 0 8 0"
-                    Foreground="Black"
-                    VerticalAlignment="Center"
-                    Text="Volver"
-                    FontSize="15"
-                    />
-            </StackPanel>
+            <Image Source="/Resource/Image/back-black.png" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Button>
     </Grid>
 </UserControl>

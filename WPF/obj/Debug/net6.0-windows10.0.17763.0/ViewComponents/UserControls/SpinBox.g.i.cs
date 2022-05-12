@@ -68,7 +68,8 @@ namespace WPF.ViewComponents.UserControls {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Centro Naturista Masaya;component/viewcomponents/usercontrols/spinbox.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/Centro Naturista Masaya;V1.0.0.0;component/viewcomponents/usercontrols/spinbox.x" +
+                    "aml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\ViewComponents\UserControls\SpinBox.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

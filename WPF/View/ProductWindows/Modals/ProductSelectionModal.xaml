@@ -32,10 +32,17 @@
 
                     <Grid
                     Grid.Row="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+
 
                         <DataGrid
-                        ItemsSource="{Binding entityStore._catalogue}"
-                        Style="{DynamicResource ElementsDataGrid}">
+                        ItemsSource="{Binding dataGridSource}"
+                        Style="{DynamicResource ElementsDataGrid}"
+                            Grid.Row="0"
+                            Margin="30 10">
 
                             <DataGrid.Resources>
                                 <DataTemplate x:Key="optionsCell">
@@ -57,6 +64,19 @@
                                 <DataGridTemplateColumn Header="Opciones" Width="auto" CellTemplate="{StaticResource optionsCell}"/>
                             </DataGrid.Columns>
                         </DataGrid>
+
+                        <WrapPanel
+                    Margin="30 0"
+                    Grid.Row="1"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Right">
+                            <TextBlock 
+                                FontSize="15"
+                                Text="{Binding dataGridSource.Count}"/>
+                            <TextBlock 
+                                FontSize="15"
+                                Text=" elementos"/>
+                        </WrapPanel>
                     </Grid>
 
                 </Grid>

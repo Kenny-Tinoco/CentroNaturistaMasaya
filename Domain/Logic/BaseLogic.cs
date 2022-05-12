@@ -6,6 +6,7 @@ namespace Domain.Logic
     public class BaseLogic<Entity> where Entity : BaseEntity
     {
         protected BaseDAO<Entity, object> _dao;
+        public Entity entity { get; set; } = null!;
 
         public BaseLogic(BaseDAO<Entity, object> parameter)
         {
@@ -13,40 +14,43 @@ namespace Domain.Logic
         }
 
 
-        public async Task save()
+        public async Task Save()
         {
-            await _dao.create(entity);
-            resetEntity();
+            await _dao.Create(entity);
+            ResetEntity();
         }
 
-        public async Task edit()
+        public async Task Edit()
         {
-            await _dao.update(entity);
-            resetEntity();
+            await _dao.Update(entity);
+            ResetEntity();
         }
 
-        public async Task delete(Entity parameter)
+        public async Task Delete(int id)
         {
-            await _dao.deleteById(getId(parameter));
+            await _dao.DeleteById(id);
         }
 
-        public virtual int getId(Entity parameter)
+        public virtual async Task<Entity?> GetById(object parameter)
         {
-            throw new NotImplementedException();
+            return await _dao.Read(parameter);
         }
 
-        public virtual async Task<Entity> getById(object parameter)
+        public async Task<IEnumerable<Entity>> GetAll()
         {
-            return await _dao.read(parameter);
+            return await _dao.GetAll();
+        }
+        
+        public async Task<IEnumerable<Entity>> GetActives()
+        {
+            return await _dao.GetActives();
+        }
+        
+        public async Task<IEnumerable<Entity>> GetInactives()
+        {
+            return await _dao.GetInactives();
         }
 
-        public async Task<IEnumerable<Entity>> getAll()
-        {
-            return await _dao.getAll();
-        }
-
-        public Entity entity { get; set; }
-
-        public virtual void resetEntity() {}
+        public virtual void ResetEntity(){}
     }
 }

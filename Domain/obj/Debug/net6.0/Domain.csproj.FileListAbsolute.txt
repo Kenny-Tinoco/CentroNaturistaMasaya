@@ -2,7 +2,6 @@ C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\Domain\bin\De
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\Domain\bin\Debug\net6.0\Domain.dll
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\Domain\bin\Debug\net6.0\ref\Domain.dll
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\Domain\bin\Debug\net6.0\Domain.pdb
-C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\Domain\obj\Debug\net6.0\Domain.csproj.AssemblyReference.cache
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\Domain\obj\Debug\net6.0\Domain.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\Domain\obj\Debug\net6.0\Domain.AssemblyInfoInputs.cache
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\Domain\obj\Debug\net6.0\Domain.AssemblyInfo.cs
@@ -10,3 +9,4 @@ C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\Domain\obj\De
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\Domain\obj\Debug\net6.0\Domain.dll
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\Domain\obj\Debug\net6.0\ref\Domain.dll
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\Domain\obj\Debug\net6.0\Domain.pdb
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\Domain\obj\Debug\net6.0\Domain.csproj.AssemblyReference.cache

@@ -8,10 +8,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using WPF.Command.CRUD;
 using WPF.Command.Navigation;
+using WPF.Services;
 using WPF.Stores;
 using WPF.ViewComponents.Converters;
 
@@ -19,62 +21,73 @@ namespace WPF.ViewModel
 {
     public class StockFormViewModel : ViewModelBase, INotifyDataErrorInfo
     {
-        public string title => !isEdition ?
-            "Agregar una nueva existencia" :
-            "Editar existencia";
+        public string title => isEdition ? "Editar existencia" : "Agregar una nueva existencia";
 
         public ICommand BackCommand { get; }
         public ICommand SearchCommand { get; }
 
-        private BaseLogic<Product> productLogic;
-        private BaseLogic<Presentation> presentationLogic;
-        private BaseLogic<Stock> stockLogic;
+        private LogicFactory logicFactory;
 
-        public EntityStore entityStore { get; }
+        public IMessenger messenger;
+        private StockMessage message;
 
-        private StockFormViewModel(LogicFactory logic, EntityStore _entityStore, INavigationService backNavigation, INavigationService modalNavigation)
+        private StockFormViewModel(LogicFactory logic, IMessenger _messenger, INavigationService backNavigation, INavigationService modalNavigation)
         {
             BackCommand = new NavigateCommand(backNavigation);
             SearchCommand = new NavigateCommand(modalNavigation);
 
-            stockLogic = logic.stockLogic;
-            productLogic = logic.productLogic;
-            presentationLogic = logic.presentationModalLogic;
+            logicFactory = logic;
 
             _errorsViewModel = new ErrorsViewModel();
             _errorsViewModel.ErrorsChanged += ErrorsViewModel_ErrorsChanged;
 
-            entityStore = _entityStore;
-            entityStore.Refresh += RefreshChanges;
-            entityStore.EntitySelected += OnEntitySelected;
+            messenger = _messenger;
+            messenger.Subscribe<Refresh>(this, RefreshPresentation);
+            messenger.Subscribe<Product>(this, ProductMessageSent);
+            messenger.Subscribe<StockMessage>(this, StockMessageSent);
         }
 
-
-
-        public static StockFormViewModel LoadViewModel(LogicFactory logic, EntityStore _entityStore, INavigationService backNavigation, INavigationService modalNavigation)
+        private async void RefreshPresentation(object parameter)
         {
-            StockFormViewModel _viewModel = new StockFormViewModel(logic, _entityStore, backNavigation, modalNavigation);
+            if ((Refresh)parameter is not Refresh.presentation)
+                return;
 
+            presentations = await logicFactory.presentationModalLogic.GetActives();
+        }
+
+        private void ProductMessageSent(object parameter)
+        {
+            currentProduct = (Product)parameter;
+        }
+
+        private void StockMessageSent(object parameter)
+        {
+            message = (StockMessage)parameter;
+        }
+
+        public static StockFormViewModel LoadViewModel(LogicFactory logic, IMessenger _messenger, INavigationService backNavigation, INavigationService modalNavigation)
+        {
+            StockFormViewModel _viewModel = new(logic, _messenger, backNavigation, modalNavigation);
             _viewModel.Initialize();
+
             return _viewModel;
         }
 
         public async void Initialize()
         {
-            presentations = await presentationLogic.getAll();
-            entityStore._catalogue = await productLogic.getAll();
+            presentations = await logicFactory.presentationModalLogic.GetActives();
+            var catalogue = await logicFactory.productLogic.GetActives();
 
-            OnPropertyChanged(nameof(entityStore._catalogue));
-            IniatilizeEntity();
+            messenger.Send(catalogue);
+            InitializeProperties(message.entity);
         }
 
-        private void IniatilizeEntity()
+        private void InitializeProperties(Stock parameter)
         {
-
-            if (entityStore.entity is null)
-                resetValuesToProperties();
+            if (parameter is null)
+                ResetValuesToProperties();
             else
-                setValuesToProperties((Stock)entityStore.entity);
+                SetValuesToProperties(parameter);
         }
 
         private ICommand _selectImageCommand;
@@ -83,27 +96,27 @@ namespace WPF.ViewModel
             get
             {
                 if (_selectImageCommand is null)
-                    _selectImageCommand = new RelayCommand(parameter => selectImage());
+                    _selectImageCommand = new RelayCommand(o => GetImage());
 
                 return _selectImageCommand;
             }
         }
-        private void selectImage()
+        private void GetImage()
         {
-            var imageSelected = Converters.GetImage();
-            
+            var imageSelected = Utilities.GetImage();
+
             if (imageSelected is not null)
                 image = imageSelected;
 
             OnPropertyChanged(nameof(image));
         }
 
-        private void resetValuesToProperties()
+        private void ResetValuesToProperties()
         {
             price = 0;
             quantity = 1;
             entryDate = DateTime.Now;
-            expiration = nextYear(DateTime.Now);
+            expiration = DateTime.Now.PlusOneYear();
             status = true;
             image = new byte[1];
 
@@ -111,27 +124,30 @@ namespace WPF.ViewModel
             currentPresentation = presentations.Find(item => item.IdPresentation == 11);
         }
 
-        private DateTime nextYear(DateTime today) => new DateTime(today.Year+1, today.Month, today.Day + 1);
-
-
-        public ICommand SaveCommand => new RelayCommand(parameter => save((bool)parameter));
-        private void save(bool isEdtion)
+        public ICommand SaveCommand => new RelayCommand(parameter => Save((bool)parameter));
+        private async void Save(bool isEdtion)
         {
-            stockLogic.entity = getStock();
+            RunSaveCommand(isEdition);
 
-            new SaveCommand<Stock>(stockLogic, canCreate).Execute(isEdtion);
-            entityStore.RefreshStockChanges();
-            resetValuesToProperties();
+            messenger.Send(Refresh.stock);
+            ResetValuesToProperties();
+
+            notification = "Guardado con éxito";
 
             if (isEdtion)
                 BackCommand.Execute(-1);
+            else
+            {
+                await Task.Delay(3000);
+                notification = "";
+            }
         }
 
-        private Stock getStock()
+        private Stock GetStock()
         {
             return new Stock()
             {
-                IdStock = ((Stock)entityStore.entity).IdStock,
+                IdStock = message.isEdition ? message.entity.IdStock : 0,
                 IdProduct = currentProduct.IdProduct,
                 IdPresentation = currentPresentation.IdPresentation,
                 Price = price,
@@ -143,25 +159,19 @@ namespace WPF.ViewModel
             };
         }
 
-
-        private void OnEntitySelected(BaseEntity parameter)
-        {
-            currentProduct = (Product)parameter;
-        }
-
-        private void setValuesToProperties(Stock parameter)
+        private void SetValuesToProperties(Stock parameter)
         {
             price = parameter.Price;
             quantity = parameter.Quantity;
             status = parameter.Status;
             image = parameter.Image;
-            insertDates(parameter);
+            InsertDates(parameter);
 
             currentProduct = parameter.ProductNavigation;
             currentPresentation = presentations.Find(item => item.IdPresentation == parameter.IdPresentation);
         }
 
-        private void insertDates(Stock parameter)
+        private void InsertDates(Stock parameter)
         {
             try
             {
@@ -173,7 +183,7 @@ namespace WPF.ViewModel
                 if (parameter.EntryDate == null && parameter.Expiration == null)
                 {
                     entryDate = DateTime.Now;
-                    expiration = nextYear(DateTime.Now);
+                    expiration = DateTime.Now.PlusOneYear();
                 }
                 else if (parameter.EntryDate == null)
                 {
@@ -183,14 +193,9 @@ namespace WPF.ViewModel
                 else
                 {
                     entryDate = (DateTime)parameter.EntryDate;
-                    expiration = nextYear(DateTime.Now);
+                    expiration = DateTime.Now.PlusOneYear();
                 }
             }
-        }
-
-        private void RefreshChanges()
-        {
-            Initialize();
         }
 
 
@@ -248,7 +253,7 @@ namespace WPF.ViewModel
                 _errorsViewModel.ClearErrors(nameof(expiration));
                 _errorsViewModel.ClearErrors(nameof(entryDate));
 
-                if (!HasStartDateBeforeEndDate)
+                if (!hasEntryDateBeforeExpiration)
                 {
                     _errorsViewModel.AddError(nameof(entryDate), "La fecha de entrada no puede ser despues de la expiración");
                 }
@@ -274,7 +279,7 @@ namespace WPF.ViewModel
                 _errorsViewModel.ClearErrors(nameof(expiration));
                 _errorsViewModel.ClearErrors(nameof(entryDate));
 
-                if (!HasStartDateBeforeEndDate)
+                if (!hasEntryDateBeforeExpiration)
                 {
                     _errorsViewModel.AddError(nameof(expiration), "La fecha de expiración no puede ser antes de la fecha de entrada.");
                 }
@@ -300,9 +305,21 @@ namespace WPF.ViewModel
             }
         }
 
-        public ICommand ChangeStatusCommand => new RelayCommand(parameter => chageStatus());
+        private byte[] _image;
+        public byte[] image
+        {
+            get => _image;
+            set
+            {
+                _image = value;
+                OnPropertyChanged(nameof(image));
+            }
+        }
 
-        private void chageStatus()
+
+        public ICommand ChangeStatusCommand => new RelayCommand(o => ChangeStatus());
+
+        private async void ChangeStatus()
         {
             bool flag = status;
 
@@ -316,24 +333,28 @@ namespace WPF.ViewModel
             else
                 status = true;
 
-            if (flag != status && entityStore.isEdition)
+            if (flag != status && isEdition)
             {
-                stockLogic.entity = getStock();
-                new SaveCommand<Stock>(stockLogic, canCreate).Execute(true);
+                RunSaveCommand(true);
+                messenger.Send(Refresh.stock);
+
+                notification = "Cambio de estado guardado con éxito";
+                await Task.Delay(3000);
+                notification = "";
             }
         }
 
-
-        private byte[] _image;
-        public byte[] image
+        private void RunSaveCommand(bool isEdition)
         {
-            get => _image;
-            set
-            {
-                _image = value;
-                OnPropertyChanged(nameof(image));
-            }
+            logicFactory.stockLogic.entity = GetStock();
+            new SaveCommand<Stock>(logicFactory.stockLogic, canCreate).Execute(isEdition);
         }
+
+
+        public bool hasChangeableState => logicFactory.stockLogic.hasChangeableState(message.entity.IdStock) && isEdition;
+        public string changeableStateMessageError => !hasChangeableState ?
+            "No se puede editar esta existencia debido a que el producto y/o la presentación no existen." +
+            " \n\nVerifique que dichas entidades estén activadas." : "";
 
 
         private Product _currentProduct;
@@ -392,10 +413,23 @@ namespace WPF.ViewModel
         }
 
 
-        public bool isEdition => entityStore.isEdition;
+        public bool isEdition => message.isEdition;
         public bool HasErrors => _errorsViewModel.HasErrors;
-        public virtual bool canCreate => !HasErrors && HasStartDateBeforeEndDate;
-        private bool HasStartDateBeforeEndDate => _entryDate <= _expiration;
+        public virtual bool canCreate => !HasErrors && hasEntryDateBeforeExpiration;
+        private bool hasEntryDateBeforeExpiration => _entryDate <= _expiration;
+
+        private string _notification;
+        public string notification
+        {
+            get => _notification;
+            set
+            {
+                _notification = value;
+                OnPropertyChanged(nameof(notification));
+            }
+        }
+
+
 
 
         private ErrorsViewModel _errorsViewModel;
@@ -410,13 +444,6 @@ namespace WPF.ViewModel
         {
             ErrorsChanged?.Invoke(this, e);
             OnPropertyChanged(nameof(canCreate));
-        }
-
-        public override void Dispose()
-        {
-            entityStore.entity = null;
-            entityStore.EntitySelected += null;
-            base.Dispose();
         }
     }
 }

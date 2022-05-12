@@ -1,24 +1,22 @@
 ﻿using Domain.Entities;
 using Domain.Logic;
 using MVVMGenericStructure.Commands;
-using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
 
 namespace WPF.Command.CRUD
 {
     public class DeleteCommand<Entity> : AsyncCommandBase where Entity : BaseEntity
     {
-        private BaseLogic<Entity> logicElement;
+        private readonly BaseLogic<Entity> logic;
 
-        public DeleteCommand( BaseLogic<Entity> parameter )
+        public DeleteCommand(BaseLogic<Entity> parameter)
         {
-            Contract.Requires(parameter != null);
-            logicElement = parameter;
+            logic = parameter;
         }
 
-        public override async Task ExecuteAsync( object parameter )
+        public override async Task ExecuteAsync(object parameter)
         {
-            await logicElement.delete((Entity)parameter);
+            await logic.Delete((int)parameter);
         }
     }
 }

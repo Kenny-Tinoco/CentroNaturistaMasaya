@@ -60,8 +60,8 @@ namespace WPF.ViewComponents.UserControls {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Centro Naturista Masaya;component/viewcomponents/usercontrols/listviewcontrol.xa" +
-                    "ml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/Centro Naturista Masaya;V1.0.0.0;component/viewcomponents/usercontrols/listviewc" +
+                    "ontrol.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\ViewComponents\UserControls\ListViewControl.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

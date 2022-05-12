@@ -21,13 +21,12 @@ namespace WPF.Command.CRUD
             return canSave && base.CanExecute(parameter);
         }
 
-        public override async Task ExecuteAsync( object parameter )
+        public override async Task ExecuteAsync( object isUpdateOperation)
         {
-            var isUpdateOperation = (bool)parameter;
-            if (isUpdateOperation)
-                await logicElement.edit();
+            if ((bool)isUpdateOperation)
+                await logicElement.Edit();
             else
-                await logicElement.save();
+                await logicElement.Save();
         }
     }
 }

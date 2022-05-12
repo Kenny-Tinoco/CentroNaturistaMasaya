@@ -15,7 +15,7 @@ namespace WPF.Stores
             get
             {
                 if (_stocks is null)
-                    _stocks = logicFactory.stockLogic.getAll();
+                    _stocks = logicFactory.stockLogic.GetAll();
                 
                 return _stocks;
             }

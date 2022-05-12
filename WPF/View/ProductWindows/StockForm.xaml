@@ -5,89 +5,6 @@
              xmlns:converters="clr-namespace:WPF.ViewComponents.Converters"
              xml:lang="es-ES"
              >
-    <UserControl.Resources>
-        <converters:StatusValueConverter x:Key="StatusValueConverter"/>
-        <Style x:Key="GroupBoxStyle"
-               TargetType="GroupBox">
-            <Setter Property="FontSize" Value="16.5"/>
-            <Setter Property="BorderBrush" Value="Black"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-        </Style>
-
-        <Style x:Key="TextBlockStyle"
-               TargetType="TextBlock">
-            <Setter Property="FontSize" Value="17"/>
-            <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="FontWeight" Value="Normal"/>
-            <Setter Property="Validation.ErrorTemplate">
-                <Setter.Value>
-                    <ControlTemplate>
-                        <DockPanel LastChildFill="true">
-                            <AdornedElementPlaceholder Name="customAdorner" VerticalAlignment="Center" >
-                                <Border BorderBrush="#2196F3" BorderThickness="1" />
-                            </AdornedElementPlaceholder>
-                            <Border Background="#2196F3"
-                                    DockPanel.Dock="Right"
-                                    Width="18"
-                                    Height="18"
-                                    HorizontalAlignment="Right"
-                                    CornerRadius="10"
-                                    >
-                                <Border.ToolTip>
-                                    <ToolTip>
-                                        <TextBlock Text="{Binding ErrorContent}" FontSize="16" Foreground="Black"/>
-                                    </ToolTip>
-                                </Border.ToolTip>
-                                <TextBlock Text="!" 
-                                           VerticalAlignment="center" 
-                                           HorizontalAlignment="center" 
-                                           FontWeight="Bold" Foreground="white"/>
-                            </Border>
-                        </DockPanel>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="ComboBoxStyle"
-               TargetType="ComboBox">
-            <Setter Property="FontSize" Value="17"/>
-            <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="FontWeight" Value="Normal"/>
-            <Setter Property="Width" Value="70"/>
-            <Setter Property="Margin" Value="5 0 0 0"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="Validation.ErrorTemplate">
-                <Setter.Value>
-                    <ControlTemplate>
-                        <DockPanel LastChildFill="true">
-                            <AdornedElementPlaceholder Name="customAdorner" VerticalAlignment="Center" >
-                                <Border BorderBrush="#2196F3" BorderThickness="1" />
-                            </AdornedElementPlaceholder>
-                            <Border Background="#2196F3"
-                                    DockPanel.Dock="Right"
-                                    Width="18"
-                                    Height="18"
-                                    HorizontalAlignment="Right"
-                                    CornerRadius="10"
-                                    >
-                                <Border.ToolTip>
-                                    <ToolTip>
-                                        <TextBlock Text="{Binding ErrorContent}" FontSize="16" Foreground="Black"/>
-                                    </ToolTip>
-                                </Border.ToolTip>
-                                <TextBlock Text="!" 
-                                           VerticalAlignment="center" 
-                                           HorizontalAlignment="center" 
-                                           FontWeight="Bold" Foreground="white"/>
-                            </Border>
-                        </DockPanel>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </UserControl.Resources>
     <Border Width="760" 
             BorderBrush="Black"
             BorderThickness="1"
@@ -108,15 +25,22 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="5"/>
             </Grid.RowDefinitions>
-            
+
             <TextBlock Text="{Binding title}"
                        Grid.Row="1"
                        Foreground="Black"
                        FontSize="18"
                        FontWeight="Bold"
                        VerticalAlignment="Center"
-                       HorizontalAlignment="Center"/>
-            
+                       HorizontalAlignment="center"/>
+
+            <userControls:BackButton Grid.Row="1"
+                                     buttonCommand="{Binding BackCommand}"
+                                     HorizontalAlignment="Left"
+                                     Height="25"
+                                     Width="25  "/>
+
+
             <Grid Grid.Row="3">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="420"/>
@@ -146,7 +70,8 @@
                             FontSize="17"
                             VerticalAlignment="Center"
                             FontWeight="Normal"
-                            Command="{Binding SearchCommand}"/>
+                            Command="{Binding SearchCommand}"
+                            Style="{DynamicResource CustomButtonSimpleBackStyle}"/>
 
                         <DockPanel
                             Grid.Column="2"
@@ -270,7 +195,8 @@
                 <Button Grid.Column="2"
                         FontSize="17"
                         Command="{Binding SelectImageCommand}"
-                        Content="Selecionar imagen"/>
+                        Content="Selecionar imagen"
+                            Style="{DynamicResource CustomButtonSimpleBackStyle}"/>
             </Grid>
             
             <GroupBox Grid.Row="7"
@@ -363,22 +289,111 @@
                         <CheckBox
                             Padding="10 2"
                             Command="{Binding ChangeStatusCommand}"
-                            Style="{DynamicResource StatusCheckBoxStyle}">
-                        </CheckBox>
+                            Style="{DynamicResource StatusCheckBoxStyle}"/>
                     </StackPanel>
                     
                 </Grid>
             </GroupBox>
 
-            <userControls:CustomButton Grid.Row="8"
-                                       Width="130"
-                                       Margin="10"
-                                       Title="Guardar"
-                                       buttonCommand="{Binding SaveCommand}"
-                                       buttonParameter="{Binding isEdition}"
-                                       ImageSource="/Resource/Image/save.png"
-                                       IsEnabled="{Binding canCreate}"
-            />
+            <userControls:CustomButton 
+                Grid.Row="8"
+                Width="130"
+                Margin="10"
+                Title="Guardar"
+                buttonCommand="{Binding SaveCommand}"
+                buttonParameter="{Binding isEdition}"
+                ImageSource="/Resource/Image/save.png"
+                IsEnabled="{Binding canCreate}"/>
+            <TextBlock 
+                Grid.Row="8"
+                Text="{Binding notification}" 
+                Margin="0 10 0 10"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                FontSize="14"
+                Foreground="Blue"/>
         </Grid>
     </Border>
+    <UserControl.Resources>
+        <Style x:Key="GroupBoxStyle"
+               TargetType="GroupBox">
+            <Setter Property="FontSize" Value="16.5"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+
+        <Style x:Key="TextBlockStyle"
+               TargetType="TextBlock">
+            <Setter Property="FontSize" Value="17"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="Validation.ErrorTemplate">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <DockPanel LastChildFill="true">
+                            <AdornedElementPlaceholder Name="customAdorner" VerticalAlignment="Center" >
+                                <Border BorderBrush="#2196F3" BorderThickness="1" />
+                            </AdornedElementPlaceholder>
+                            <Border Background="#2196F3"
+                                    DockPanel.Dock="Right"
+                                    Width="18"
+                                    Height="18"
+                                    HorizontalAlignment="Right"
+                                    CornerRadius="10"
+                                    >
+                                <Border.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock Text="{Binding ErrorContent}" FontSize="16" Foreground="Black"/>
+                                    </ToolTip>
+                                </Border.ToolTip>
+                                <TextBlock Text="!" 
+                                           VerticalAlignment="center" 
+                                           HorizontalAlignment="center" 
+                                           FontWeight="Bold" Foreground="white"/>
+                            </Border>
+                        </DockPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ComboBoxStyle"
+               TargetType="ComboBox">
+            <Setter Property="FontSize" Value="17"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="Width" Value="70"/>
+            <Setter Property="Margin" Value="5 0 0 0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Validation.ErrorTemplate">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <DockPanel LastChildFill="true">
+                            <AdornedElementPlaceholder Name="customAdorner" VerticalAlignment="Center" >
+                                <Border BorderBrush="#2196F3" BorderThickness="1" />
+                            </AdornedElementPlaceholder>
+                            <Border Background="#2196F3"
+                                    DockPanel.Dock="Right"
+                                    Width="18"
+                                    Height="18"
+                                    HorizontalAlignment="Right"
+                                    CornerRadius="10"
+                                    >
+                                <Border.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock Text="{Binding ErrorContent}" FontSize="16" Foreground="Black"/>
+                                    </ToolTip>
+                                </Border.ToolTip>
+                                <TextBlock Text="!" 
+                                           VerticalAlignment="center" 
+                                           HorizontalAlignment="center" 
+                                           FontWeight="Bold" Foreground="white"/>
+                            </Border>
+                        </DockPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
 </UserControl>

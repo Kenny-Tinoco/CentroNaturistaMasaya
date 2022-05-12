@@ -68,7 +68,8 @@ namespace WPF.ViewComponents.UserControls {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Centro Naturista Masaya;component/viewcomponents/usercontrols/homebutton.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/Centro Naturista Masaya;V1.0.0.0;component/viewcomponents/usercontrols/homebutto" +
+                    "n.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\ViewComponents\UserControls\HomeButton.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

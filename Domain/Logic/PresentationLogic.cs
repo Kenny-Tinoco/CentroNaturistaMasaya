@@ -10,7 +10,7 @@ namespace Domain.Logic
             entity = new Presentation();
         }
 
-        public override void resetEntity()
+        public override void ResetEntity()
         {
             var element = new Presentation
             {
@@ -19,11 +19,6 @@ namespace Domain.Logic
                 Status = true
             };
             entity = element;
-        }
-
-        public override int getId(Presentation parameter)
-        {
-            return parameter.IdPresentation;
         }
     }
 }

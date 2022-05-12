@@ -32,7 +32,7 @@ namespace Domain.DAO
 
     public interface StockDAO : BaseDAO<Stock, object>
     {
-        Stock getStock(int id);
+        Stock GetStock(int id);
     }
 
     public interface SellDAO : BaseDAO<Sell, object>

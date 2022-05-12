@@ -2,10 +2,10 @@
 {
     public interface IDataService<T, ID>
     {
-        Task create(T element);
-        Task<T?> read(ID id);
-        Task update(T element);
-        Task<bool> deleteById(ID id);
-        Task<IEnumerable<T>> getAll();
+        Task Create(T element);
+        Task<T?> Read(ID id);
+        Task Update(T element);
+        Task<bool> DeleteById(ID id);
+        Task<IEnumerable<T>> GetAll();
     }
 }

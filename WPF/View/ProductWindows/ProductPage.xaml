@@ -72,11 +72,17 @@
             Grid.Row="3"
             Grid.Column="1"
             Visibility="{Binding IsLoading, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
 
             <DataGrid
                 x:Name="elementDataGrid"
-                ItemsSource="{Binding catalogue, UpdateSourceTrigger=PropertyChanged}"
+                ItemsSource="{Binding dataGridSource}"
                 Style="{DynamicResource ElementsDataGrid}"
+                Margin="30 10"
+                Grid.Column="0"
                 >
                 <DataGrid.Resources>
                     <DataTemplate x:Key="optionsCell">
@@ -96,16 +102,34 @@
                     </DataTemplate>
                 </DataGrid.Resources>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Código" Width="auto" Binding="{Binding IdProduct}"/>
+                    <DataGridTextColumn Header="Código" Width="auto" Binding="{Binding IdProduct}" />
                     <DataGridTextColumn Header="Nombre" Width="220" Binding="{Binding Name}"/>
                     <DataGridTextColumn Header="Descripción" Width="*" Binding="{Binding Description}"/>
                     <DataGridTextColumn Header="Cantidad total" Width="auto" Binding="{Binding Quantity}"/>
                     <DataGridTemplateColumn Header="Opciones" Width="155" CellTemplate="{StaticResource optionsCell}"/>
                 </DataGrid.Columns>
             </DataGrid>
+
+            <WrapPanel
+                    Margin="30 0"
+                    Grid.Row="1"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Right">
+                <TextBlock 
+                    Style="{DynamicResource textBlockListViewStyle}"
+                    Text="{Binding dataGridSource.Count}"/>
+                <TextBlock 
+                    Style="{DynamicResource textBlockListViewStyle}"
+                    Text=" elementos"/>
+            </WrapPanel>
         </Grid>
     </Grid>
     <Page.Resources>
+        <Style TargetType="TextBlock" x:Key="textBlockListViewStyle">
+            <Setter Property="FontSize" Value="17"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
         <Style x:Key="StackPanelStyle"
                TargetType="StackPanel">
             <Setter Property="Grid.Row" Value="2"/>

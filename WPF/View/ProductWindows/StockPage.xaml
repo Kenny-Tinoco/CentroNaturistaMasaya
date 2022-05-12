@@ -76,6 +76,7 @@
                 Grid.Row="0"
                 x:Name="elementDataGrid"
                 ItemsSource="{Binding dataGridSource}"
+                Margin="30 10"
                 Style="{DynamicResource ElementsDataGrid}"
                 RowDetailsVisibilityMode="Collapsed"
                 >
@@ -87,7 +88,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Código" Width="auto" Binding="{Binding IdStock}" >
+                    <DataGridTextColumn Header="Cód." Width="auto" Binding="{Binding IdStock}" >
                         <DataGridTextColumn.CellStyle>
                             <Style TargetType="DataGridCell">
                                 <Setter Property="ToolTip" Value="" />
@@ -103,156 +104,190 @@
                     <DataGridTextColumn Header="Presentación" Width="120" Binding="{Binding Presentation}"/>
                     <DataGridTextColumn Header="Cantidad" Width="auto" Binding="{Binding Quantity}"/>
                     <DataGridTextColumn Header="Precio" Width="auto" Binding="{Binding Price}"/>
-                    <DataGridTextColumn Header="Entrada" Width="auto" Binding="{Binding EntryDate, StringFormat='dddd  dd/MMM/yyyy', ConverterCulture='es'}"/>
-                    <DataGridTextColumn Header="Caducidad" Width="auto" Binding="{Binding Expiration, StringFormat='dddd  dd/MMM/yyyy', ConverterCulture='es'}"/>
+                    <DataGridTextColumn Header="Estado" Width="auto" Binding="{Binding Status, Converter={StaticResource StatusValueConverter}}" 
+                                        Visibility="{Binding Source={x:Reference groupAllCheck}, Path=Visibility}"/>
+                    <DataGridTextColumn Header="Entrada" Width="auto" Binding="{Binding EntryDate, StringFormat='h:mm tt  dd/MMM/yyyy', ConverterCulture='es'}"/>
+                    <DataGridTextColumn Header="Caducidad" Width="auto" Binding="{Binding Expiration, StringFormat='dd/MMM/yyyy', ConverterCulture='es'}"/>
                 </DataGrid.Columns>
                 <DataGrid.RowDetailsTemplate>
                     <DataTemplate>
                         <Border Background="{DynamicResource colorBlancoFondo}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
+                            <WrapPanel>
 
-                                <Grid Grid.Column="0">
+                                <Grid Margin="10 5 0 5">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Button
+                                        Grid.Row="0"
+                                        Command="{Binding Path=DataContext.EditCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                        CommandParameter="{Binding IdStock}"
+                                        Style="{DynamicResource CustomButtonSimpleBackStyle}"
+                                        Width="40"
+                                        Height="40">
+                                        <Image Source="/Resource/Image/edit.png"
+                                               Margin="4"/>
+                                    </Button>
+                                    <Button
+                                        Grid.Row="1"
+                                        Command="{Binding Path=DataContext.DeleteCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                        CommandParameter="{Binding IdStock}"
+                                        Style="{DynamicResource CustomButtonSimpleBackStyle}"
+                                        Width="40"
+                                        Height="40">
+                                        <Image Source="/Resource/Image/remove-red.png"/>
+                                    </Button>
+                                </Grid>
+
+                                <Grid Margin="10 5">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="*"/>
-                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="auto"/>
                                     </Grid.RowDefinitions>
-                                    <userControls:CustomButton 
+                                    <Border 
                                         Grid.Row="0"
-                                        buttonCommand="{Binding Path=DataContext.EditCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
-                                        buttonParameter="{Binding}"
-                                        ImageSource="/Resource/Image/edit.png"/>
-                                    <userControls:CustomButton 
-                                        Grid.Row="1"
-                                        buttonCommand="{Binding Path=DataContext.DeleteCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
-                                        buttonParameter="{Binding}"
-                                        ImageSource="/Resource/Image/remove-red.png"/>
-                                </Grid>
-                                <Border Grid.Column="1"
                                         BorderBrush="Black"
                                         BorderThickness="1"
                                         Padding="5"
-                                        Background="White"
                                         CornerRadius="6"
-                                        Margin="5 0"
                                         Width="200"
-                                        Height="200">
-                                    <Image Source="{Binding Image}"/>
-                                </Border>
-                                <Grid Grid.Column="2"
-                                          Margin="5 0">
+                                        Height="200"
+                                        Background="White">
+                                        <Image Source="{Binding Image}"/>
+                                    </Border>
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        Style="{DynamicResource textBlockListViewStyle}"
+                                        HorizontalAlignment="Center">
+                                        <Run Text="Código:"/>
+                                        <Run Text="{Binding IdStock}" FontWeight="SemiBold"/>
+                                    </TextBlock>
+                                </Grid>
+
+                                <Grid Width="320">
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
                                         <RowDefinition Height="auto"/>
                                         <RowDefinition Height="auto"/>
                                         <RowDefinition Height="auto"/>
                                         <RowDefinition Height="*"/>
                                     </Grid.RowDefinitions>
 
-                                    <TextBlock Grid.Row="0"
-                                            Style="{DynamicResource textBlockListViewStyle}"
-                                            VerticalAlignment="Bottom">
-                                                <Run Text="Código:"/>
-                                                <Run Text="{Binding IdStock}" 
-                                                     FontWeight="SemiBold"/>
-                                    </TextBlock>
-                                    <TextBlock Grid.Row="1"
-                                                    Margin="0 5" 
-                                                   Style="{DynamicResource textBlockListViewStyle}"
-                                                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                                   ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                                   TextWrapping="Wrap"
-                                                   TextAlignment="Justify">
-                                                <Run Text="Nombre:"/>
-                                                <Run Text="{Binding Name}"
-                                                     FontWeight="SemiBold"/>
-                                    </TextBlock>
-
-                                    <StackPanel Grid.Row="2"
-                                               Margin="0 5">
-                                        <TextBlock Text="Descripción"
-                                                   Style="{DynamicResource textBlockListViewStyle}"/>
+                                    <StackPanel
+                                        Grid.Row="0"
+                                        Margin="0 5">
+                                        <TextBlock 
+                                            Text="* Nombre"
+                                            Style="{DynamicResource textBlockListViewStyle}"/>
                                         <TextBox
-                                            HorizontalAlignment="Left"
-                                             IsReadOnly="True"
-                                             Text="{Binding Description}"
-                                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                             ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                             TextWrapping="Wrap"
-                                             TextAlignment="Justify"
-                                             Height="80"
-                                             Width="320"/>
+                                            IsReadOnly="True"
+                                            Text="{Binding Name}"
+                                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                            TextWrapping="Wrap"
+                                            TextAlignment="Justify"
+                                            Height="50"
+                                            FontSize="17"
+                                            FontWeight="SemiBold"
+                                            Background="Transparent"/>
+                                    </StackPanel>
+                                    
+                                    <StackPanel
+                                        Grid.Row="1"
+                                        Margin="0 5">
+                                        <TextBlock 
+                                            Text="* Descripción"
+                                            Style="{DynamicResource textBlockListViewStyle}"/>
+                                        <TextBox
+                                            IsReadOnly="True"
+                                            Text="{Binding Description}"
+                                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                            TextWrapping="Wrap"
+                                            TextAlignment="Justify"
+                                            Height="70"
+                                            FontSize="17"
+                                            FontWeight="SemiBold"
+                                            Background="Transparent"
+                                            />
                                     </StackPanel>
 
-                                    <TextBlock Grid.Row="3"
-                                                       Style="{DynamicResource textBlockListViewStyle}"
-                                                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                                       ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                                       TextWrapping="Wrap"
-                                                       TextAlignment="Justify">
-                                                <Run Text="Presentación:"/>
-                                                <Run Text="{Binding Presentation}"
-                                                     FontWeight="SemiBold"/>
-                                    </TextBlock>
-                                    <TextBlock Grid.Row="4"
-                                                   Style="{DynamicResource textBlockListViewStyle}"
-                                                   HorizontalAlignment="Right"
-                                                           VerticalAlignment="Bottom">
-                                                <Run Text="Estado: "/>
-                                                <Run Text="{Binding Status, Converter={StaticResource StatusValueConverter}}" 
-                                                     FontWeight="SemiBold"/>
-                                    </TextBlock>
-                                </Grid>
-                                <Grid Grid.Column="3"
-                                                  Grid.ColumnSpan="2"
-                                                  Grid.Row="2"
-                                                  Margin="5 5">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                    </Grid.RowDefinitions>
                                     <TextBlock
-                                                   Grid.Row="0"
-                                                   Style="{DynamicResource textBlockListViewStyle}">
-                                                <Run Text="Precio:"/>
-                                                <Run Text="{Binding Price}"
-                                                     FontWeight="SemiBold"/>
-                                                <Run Text="córdobas"
-                                                     FontWeight="SemiBold"/>
+                                        Grid.Row="2"
+                                        Style="{DynamicResource textBlockListViewStyle}"
+                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                        ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                        TextWrapping="Wrap"
+                                        TextAlignment="Justify">
+                                        <Run Text="* Presentación:"/>
+                                        <Run Text="{Binding Presentation}" FontWeight="SemiBold"/>
                                     </TextBlock>
-                                    <TextBlock 
-                                                   Grid.Row="1"
-                                                   Style="{DynamicResource textBlockListViewStyle}">
-                                                <Run Text="En stock:"/>
-                                                <Run Text="{Binding Quantity}"
-                                                     FontWeight="SemiBold"/>
+                                    
+                                    <TextBlock
+                                        Margin="0 5"
+                                        Grid.Row="3"
+                                        Style="{DynamicResource textBlockListViewStyle}">
+                                        <Run Text="* Estado: "/>
+                                        <Run Text="{Binding Status, Converter={StaticResource StatusValueConverter}}" 
+                                             FontWeight="SemiBold"/>
                                     </TextBlock>
-
-                                    <TextBlock 
-                                                   Grid.Row="2"
-                                                   HorizontalAlignment="Right"
-                                                   Style="{DynamicResource textBlockListViewStyle}">
-                                                <Run Text="F. entrada:"/>
-                                                <Run Text="{Binding EntryDate, StringFormat='dddd  dd/MMM/yyyy', ConverterCulture='es'}"
-                                                     FontWeight="SemiBold"/>
-                                    </TextBlock>
-                                    <TextBlock 
-                                                   Grid.Row="3"
-                                                   HorizontalAlignment="Right"
-                                                   Style="{DynamicResource textBlockListViewStyle}">
-                                                <Run Text="Vecimiento:"/>
-                                                <Run Text="{Binding Expiration, StringFormat='dddd  dd/MMM/yyyy', ConverterCulture='es'}"
-                                                     FontWeight="SemiBold"/>
+                                    <TextBlock
+                                        Margin="0 5"
+                                        Grid.Row="3"
+                                        HorizontalAlignment="Right"
+                                        Style="{DynamicResource textBlockListViewStyle}">
+                                        <Run Text="* En stock:"/>
+                                        <Run Text="{Binding Quantity}" FontWeight="SemiBold"/>
                                     </TextBlock>
                                 </Grid>
-                            </Grid>
+                                
+                                <Grid Margin="20 0"
+                                      Width="320">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    
+                                    <TextBlock
+                                        Grid.Row="0"
+                                        Margin="0 5 0 0"
+                                        Style="{DynamicResource textBlockListViewStyle}">
+                                        <Run Text="* Precio:"/>
+                                        <Run Text="{Binding Price}" FontWeight="SemiBold"/>
+                                        <Run Text="córdobas" FontWeight="SemiBold"/>
+                                    </TextBlock>
+                                    
+                                    <StackPanel
+                                        Grid.Row="1"
+                                        Margin="0 5">
+                                        <TextBlock 
+                                            Text="* Fecha de entrada:"
+                                            Style="{DynamicResource textBlockListViewStyle}"/>
+                                        <TextBlock
+                                            Margin="10 0 0 0"
+                                            Text="{Binding  EntryDate, StringFormat='h:mm tt  -  dddd dd MMMM yyyy', ConverterCulture='es'}"
+                                            TextWrapping="Wrap"
+                                            Height="50"
+                                            FontSize="17"
+                                            FontWeight="SemiBold"/>
+                                    </StackPanel>
+
+                                    <StackPanel
+                                        Grid.Row="2">
+                                        <TextBlock 
+                                            Text="* Fecha de vencimiento:"
+                                            Style="{DynamicResource textBlockListViewStyle}"/>
+                                        <TextBlock
+                                            Margin="10 0 0 0"
+                                            Text="{Binding Expiration, StringFormat='dddd dd MMMM yyyy', ConverterCulture='es'}"
+                                            FontSize="17"
+                                            FontWeight="SemiBold"
+                                            />
+                                    </StackPanel>
+                                </Grid>
+                                
+                            </WrapPanel>
                         </Border>
                     </DataTemplate>
                 </DataGrid.RowDetailsTemplate>
@@ -412,38 +447,75 @@
 
             </DataGrid>
 
-            <WrapPanel
+            <Grid 
                 Grid.Row="1"
-                Margin="60 10"
-                >
-                <WrapPanel>
-                    <CheckBox Margin="0 0 5 0"
-                                 Command="{Binding GroupCommand}"
-                                 CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}"
-                                 Content="Agrupar/Ordenar"
-                                 Style="{DynamicResource CheckBoxStyle}">
-                        <CheckBox.ToolTip>
-                            <ToolTip>
-                                <TextBlock Text="Agrupar y ordenar por presentaciones" FontSize="16" Foreground="Black"/>
-                            </ToolTip>
-                        </CheckBox.ToolTip>
-                    </CheckBox>
-                </WrapPanel>
-
-                <WrapPanel>
-                    <CheckBox Margin="50 0 0 0"
-                                 Command="{Binding SortCommand}"
-                                 CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}"
-                                 Content="Ordenar"
-                                 Style="{DynamicResource CheckBoxStyle}">
-                        <CheckBox.ToolTip>
-                            <ToolTip>
-                                <TextBlock Text="Aplicar orden ascendente por código" FontSize="16" Foreground="Black"/>
-                            </ToolTip>
-                        </CheckBox.ToolTip>
-                    </CheckBox>
-                </WrapPanel>
+                Margin="30 10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <WrapPanel Grid.Column="0">
+                <CheckBox 
+                    Margin="0 0 5 0" 
+                    IsChecked="{Binding groupSort, Mode=TwoWay}"
+                    Content="Agrupar/Ordenar"
+                    Style="{DynamicResource CheckBoxStyle}">
+                    <CheckBox.ToolTip>
+                        <ToolTip>
+                            <TextBlock Text="Agrupar y ordenar por presentaciones" FontSize="16" Foreground="Black"/>
+                        </ToolTip>
+                    </CheckBox.ToolTip>
+                </CheckBox>
+                <CheckBox 
+                    Margin="50 0 50 0" 
+                    IsChecked="{Binding viewOnlyInactives, Mode=TwoWay}"
+                    Content="Ver inactivos"
+                    Style="{DynamicResource CheckBoxStyle}">
+                    <CheckBox.ToolTip>
+                        <ToolTip>
+                            <TextBlock Text="Se cargan todas las existencias inactivas" FontSize="16" Foreground="Black"/>
+                        </ToolTip>
+                    </CheckBox.ToolTip>
+                </CheckBox>
+                <CheckBox
+                    IsChecked="{Binding viewAll, Mode=TwoWay}"
+                    Content="Ver todo"
+                    Style="{DynamicResource CheckBoxStyle}">
+                    <CheckBox.ToolTip>
+                        <ToolTip>
+                            <TextBlock Text="Se muestran todas las existencias activas e inactivas" FontSize="16" Foreground="Black"/>
+                        </ToolTip>
+                    </CheckBox.ToolTip>
+                </CheckBox>
+                <CheckBox
+                    x:Name="groupAllCheck"
+                    Margin="50 0 0 0"
+                    IsChecked="{Binding groupAll, Mode=TwoWay}"
+                    Content="Agrupar"
+                    Visibility="{Binding viewAll, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Style="{DynamicResource CheckBoxStyle}">
+                    <CheckBox.ToolTip>
+                        <ToolTip>
+                            <TextBlock Text="Agrupar las existencias en activas e inactivas" FontSize="16" Foreground="Black"/>
+                        </ToolTip>
+                    </CheckBox.ToolTip>
+                </CheckBox>
             </WrapPanel>
+
+                <WrapPanel
+                    Grid.Column="1"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Right">
+                    <TextBlock 
+                    Style="{DynamicResource textBlockListViewStyle}"
+                    Text="{Binding dataGridSource.Count}"/>
+                    <TextBlock 
+                    Style="{DynamicResource textBlockListViewStyle}"
+                    Grid.Column="1"
+                    Text=" elementos"/>
+                </WrapPanel>
+            </Grid>
         </Grid>
         
     </Grid>

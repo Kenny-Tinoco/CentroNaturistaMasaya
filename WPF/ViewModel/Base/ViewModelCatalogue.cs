@@ -17,14 +17,14 @@ namespace WPF.ViewModel.Base
         {
             this.logic = logic;
 
-            LoadCatalogueCommand = new LoadRecordListCommand<Entity>(this);
+            loadCatalogueCommand = new LoadRecordListCommand<Entity>(this);
         }
 
-        protected ICommand LoadCatalogueCommand { get; set; } = null!;
+        protected ICommand loadCatalogueCommand { get; set; } = null!;
 
         public async virtual Task Initialize()
         {
-            await updateCatalogue();
+            await UpdateCatalogue();
         }
 
         private ObservableCollection<Entity> _catalogue;
@@ -58,9 +58,9 @@ namespace WPF.ViewModel.Base
         }
         public BaseLogic<Entity> logic { get; set; }
 
-        protected async Task updateCatalogue()
+        protected async Task UpdateCatalogue()
         {
-            RefreshCatalogue(await logic.getAll());
+            RefreshCatalogue(await logic.GetAll());
         }
 
         public void RefreshCatalogue(IEnumerable<Entity> list)
@@ -72,7 +72,7 @@ namespace WPF.ViewModel.Base
 
             catalogue = auxiliaryList;
         }
-        protected bool validateSearchString(string parameter)
+        protected bool ValidateSearchString(string parameter)
         {
             return
                 !parameter.Trim().Equals("Búscar") &&

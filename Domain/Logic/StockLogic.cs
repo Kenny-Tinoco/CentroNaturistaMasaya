@@ -23,13 +23,16 @@ namespace Domain.Logic
                 element.Name.ToLower().StartsWith(parameter.Trim().ToLower()) ||
                 element.Presentation.ToLower().StartsWith(parameter.Trim().ToLower());
         }
-        public override int getId(Stock parameter)
-        {
-            return parameter.IdStock;
-        }
+
         public Stock getStock(int id)
         {
-            return ((StockDAO)_dao).getStock(id);
+            return ((StockDAO)_dao).GetStock(id);
+        }
+
+        public bool hasChangeableState(int id)
+        {
+            var element = getStock(id);
+            return element.ProductNavigation.Status && element.PresentationNavigation.Status;
         }
     }
 }

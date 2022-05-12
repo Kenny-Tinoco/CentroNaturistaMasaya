@@ -8,13 +8,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resource/image/edit.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resource/logo-cnm.ico")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resource/image/back-black.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resource/image/cnm-icon.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resource/image/search.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resource/image/buy.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resource/image/consult.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resource/image/edit.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resource/image/remove-red.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resource/image/employee-black.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resource/image/employee.png")]

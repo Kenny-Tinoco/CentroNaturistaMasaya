@@ -1,13 +1,11 @@
 ﻿using Domain.Entities;
-using Domain.Logic;
 using MVVMGenericStructure.Services;
-using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Data;
 using System.Windows.Input;
-using WPF.Command;
 using WPF.Command.Navigation;
-using WPF.Stores;
+using WPF.Services;
 using WPF.ViewModel.Base;
 
 namespace WPF.ViewModel
@@ -16,21 +14,28 @@ namespace WPF.ViewModel
     {
         public string titleBar { get; }
 
-        public EntityStore entityStore { get; set; }
+        public IMessenger messenger;
 
-        public ProductSelectionModalViewModel(EntityStore _entityStore , INavigationService closeModalNavigationService ) : base(closeModalNavigationService)
+        public ProductSelectionModalViewModel(IMessenger _messenger, INavigationService closeModal) : base(closeModal)
         {
             titleBar = "Selecionar un producto";
 
-            entityStore = _entityStore;
-            GoCommand = new RelayCommand(parameter => go((Product)parameter));
+            messenger = _messenger;
+            messenger.Subscribe<IEnumerable<Product>>(this, CatalogueReceived);
+            GoCommand = new RelayCommand(parameter => Go((Product)parameter));
+        }
+
+        private void CatalogueReceived(object parameter)
+        {
+            dataGridSource = CollectionViewSource.GetDefaultView((IEnumerable<Product>)parameter);
+            Sort();
         }
 
         public ICommand GoCommand { get; }
 
-        public void go( Product parameter )
+        public void Go(Product parameter)
         {
-            new SelectEntityCommand(entityStore).Execute(parameter);
+            messenger.Send(parameter);
             ExitCommand.Execute(-1);
         }
 
@@ -44,15 +49,18 @@ namespace WPF.ViewModel
             set
             {
                 _searchText = value;
-                search();
+                Search();
             }
         }
 
-        public void search()
+        public void Search()
         {
-            if (validateSearchString(searchText))
+            if (dataGridSource is null)
+                return;
+
+            if (ValidateSearchString(searchText))
             {
-                dataGridSource.Filter = DataGridSource_Filter;
+                dataGridSource.Filter = Filter;
             }
             else if (searchText.Equals(""))
             {
@@ -60,23 +68,36 @@ namespace WPF.ViewModel
             }
         }
 
-        private bool validateSearchString(string parameter) => !parameter.Trim().Equals("Búscar") && !parameter.Trim().Equals("");
+        private bool ValidateSearchString(string parameter) => !parameter.Trim().Equals("Búscar") && !parameter.Trim().Equals("");
 
-        private bool DataGridSource_Filter(object obj)
+        private bool Filter(object parameter)
         {
-            if (obj is Product element)
+            if (parameter is Product element)
             {
-                return searchLogic(element, searchText);
+                return SearchLogic(element, searchText);
             }
 
             return false;
         }
-        public bool searchLogic(Product element, string parameter) =>
+        public static bool SearchLogic(Product element, string parameter) =>
             element.IdProduct.ToString().Contains(parameter.Trim()) ||
             element.Name.ToLower().StartsWith(parameter.Trim().ToLower());
 
 
-        public ICollectionView dataGridSource => CollectionViewSource.GetDefaultView(entityStore._catalogue);
+        public ICollectionView dataGridSource
+        {
+            get;
+            private set;
+        }
+        private void Sort()
+        {
+            dataGridSource.SortDescriptions
+                .Clear();
+            dataGridSource.SortDescriptions
+                .Add(new SortDescription(nameof(Product.IdProduct), ListSortDirection.Descending));
+        }
+
+
         public override void Dispose()
         {
             searchText = "";

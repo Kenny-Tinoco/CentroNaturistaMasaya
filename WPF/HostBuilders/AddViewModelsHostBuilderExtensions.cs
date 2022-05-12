@@ -52,36 +52,36 @@ namespace WPF.HostBuilders
             return StockViewModel.LoadViewModel
             (
                 serviceProvider.GetRequiredService<LogicFactory>().stockLogic,
-                serviceProvider.GetRequiredService<EntityStore>(),
+                serviceProvider.GetRequiredService<IMessenger>(),
                 createStockFormNavigationService(serviceProvider)
             );
         }
-        private static ProductViewModel createProductViewModel(IServiceProvider serviceProvider)
+        private static ProductViewModel createProductViewModel(IServiceProvider servicesProvider)
         {
             return ProductViewModel.LoadViewModel
             (
-                serviceProvider.GetRequiredService<LogicFactory>().productLogic,
-                serviceProvider.GetRequiredService<EntityStore>(),
-                createProductModalNavigationService(serviceProvider)
+                servicesProvider.GetRequiredService<LogicFactory>().productLogic,
+                servicesProvider.GetRequiredService<IMessenger>(),
+                createProductModalNavigationService(servicesProvider)
             );
         }
-        private static StartupViewModel createStartupViewModel(IServiceProvider serviceProvider)
+        private static StartupViewModel createStartupViewModel(IServiceProvider servicesProvider)
         {
             return new StartupViewModel
             (
-                serviceProvider.GetRequiredService<NavigationStore>(),
-                serviceProvider.GetRequiredService<ModalNavigationStore>(),
-                serviceProvider.GetRequiredService<NavigationMenuViewModel>()
+                servicesProvider.GetRequiredService<NavigationStore>(),
+                servicesProvider.GetRequiredService<ModalNavigationStore>(),
+                servicesProvider.GetRequiredService<NavigationMenuViewModel>()
             );
         }
-        private static StockFormViewModel createStockFormViewModel(IServiceProvider serviceProvider)
+        private static StockFormViewModel createStockFormViewModel(IServiceProvider servicesProvider)
         {
             return StockFormViewModel.LoadViewModel
             (
-                serviceProvider.GetRequiredService<LogicFactory>(),
-                serviceProvider.GetRequiredService<EntityStore>(),
-                createStockNavigationService(serviceProvider),
-                createStockModalNavigationService(serviceProvider)
+                servicesProvider.GetRequiredService<LogicFactory>(),
+                servicesProvider.GetRequiredService<IMessenger>(),
+                createStockNavigationService(servicesProvider),
+                createStockModalNavigationService(servicesProvider)
             );
         }
         private static ProductWindowsViewModel createProductWindowsViewModel(IServiceProvider servicesProvider)
@@ -96,7 +96,7 @@ namespace WPF.HostBuilders
         {
             return new ProductSelectionModalViewModel
             (
-                servicesProvider.GetRequiredService<EntityStore>(),
+                servicesProvider.GetRequiredService<IMessenger>(),
                 servicesProvider.GetRequiredService<CloseModalNavigationService>()
             );
         }
@@ -105,7 +105,7 @@ namespace WPF.HostBuilders
             return PresentationModalViewModel.LoadViewModel
             (
                 servicesProvider.GetRequiredService<LogicFactory>().presentationModalLogic,
-                servicesProvider.GetRequiredService<EntityStore>(),
+                servicesProvider.GetRequiredService<IMessenger>(),
                 servicesProvider.GetRequiredService<CloseModalNavigationService>()
             );
         }
@@ -113,7 +113,7 @@ namespace WPF.HostBuilders
         {
             return new ProductModalFormViewModel
             (
-                servicesProvider.GetRequiredService<EntityStore>(),
+                servicesProvider.GetRequiredService<IMessenger>(),
                 servicesProvider.GetRequiredService<CloseModalNavigationService>()
             );
         }

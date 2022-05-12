@@ -6,7 +6,7 @@
              xmlns:userControls="clr-namespace:WPF.ViewComponents.UserControls" 
              xmlns:custom="clr-namespace:WPF.ViewComponents.CustomControls"
              mc:Ignorable="d">
-    <Grid>
+    <Grid MaxWidth="440">
         <userControls:Popup
             titleBar="{Binding titleBar}"
             iconBar="/Resource/Image/presentation.png"
@@ -65,7 +65,7 @@
                                     Text="{Binding name, UpdateSourceTrigger=PropertyChanged}"
                                     FontSize="17"
                                     FontWeight="Normal"
-                            Style="{DynamicResource TextBoxStyle}"
+                                    Style="{DynamicResource TextBoxStyle}"
                                     TextAlignment="Center"/>
                             </StackPanel>
                             
@@ -131,11 +131,16 @@
                                 Grid.Row="0"
                                 Grid.Column="0"
                                 Visibility="{Binding IsLoading, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
                                 
                                 <DataGrid
-                                    ItemsSource="{Binding catalogue}"
+                                    Grid.Row="0"
+                                    ItemsSource="{Binding dataGridSource}"
                                     Style="{DynamicResource ElementsDataGrid}"
-                                    Margin="5 20 5 5"
+                                    Margin="5 10 5 5"
                                     Height="135"
                                     CanUserResizeColumns="false"
                                     Width="380"
@@ -164,6 +169,20 @@
                                     </DataGrid.Columns>
                                 </DataGrid>
 
+                                <WrapPanel 
+                                    Grid.Row="1" 
+                                    Margin="5 0"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Right">
+                                    <TextBlock 
+                                        Style="{DynamicResource TextBlockStyle}"
+                                        FontSize="14"
+                                        Text="{Binding dataGridSource.Count}"/>
+                                    <TextBlock 
+                                        Style="{DynamicResource TextBlockStyle}"
+                                        FontSize="14"
+                                        Text=" elementos"/>
+                                </WrapPanel>
                             </Grid>
                         </Grid>
                     </GroupBox>

@@ -2,8 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     
     <Style x:Key="ElementsDataGrid"
-           TargetType="DataGrid" >
-        <Setter Property="Margin" Value="30,10,30,0"/>
+           TargetType="DataGrid">
         <Setter Property="AutoGenerateColumns" Value="False"/>
         <Setter Property="IsReadOnly" Value="True"/>
         <Setter Property="Background" Value="White"/>
@@ -160,8 +159,9 @@
 
                     <Border x:Name="border"
                             BorderBrush="white"
-                            BorderThickness="0.6"
+                            BorderThickness="0.8"
                             Background="Transparent"
+                            CornerRadius="100"
                             SnapsToDevicePixels="true">
                         <ContentPresenter x:Name="contentPresenter" 
                                           Focusable="False" 
@@ -173,12 +173,43 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="Background" TargetName="border" Value="{DynamicResource colorSecondaryLight}"/>
                             <Setter Property="BorderBrush" TargetName="border" Value="Black"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
-                            <Setter Property="Background" TargetName="border" Value="transparent"/>
                             <Setter Property="BorderBrush" TargetName="border" Value="White"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="CustomButtonSimpleBackStyle"
+           TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+
+                    <Border x:Name="border"
+                            BorderBrush="Transparent"
+                            BorderThickness="0.8"
+                            Background="Transparent"
+                            CornerRadius="5"
+                            SnapsToDevicePixels="true">
+                        <ContentPresenter x:Name="contentPresenter" 
+                                          Focusable="False" 
+                                          HorizontalAlignment="Center"
+                                          Margin="1" 
+                                          RecognizesAccessKey="True" 
+                                          SnapsToDevicePixels="True" 
+                                          VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="BorderBrush" TargetName="border" Value="Black"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter Property="BorderBrush" TargetName="border" Value="Transparent"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
 
@@ -304,6 +335,34 @@
                         >
                         <ContentControl Content="{TemplateBinding Content}"/>
                     </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Validation.ErrorTemplate">
+            <Setter.Value>
+                <ControlTemplate>
+                    <DockPanel LastChildFill="true">
+                        <AdornedElementPlaceholder Name="customAdorner" VerticalAlignment="Center" >
+                            <Border BorderBrush="#2196F3" BorderThickness="1" />
+                        </AdornedElementPlaceholder>
+                        <Border Background="#2196F3"
+                                    DockPanel.Dock="Right"
+                                    Width="18"
+                                    Height="18"
+                                    HorizontalAlignment="Right"
+                                    CornerRadius="10"
+                                    >
+                            <Border.ToolTip>
+                                <ToolTip>
+                                    <TextBlock Text="{Binding ErrorContent}" FontSize="16" Foreground="Black"/>
+                                </ToolTip>
+                            </Border.ToolTip>
+                            <TextBlock Text="!" 
+                                           VerticalAlignment="center" 
+                                           HorizontalAlignment="center" 
+                                           FontWeight="Bold" Foreground="white"/>
+                        </Border>
+                    </DockPanel>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

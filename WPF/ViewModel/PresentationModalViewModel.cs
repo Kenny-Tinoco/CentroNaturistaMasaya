@@ -1,10 +1,14 @@
 ﻿using Domain.Entities;
 using Domain.Logic;
 using MVVMGenericStructure.Services;
+using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 using WPF.Command.CRUD;
 using WPF.Command.Navigation;
+using WPF.Services;
 using WPF.Stores;
 
 namespace WPF.ViewModel
@@ -13,31 +17,28 @@ namespace WPF.ViewModel
     {
         public string titleBar => "Presentaciones";
 
-        private ICommand Save;
-
         private ICommand CloseModalCommand;
 
-        private EntityStore entityStore;
+        private IMessenger messenger;
 
-        public PresentationModalViewModel(BaseLogic<Presentation> parameter, EntityStore _entityStore, INavigationService closeModalNavigationService) : base((PresentationLogic)parameter)
+        public PresentationModalViewModel(BaseLogic<Presentation> logic, IMessenger _messenger, INavigationService closeModal) : base((PresentationLogic)logic)
         {
-            entityStore = _entityStore;
+            messenger = _messenger;
 
-            Save = new SaveCommand<Presentation>(logic, canCreate);
-            CloseModalCommand = new ExitModalCommand(closeModalNavigationService);
+            CloseModalCommand = new ExitModalCommand(closeModal);
 
-            if(!isEditable)
-                reset();
+            Reset();
         }
 
-        public static PresentationModalViewModel LoadViewModel(BaseLogic<Presentation> parameter, EntityStore _entityStore, INavigationService closeModalNavigationService)
+        public static PresentationModalViewModel LoadViewModel(BaseLogic<Presentation> logic, IMessenger _messenger, INavigationService closeModal)
         {
-            PresentationModalViewModel viewModel = new PresentationModalViewModel(parameter, _entityStore, closeModalNavigationService);
+            PresentationModalViewModel viewModel = new(logic, _messenger, closeModal);
 
-            viewModel.LoadCatalogueCommand.Execute(null);
+            viewModel.loadCatalogueCommand.Execute(null);
 
             return viewModel;
         }
+
 
 
         private ICommand _saveCommand;
@@ -46,26 +47,41 @@ namespace WPF.ViewModel
             get
             {
                 if (_saveCommand is null)
-                    _saveCommand = new RelayCommand(parameter => save((bool)parameter));
+                {
+                    _saveCommand = new RelayCommand(parameter => RunSaveCommand((bool)parameter));
+                }
 
                 return _saveCommand;
             }
         }
-        private void save(bool parameter)
+        private void RunSaveCommand(bool isEdition)
         {
-            saveAux(parameter);
-            reset();
+            Save(isEdition);
+            Reset();
         }
 
-        private async void saveAux(bool parameter)
+        private void Save(bool isEdition)
         {
-            logic.entity = getEntity();
-            Save.Execute(parameter);
-            await updateCatalogue();
-            //entityStore.RefreshChanges();
+            Save(GetEntity(), isEdition);
+            RefreshCatalogues(isEdition);
         }
-        
-        private Presentation getEntity()
+        private async void Save(Presentation parameter, bool isEdition)
+        {
+            logic.entity = parameter;
+            await new SaveCommand<Presentation>(logic, canCreate).ExecuteAsync(isEdition);
+
+            await Initialize();
+        }
+
+        private void RefreshCatalogues(bool isEdition)
+        {
+            messenger.Send(Refresh.presentation);
+
+            if (isEdition)
+                messenger.Send(Refresh.stock);
+        }
+
+        private Presentation GetEntity()
         {
             return new Presentation()
             {
@@ -75,10 +91,10 @@ namespace WPF.ViewModel
             };
         }
 
-        public ICommand ExitCommand => new RelayCommand(parameter => exit());
-        private void exit()
+        public ICommand ExitCommand => new RelayCommand(o => Exit());
+        private void Exit()
         {
-            reset();
+            Reset();
             CloseModalCommand.Execute(null);
         }
 
@@ -89,12 +105,12 @@ namespace WPF.ViewModel
             get
             {
                 if (_resetCommand is null)
-                    _resetCommand = new RelayCommand(parameter => reset());
+                    _resetCommand = new RelayCommand(o => Reset());
 
                 return _resetCommand;
             }
         }
-        private void reset()
+        private void Reset()
         {
             id = 0;
             name = string.Empty;
@@ -109,12 +125,12 @@ namespace WPF.ViewModel
             get
             {
                 if (_editCommand is null)
-                    _editCommand = new RelayCommand(parameter => edit((Presentation)parameter));
+                    _editCommand = new RelayCommand(parameter => Edit((Presentation)parameter));
 
                 return _editCommand;
             }
         }
-        private void edit(Presentation parameter)
+        private void Edit(Presentation parameter)
         {
             id = parameter.IdPresentation;
             name = parameter.Name;
@@ -130,12 +146,12 @@ namespace WPF.ViewModel
             get
             {
                 if (_deleteCommand is null)
-                    _deleteCommand = new RelayCommand(parameter => delete());
+                    _deleteCommand = new RelayCommand(o => Delete());
 
                 return _deleteCommand;
             }
         }
-        private async void delete()
+        private async void Delete()
         {
             var result = MessageBox
                 .Show("¿Está seguro de eliminar esta presentación?\n" +
@@ -144,13 +160,14 @@ namespace WPF.ViewModel
                       "sin hacer eliminaciones.",
                       "Confirmar Eliminación", MessageBoxButton.YesNo);
 
-            if (result == MessageBoxResult.Yes)
-            {
-                await new DeleteCommand<Presentation>(logic).ExecuteAsync(entity);
-
-                reset();
-                await updateCatalogue();
-            }
+            if (result is not MessageBoxResult.Yes)
+                return;
+            
+            await new DeleteCommand<Presentation>(logic).ExecuteAsync(entity.IdPresentation);
+            
+            Reset();
+            await Initialize();
+            RefreshCatalogues(true);
         }
 
 
@@ -160,12 +177,12 @@ namespace WPF.ViewModel
             get
             {
                 if (_changeStatusCommand is null)
-                    _changeStatusCommand = new RelayCommand(parameter => changeStatus((Presentation)parameter));
+                    _changeStatusCommand = new RelayCommand(parameter => ChangeStatus((Presentation)parameter));
 
                 return _changeStatusCommand;
             }
         }
-        private void changeStatus(Presentation parameter)
+        private void ChangeStatus(Presentation parameter)
         {
             if (parameter == null)
                 return;
@@ -186,8 +203,8 @@ namespace WPF.ViewModel
 
             if (flag != parameter.Status)
             {
-                edit(parameter);
-                saveAux(true);
+                Save(parameter,true);
+                RefreshCatalogues(true);
             }
         }
 
@@ -230,6 +247,40 @@ namespace WPF.ViewModel
         {
             get => entity.Status;
             set => entity.Status = value;
+        }
+
+
+
+        private ICollectionView _dataGridSource;
+        public ICollectionView dataGridSource
+        {
+            get
+            {
+                if (_dataGridSource != null)
+                    Sort();
+
+                return _dataGridSource;
+            }
+            set
+            {
+                _dataGridSource = value;
+                OnPropertyChanged(nameof(dataGridSource));
+            }
+        }
+
+        private void Sort()
+        {
+            _dataGridSource.SortDescriptions
+                .Clear();
+            _dataGridSource.SortDescriptions
+                .Add(new SortDescription(nameof(Presentation.IdPresentation), ListSortDirection.Descending));
+        }
+        public override async Task Initialize()
+        {
+            dataGridSource =
+                CollectionViewSource.
+                GetDefaultView(await logic.GetAll());
+            Sort();
         }
     }
 }

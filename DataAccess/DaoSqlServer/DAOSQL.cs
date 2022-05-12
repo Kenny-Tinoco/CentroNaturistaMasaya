@@ -1,23 +1,26 @@
 ﻿using DataAccess.SqlServerDataSource;
 using Domain.DAO;
 using Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.DaoSqlServer
 {
     public class ConsultDAOSQL : BaseDAOSQL<Consult>, ConsultDAO
     {
-        public ConsultDAOSQL(MasayaNaturistCenterDataBaseFactory dataBaseContext) : base(dataBaseContext){}
+        public ConsultDAOSQL(MasayaNaturistCenterDataBaseFactory dataBaseContext) : base(dataBaseContext) { }
     }
 
     public class EmployeeDAOSQL : BaseDAOSQL<Employee>, EmployeeDAO
     {
         public EmployeeDAOSQL(MasayaNaturistCenterDataBaseFactory dataBaseContext) : base(dataBaseContext) { }
+
+        protected override string nameTable => "Employee";
     }
 
     public class PatientDAOSQL : BaseDAOSQL<Patient>, PatientDAO
     {
         public PatientDAOSQL(MasayaNaturistCenterDataBaseFactory dataBaseContext) : base(dataBaseContext) { }
+
+        protected override string nameTable => "Patient";
     }
 
     public class PrescriptionProductDAOSQL : BaseDAOSQL<PrescriptionProduct>, PrescriptionProductDAO
@@ -27,41 +30,23 @@ namespace DataAccess.DaoSqlServer
 
     public class PresentationDAOSQL : BaseDAOSQL<Presentation>, PresentationDAO
     {
-        public PresentationDAOSQL(MasayaNaturistCenterDataBaseFactory dataBaseContext) : base(dataBaseContext) {}
+        public PresentationDAOSQL(MasayaNaturistCenterDataBaseFactory dataBaseContext) : base(dataBaseContext) { }
 
-        protected override bool validateEntity(Presentation item, object id)
-        {
-            if(item.IdPresentation == (int)id)
-                return true;
-
-            return false;
-        }
-        protected override async Task<Presentation> getEntityById(object id, MasayaNaturistCenterDataBase context)
-        {
-            return await context.Set<Presentation>().FirstOrDefaultAsync((e) => e.IdPresentation == (int)id);
-        }
+        protected override string nameTable => "Presentation";
     }
 
     public class ProductDAOSQL : BaseDAOSQL<Product>, ProductDAO
     {
         public ProductDAOSQL(MasayaNaturistCenterDataBaseFactory dataBaseContext) : base(dataBaseContext) { }
 
-        protected override bool validateEntity(Product item, object id)
-        {
-            if (item.IdProduct == (int)id)
-                return true;
-
-            return false;
-        }
-        protected override async Task<Product> getEntityById(object id, MasayaNaturistCenterDataBase context)
-        {
-            return await context.Set<Product>().FirstOrDefaultAsync((e) => e.IdProduct == (int)id);
-        }
+        protected override string nameTable => "Product";
     }
 
     public class ProviderDAOSQL : BaseDAOSQL<Provider>, ProviderDAO
     {
         public ProviderDAOSQL(MasayaNaturistCenterDataBaseFactory dataBaseContext) : base(dataBaseContext) { }
+
+        protected override string nameTable => "Provider";
     }
 
     public class SaleDetailDAOSQL : BaseDAOSQL<SaleDetail>, SaleDetailDAO
@@ -73,24 +58,12 @@ namespace DataAccess.DaoSqlServer
     {
         public SellDAOSQL(MasayaNaturistCenterDataBaseFactory dataBaseContext) : base(dataBaseContext) { }
     }
-    
+
     public class StockDAOSQL : BaseDAOSQL<Stock>, StockDAO
     {
         public StockDAOSQL(MasayaNaturistCenterDataBaseFactory dataBaseContext) : base(dataBaseContext) { }
-        
-        protected override bool validateEntity(Stock item, object id)
-        {
-            if (item.IdStock == (int)id)
-                return true;
 
-            return false;
-        }
-        protected override async Task<Stock> getEntityById(object id, MasayaNaturistCenterDataBase context)
-        {
-            return await context.Set<Stock>().FirstOrDefaultAsync((e) => validateEntity(e, id));
-        }
-
-        public Stock getStock(int id)
+        public Stock GetStock(int id)
         {
             using (MasayaNaturistCenterDataBase context = _contextFactory.CreateDbContext())
             {
@@ -102,6 +75,7 @@ namespace DataAccess.DaoSqlServer
                 return element;
             }
         }
+        protected override string nameTable => "Stock";
     }
 
     public class SupplyDAOSQL : BaseDAOSQL<Supply>, SupplyDAO

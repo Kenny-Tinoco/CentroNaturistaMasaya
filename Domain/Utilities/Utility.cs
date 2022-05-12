@@ -14,12 +14,18 @@
                 return Status.inactive;
         }
 
-        public static T Find<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
+        public static T? Find<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
         {
             foreach (var current in enumerable)
                 if (predicate(current)) return current;
 
             return default(T);
         }
+    }
+    public enum Views
+    {
+        All,
+        OnlyActive,
+        OnlyInactive
     }
 }
