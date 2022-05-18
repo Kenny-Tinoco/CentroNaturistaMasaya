@@ -1,6 +1,5 @@
 ﻿using Domain.Entities;
 using MVVMGenericStructure.Services;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using WPF.Command.Navigation;
@@ -13,27 +12,34 @@ namespace WPF.ViewModel
     public class ProductModalFormViewModel : ModalFormViewModel
     {
         private readonly IMessenger messenger;
-        public productMessage message { get; private set; }
 
-
-        public ProductModalFormViewModel(IMessenger messenger, INavigationService closeModal) : base(closeModal)
+        public ProductModalFormViewModel(IMessenger _messenger, INavigationService closeModal) : base(closeModal)
         {
-            this.messenger = messenger;
-            this.messenger.Subscribe<productMessage>(this, ProductMessageSent);
+            messenger = _messenger;
+            messenger.Subscribe<ProductMessage>(this, ProductMessageSent);
         }
 
 
         private void ProductMessageSent(object parameter)
         {
-            message = (productMessage)parameter;
+            isEditable = ((ProductMessage)parameter).isEdition;
 
-            if (message.entity is null)
+            var element = ((ProductMessage)parameter).entity;
+
+            if (element is null)
                 ResetEntity();
             else
-                entity = message.entity;
+                entity = new Product()
+                {
+                    IdProduct = element.IdProduct,
+                    Name = element.Name,
+                    Description = element.Description,
+                    Status = element.Status,
+                    Quantity = element.Quantity
+                };
         }
 
-        public override void ResetEntity()
+        private void ResetEntity()
         {
             entity = new Product()
             {
@@ -46,11 +52,32 @@ namespace WPF.ViewModel
             OnPropertyChanged(nameof(name));
             OnPropertyChanged(nameof(description));
         }
+        private Product GetEntity()
+        {
+            return new Product()
+            {
+                IdProduct = entity.IdProduct,
+                Name = name.Trim(),
+                Description = description.Trim(),
+                Status = entity.Status,
+                Quantity = entity.Quantity
+            };
+        }
 
-        public string titleBar => message.isEdition ? "Editar Producto" : "Agregar Producto";
+        public Product entity
+        {
+            get => (Product)_entity;
+            set
+            {
+                _entity = value;
+                OnPropertyChanged(nameof(entity));
+            }
+        }
+
+        public string titleBar => isEditable ? "Editar Producto" : "Agregar Producto";
 
         public ICommand _deleteCommand;
-        public ICommand DeleteCommand
+        public ICommand deleteCommand
         {
             get
             {
@@ -71,14 +98,14 @@ namespace WPF.ViewModel
 
             if (result != MessageBoxResult.Yes)
                 return;
-            
-            messenger.Send(new productModalMessage((Product)entity, Operation.delete));
-            ExitCommand.Execute(null);
+
+            messenger.Send(new ProductModalMessage(entity, Operation.delete));
+            exitCommand.Execute(null);
         }
 
 
         public ICommand _saveCommand;
-        public ICommand SaveCommand
+        public ICommand saveCommand
         {
             get
             {
@@ -88,41 +115,44 @@ namespace WPF.ViewModel
                 return _saveCommand;
             }
         }
-        public async void Save(bool isEdition)
+        public void Save(bool isEdition)
         {
             if (!isEdition)
             {
-                messenger.Send(new productModalMessage((Product)entity, Operation.create));
+                messenger.Send(new ProductModalMessage(GetEntity(), Operation.create));
                 ResetEntity();
-
-                notification = "Guardado con éxito";
-                await Task.Delay(3000);
-                notification = "";
             }
             else
             {
-                messenger.Send(new productModalMessage((Product)entity, Operation.update));
-                ExitCommand.Execute(null);
+                messenger.Send(new ProductModalMessage(GetEntity(), Operation.update));
+                exitCommand.Execute(null);
             }
         }
 
+
+        public ICommand closeCommand => new RelayCommand(o => Close());
+        private void Close()
+        {
+            messenger.Unsubscribe<ProductMessage>(this);
+            exitCommand.Execute(null);
+        }
 
         public string name
         {
             get
             {
-                if (string.IsNullOrEmpty(((Product)entity).Name))
-                    _errorsViewModel.AddError(nameof(name), "El nombre es nulo o vacio");
+                if (string.IsNullOrEmpty(entity.Name))
+                    errorsViewModel.AddError(nameof(name), "El nombre es nulo o vacio");
 
-                return ((Product)entity).Name;
+                return entity.Name;
             }
             set
             {
-                ((Product)entity).Name = value;
-                _errorsViewModel.ClearErrors(nameof(name));
+                entity.Name = value;
+                errorsViewModel.ClearErrors(nameof(name));
 
-                if (string.IsNullOrEmpty(((Product)entity).Name))
-                    _errorsViewModel.AddError(nameof(name), "Debe ingresar un nombre");
+                if (string.IsNullOrEmpty(entity.Name.Trim()))
+                    errorsViewModel.AddError(nameof(name), "Debe ingresar un nombre");
 
                 OnPropertyChanged(nameof(name));
             }
@@ -131,31 +161,20 @@ namespace WPF.ViewModel
         {
             get
             {
-                if (string.IsNullOrEmpty(((Product)entity).Description))
-                    _errorsViewModel.AddError(nameof(description), "El nombre es nulo o vacio");
+                if (string.IsNullOrEmpty(entity.Description.Trim()))
+                    errorsViewModel.AddError(nameof(description), "El nombre es nulo o vacio");
 
-                return ((Product)entity).Description;
+                return entity.Description;
             }
             set
             {
-                ((Product)entity).Description = value;
-                _errorsViewModel.ClearErrors(nameof(description));
+                entity.Description = value;
+                errorsViewModel.ClearErrors(nameof(description));
 
-                if (string.IsNullOrEmpty(((Product)entity).Description))
-                    _errorsViewModel.AddError(nameof(description), "Debe ingresar una descripción");
+                if (string.IsNullOrEmpty(entity.Description.Trim()))
+                    errorsViewModel.AddError(nameof(description), "Debe ingresar una descripción");
 
                 OnPropertyChanged(nameof(description));
-            }
-        }
-
-        private string _notification;
-        public string notification
-        {
-            get => _notification;
-            set
-            {
-                _notification = value;
-                OnPropertyChanged(nameof(notification));
             }
         }
     }

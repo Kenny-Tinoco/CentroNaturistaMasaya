@@ -1,48 +1,67 @@
 ﻿using Domain.Entities;
 using Domain.Logic;
+using Domain.Logic.Base;
 using MVVMGenericStructure.Services;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Data;
 using System.Windows.Input;
 using WPF.Command.CRUD;
 using WPF.Command.Navigation;
 using WPF.Services;
 using WPF.Stores;
+using WPF.ViewModel.Base;
 
 namespace WPF.ViewModel
 {
-    public class PresentationModalViewModel : ViewModelGeneric<Presentation>
+    public class PresentationModalViewModel : ModalFormViewModel
     {
         public string titleBar => "Presentaciones";
 
-        private ICommand CloseModalCommand;
+        private readonly IMessenger messenger;
 
-        private IMessenger messenger;
+        public ListingViewModel listingViewModel { get; }
 
-        public PresentationModalViewModel(BaseLogic<Presentation> logic, IMessenger _messenger, INavigationService closeModal) : base((PresentationLogic)logic)
+        private PresentationLogic logic { get; }
+
+        public PresentationModalViewModel(ILogic _logic, IMessenger _messenger, INavigationService closeModal) : base(closeModal)
         {
             messenger = _messenger;
 
-            CloseModalCommand = new ExitModalCommand(closeModal);
+            logic = (PresentationLogic)_logic;
+
+            listingViewModel = new ListingViewModel(GetPresentationListing, SortPresentationListing);
 
             Reset();
         }
 
-        public static PresentationModalViewModel LoadViewModel(BaseLogic<Presentation> logic, IMessenger _messenger, INavigationService closeModal)
+
+        public static PresentationModalViewModel LoadViewModel(ILogic logic, IMessenger _messenger, INavigationService closeModal)
         {
             PresentationModalViewModel viewModel = new(logic, _messenger, closeModal);
 
-            viewModel.loadCatalogueCommand.Execute(null);
+            viewModel.listingViewModel.loadCommand.Execute(null);
 
             return viewModel;
         }
 
 
 
+        private void SortPresentationListing(ICollectionView listing)
+        {
+            listing.SortDescriptions.Clear();
+            listing.SortDescriptions
+                .Add(new SortDescription(nameof(Presentation.IdPresentation), ListSortDirection.Descending));
+        }
+
+        private async Task<IEnumerable<BaseEntity>> GetPresentationListing()
+        {
+            return await logic.GetAll();
+        }
+
         private ICommand _saveCommand;
-        public ICommand SaveCommand
+        public ICommand saveCommand
         {
             get
             {
@@ -65,12 +84,14 @@ namespace WPF.ViewModel
             Save(GetEntity(), isEdition);
             RefreshCatalogues(isEdition);
         }
+
         private async void Save(Presentation parameter, bool isEdition)
         {
             logic.entity = parameter;
-            await new SaveCommand<Presentation>(logic, canCreate).ExecuteAsync(isEdition);
+            
+            await new SaveCommand(logic).ExecuteAsync(isEdition);
 
-            await Initialize();
+            listingViewModel.loadCommand.Execute(null);
         }
 
         private void RefreshCatalogues(bool isEdition)
@@ -86,21 +107,21 @@ namespace WPF.ViewModel
             return new Presentation()
             {
                 IdPresentation = id,
-                Name = name,
+                Name = name.Trim(),
                 Status = status
             };
         }
 
-        public ICommand ExitCommand => new RelayCommand(o => Exit());
+        public ICommand closeCommand => new RelayCommand(o => Exit());
         private void Exit()
         {
             Reset();
-            CloseModalCommand.Execute(null);
+            exitCommand.Execute(null);
         }
 
 
         private ICommand _resetCommand;
-        public ICommand ResetCommand
+        public ICommand resetCommand
         {
             get
             {
@@ -120,7 +141,7 @@ namespace WPF.ViewModel
 
 
         private ICommand _editCommand;
-        public ICommand EditCommand
+        public ICommand editCommand
         {
             get
             {
@@ -141,7 +162,7 @@ namespace WPF.ViewModel
 
 
         private ICommand _deleteCommand;
-        public ICommand DeleteCommand
+        public ICommand deleteCommand
         {
             get
             {
@@ -162,17 +183,19 @@ namespace WPF.ViewModel
 
             if (result is not MessageBoxResult.Yes)
                 return;
-            
-            await new DeleteCommand<Presentation>(logic).ExecuteAsync(entity.IdPresentation);
-            
+
+            await new DeleteCommand(logic).ExecuteAsync(entity.IdPresentation);
+
             Reset();
-            await Initialize();
+
+            listingViewModel.loadCommand.Execute(null);
+
             RefreshCatalogues(true);
         }
 
 
         private ICommand _changeStatusCommand;
-        public ICommand ChangeStatusCommand
+        public ICommand changeStatusCommand
         {
             get
             {
@@ -203,20 +226,18 @@ namespace WPF.ViewModel
 
             if (flag != parameter.Status)
             {
-                Save(parameter,true);
+                Save(parameter, true);
                 RefreshCatalogues(true);
             }
         }
 
-
-        private Presentation _entity;
         private Presentation entity
         {
             get
             {
-                if (_entity is null)
+                if (_entity == null)
                     _entity = new Presentation();
-                return _entity;
+                return (Presentation)_entity;
             }
         }
 
@@ -235,10 +256,10 @@ namespace WPF.ViewModel
             set
             {
                 entity.Name = value;
-                _errorsViewModel.ClearErrors(nameof(name));
+                errorsViewModel.ClearErrors(nameof(name));
 
                 if (string.IsNullOrEmpty(entity.Name))
-                    _errorsViewModel.AddError(nameof(name), "Debe ingresar un nombre");
+                    errorsViewModel.AddError(nameof(name), "Debe ingresar un nombre");
 
                 OnPropertyChanged(nameof(name));
             }
@@ -247,40 +268,6 @@ namespace WPF.ViewModel
         {
             get => entity.Status;
             set => entity.Status = value;
-        }
-
-
-
-        private ICollectionView _dataGridSource;
-        public ICollectionView dataGridSource
-        {
-            get
-            {
-                if (_dataGridSource != null)
-                    Sort();
-
-                return _dataGridSource;
-            }
-            set
-            {
-                _dataGridSource = value;
-                OnPropertyChanged(nameof(dataGridSource));
-            }
-        }
-
-        private void Sort()
-        {
-            _dataGridSource.SortDescriptions
-                .Clear();
-            _dataGridSource.SortDescriptions
-                .Add(new SortDescription(nameof(Presentation.IdPresentation), ListSortDirection.Descending));
-        }
-        public override async Task Initialize()
-        {
-            dataGridSource =
-                CollectionViewSource.
-                GetDefaultView(await logic.GetAll());
-            Sort();
         }
     }
 }

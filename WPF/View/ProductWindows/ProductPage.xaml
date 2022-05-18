@@ -32,7 +32,7 @@
             Style="{DynamicResource StackPanelStyle}">
             <userControls:CustomButton
                 Title="Nuevo Producto"
-                buttonCommand="{Binding AddModalCommand}"
+                buttonCommand="{Binding addModalCommand}"
                 ImageSource="/Resource/Image/plus.png"/>
         </StackPanel>
 
@@ -60,26 +60,33 @@
             Text="{DynamicResource ProductWindowTitle}"
             FontSize="{DynamicResource ElementsDataGridTitleFontSize}"/>
 
-        <custom:LoadingSpinner
-            Grid.Row="3"
-            Grid.Column="1" 
-            Diameter="100"
-            IsLoading="{Binding IsLoading}"
-            Thickness="5"
-            Color="Black"/>
-
         <Grid 
             Grid.Row="3"
-            Grid.Column="1"
-            Visibility="{Binding IsLoading, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+            Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
 
+            <StackPanel Grid.Row="0"
+                       HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        DataContext="{Binding listingViewModel}">
+                <custom:LoadingSpinner  
+                    Diameter="100"
+                    IsLoading="{Binding isLoading}"
+                    Thickness="5"
+                    Color="Black"/>
+                <TextBlock Text="{Binding errorMessage}" 
+                       Foreground="DarkRed"
+                       FontSize="18"
+                       Visibility="{Binding hasErrorMessage, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            </StackPanel>
+            
             <DataGrid
                 x:Name="elementDataGrid"
-                ItemsSource="{Binding dataGridSource}"
+                ItemsSource="{Binding listingViewModel.listing}"
+                Visibility="{Binding listingViewModel.isListingVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
                 Style="{DynamicResource ElementsDataGrid}"
                 Margin="30 10"
                 Grid.Column="0"
@@ -90,12 +97,12 @@
                             HorizontalAlignment="Center"
                             Orientation="Horizontal">
                             <Button Content="Editar"
-                                    Command="{Binding Path=DataContext.EditModalCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                    Command="{Binding Path=DataContext.editModalCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                     CommandParameter="{Binding}" 
                                     Style="{DynamicResource ButtonStyle}"
                                     Background="#2196F3"
                                     Margin="0 0 5 0"/>
-                            <RibbonCheckBox Command="{Binding Path=DataContext.ChangeStatusCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                            <RibbonCheckBox Command="{Binding Path=DataContext.changeStatusCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                             CommandParameter="{Binding}"
                                             Style="{DynamicResource StatusCheckBoxDataGridStyle}"/>
                         </StackPanel>
@@ -114,10 +121,12 @@
                     Margin="30 0"
                     Grid.Row="1"
                     VerticalAlignment="Center"
-                    HorizontalAlignment="Right">
+                    HorizontalAlignment="Right"
+                    DataContext="{Binding listingViewModel}"
+                Visibility="{Binding isListingVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <TextBlock 
                     Style="{DynamicResource textBlockListViewStyle}"
-                    Text="{Binding dataGridSource.Count}"/>
+                    Text="{Binding listing.Count}"/>
                 <TextBlock 
                     Style="{DynamicResource textBlockListViewStyle}"
                     Text=" elementos"/>

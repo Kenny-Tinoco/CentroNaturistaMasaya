@@ -76,7 +76,7 @@ namespace WPF.HostBuilders
         }
         private static StockFormViewModel createStockFormViewModel(IServiceProvider servicesProvider)
         {
-            return StockFormViewModel.LoadViewModel
+            return new StockFormViewModel
             (
                 servicesProvider.GetRequiredService<LogicFactory>(),
                 servicesProvider.GetRequiredService<IMessenger>(),

@@ -22,7 +22,7 @@ namespace WPF.ViewModel
 
             messenger = _messenger;
             messenger.Subscribe<IEnumerable<Product>>(this, CatalogueReceived);
-            GoCommand = new RelayCommand(parameter => Go((Product)parameter));
+            goCommand = new RelayCommand(parameter => Go((Product)parameter));
         }
 
         private void CatalogueReceived(object parameter)
@@ -31,12 +31,12 @@ namespace WPF.ViewModel
             Sort();
         }
 
-        public ICommand GoCommand { get; }
+        public ICommand goCommand { get; }
 
         public void Go(Product parameter)
         {
             messenger.Send(parameter);
-            ExitCommand.Execute(-1);
+            exitCommand.Execute(-1);
         }
 
         private string _searchText;
@@ -58,7 +58,7 @@ namespace WPF.ViewModel
             if (dataGridSource is null)
                 return;
 
-            if (ValidateSearchString(searchText))
+            if (ListingViewModel.ValidateSearchString(searchText))
             {
                 dataGridSource.Filter = Filter;
             }
@@ -67,8 +67,6 @@ namespace WPF.ViewModel
                 dataGridSource.Filter = null;
             }
         }
-
-        private bool ValidateSearchString(string parameter) => !parameter.Trim().Equals("Búscar") && !parameter.Trim().Equals("");
 
         private bool Filter(object parameter)
         {

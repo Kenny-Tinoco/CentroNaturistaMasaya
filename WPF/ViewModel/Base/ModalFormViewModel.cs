@@ -1,45 +1,21 @@
 ﻿using Domain.Entities;
 using MVVMGenericStructure.Services;
-using System;
-using System.Collections;
-using System.ComponentModel;
+using System.Windows.Input;
 
 namespace WPF.ViewModel.Base
 {
-    public class ModalFormViewModel : ModalViewModel, INotifyDataErrorInfo
+    public class ModalFormViewModel : FormViewModel
     {
 
-        public ModalFormViewModel(INavigationService closeModalNavigationService) : base(closeModalNavigationService)
+        public ModalFormViewModel(INavigationService closeModal)
         {
-            _errorsViewModel = new ErrorsViewModel();
-            _errorsViewModel.ErrorsChanged += ErrorsViewModel_ErrorsChanged;
+            modal = new ModalViewModel(closeModal);
         }
 
-        public virtual void ResetEntity() 
-        {}
+        private ModalViewModel modal { get; }
 
-        public BaseEntity entity { get; set; }
+        public ICommand exitCommand => modal.exitCommand;
 
-        public virtual bool canCreate
-        {
-            get => !HasErrors;
-            set { }
-        }
-
-        protected readonly ErrorsViewModel _errorsViewModel;
-
-        public bool HasErrors => _errorsViewModel.HasErrors;
-
-        public IEnumerable GetErrors(string propertyName)
-        {
-            return _errorsViewModel.GetErrors(propertyName);
-        }
-
-        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
-        private void ErrorsViewModel_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)
-        {
-            ErrorsChanged?.Invoke(this, e);
-            OnPropertyChanged(nameof(canCreate));
-        }
+        protected BaseEntity _entity { get; set; }
     }
 }

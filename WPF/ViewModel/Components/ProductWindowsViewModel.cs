@@ -7,14 +7,10 @@ namespace WPF.ViewModel.Components
         public TabControlMenuViewModel tabControlBarMenuViewModel { get; }
         public ViewModelBase contentViewModel { get; }
 
-        public ProductWindowsViewModel
-            (
-                TabControlMenuViewModel tabControlBarMenuViewModel,
-                ViewModelBase contentViewModel
-            )
+        public ProductWindowsViewModel (TabControlMenuViewModel _tabControlMenu, ViewModelBase _contentViewModel)
         {
-            this.tabControlBarMenuViewModel = tabControlBarMenuViewModel;
-            this.contentViewModel = contentViewModel;
+            tabControlBarMenuViewModel = _tabControlMenu;
+            contentViewModel = _contentViewModel;
         }
 
         public override void Dispose()

@@ -9,7 +9,7 @@
         <userControls:Popup
             titleBar="{Binding titleBar}"
             iconBar="/Resource/Image/product.png"
-            buttonExitCommand="{Binding ExitCommand}">
+            buttonExitCommand="{Binding closeCommand}">
 
             <userControls:Popup.popupContent>
 
@@ -42,7 +42,7 @@
                                     Text="Código"
                                     Style="{DynamicResource TextBlockStyle}"/>
                             <TextBox
-                                    Text="{Binding entity.IdProduct, Mode=TwoWay}"
+                                    Text="{Binding entity.IdProduct}"
                                     FontSize="17"
                                     TextAlignment="Center"
                                     IsEnabled="False"
@@ -56,7 +56,7 @@
                                     Style="{DynamicResource TextBlockStyle}"/>
 
                             <TextBox
-                                    Text="{Binding name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                    Text="{Binding name, UpdateSourceTrigger=PropertyChanged}"
                                     FontSize="17"
                                     FontWeight="Normal"
                             Style="{DynamicResource TextBoxStyle}"
@@ -80,9 +80,9 @@
 
                             <TextBox
                                 Grid.Row="1"
-                                Text="{Binding description, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                Text="{Binding description, UpdateSourceTrigger=PropertyChanged}"
                                 FontSize="17"
-                            Style="{DynamicResource TextBoxStyle}"
+                                Style="{DynamicResource TextBoxStyle}"
                                 FontWeight="Normal"
                                 VerticalContentAlignment="Top"
                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -100,8 +100,8 @@
                             <Button
                                 Content="Guardar"
                                 FontWeight="Normal"
-                                Command="{Binding SaveCommand}"
-                                CommandParameter="{Binding message.isEdition}"
+                                Command="{Binding saveCommand}"
+                                CommandParameter="{Binding isEditable}"
                                 Style="{DynamicResource CustomButtonStyle}"
                                 Foreground="White"
                                 FontSize="15"
@@ -110,10 +110,10 @@
                             <Button
                                     Margin="30 0 0 0"
                                     Content="Eliminar"
-                                    Command="{Binding DeleteCommand}"
+                                    Command="{Binding deleteCommand}"
                                     Background="#F44336"
                                     Style="{DynamicResource DeleteButtonStyle}"
-                                    Visibility="{Binding message.isEdition, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                    Visibility="{Binding isEditable, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                         </DockPanel>
                     </Grid>
 
@@ -121,7 +121,8 @@
                         Grid.Row="1"
                         Grid.RowSpan="2"
                         Margin="12 0 0 0"
-                        Text="{Binding notification}" 
+                        Text="{Binding statusMessage}"
+                        Visibility="{Binding hasStatusMessage,Converter={StaticResource BooleanToVisibilityConverter}}"
                         VerticalAlignment="Bottom"
                         FontSize="14"
                         Foreground="Blue"/>

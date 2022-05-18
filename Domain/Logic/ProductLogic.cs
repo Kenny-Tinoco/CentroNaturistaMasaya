@@ -1,5 +1,6 @@
 ﻿using Domain.DAO;
 using Domain.Entities;
+using Domain.Logic.Base;
 
 namespace Domain.Logic
 {

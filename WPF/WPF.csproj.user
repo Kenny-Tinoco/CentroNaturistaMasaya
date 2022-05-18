@@ -8,6 +8,15 @@
     <Compile Update="ViewComponents\UserControls\ListViewControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="View\Employee\EmployeePage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\HomeWindows\ConsultView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\HomeWindows\PurchaseView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="View\HomeWindows\SellView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -33,6 +42,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="View\ProductWindows\StockPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\ProviderWindows\ProviderModal.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\ProviderWindows\ProviderPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="View\Startup.xaml.cs">
@@ -76,7 +91,16 @@
     <Page Update="ViewComponents\UserControls\ListViewControl.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="View\Employee\EmployeePage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\HomeWindows\ConsultView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="View\HomeWindows\HomeView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\HomeWindows\PurchaseView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\HomeWindows\SellView.xaml">
@@ -119,6 +143,12 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Resource\Values\strings.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\ProviderWindows\ProviderModal.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\ProviderWindows\ProviderPage.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\Startup.xaml">

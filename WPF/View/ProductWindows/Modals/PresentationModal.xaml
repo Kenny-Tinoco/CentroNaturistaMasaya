@@ -6,11 +6,11 @@
              xmlns:userControls="clr-namespace:WPF.ViewComponents.UserControls" 
              xmlns:custom="clr-namespace:WPF.ViewComponents.CustomControls"
              mc:Ignorable="d">
-    <Grid MaxWidth="440">
+    <Grid Width="440">
         <userControls:Popup
             titleBar="{Binding titleBar}"
             iconBar="/Resource/Image/presentation.png"
-            buttonExitCommand="{Binding ExitCommand}">
+            buttonExitCommand="{Binding closeCommand}">
 
             <userControls:Popup.popupContent>
 
@@ -80,7 +80,7 @@
                                     Content="Guardar"
                                     FontWeight="Normal"
                                     IsEnabled="{Binding canCreate}"
-                                    Command="{Binding SaveCommand}"
+                                    Command="{Binding saveCommand}"
                                     CommandParameter="{Binding isEditable}"
                                     Style="{DynamicResource CustomButtonStyle}"
                                     Foreground="White"
@@ -90,7 +90,7 @@
                                     Margin="30 0 0 0"
                                     Content="Limpiar"
                                     FontWeight="Normal"
-                                    Command="{Binding ResetCommand}"
+                                    Command="{Binding resetCommand}"
                                     Style="{DynamicResource CustomButtonStyle}"
                                     Foreground="White"
                                     Width="75"
@@ -99,7 +99,7 @@
                                 <Button
                                     Margin="30 0 0 0"
                                     Content="Eliminar"
-                                    Command="{Binding DeleteCommand}"
+                                    Command="{Binding deleteCommand}"
                                     Background="#F44336"
                                     Style="{DynamicResource DeleteButtonStyle}"
                                     Visibility="{Binding isEditable, Converter={StaticResource BooleanToVisibilityConverter}}"/>
@@ -113,77 +113,78 @@
                         Grid.Row="3"
                         Header="Lista de presentación"
                         Style="{DynamicResource GroupBoxStyle}">
-
-                        <Grid Margin="5">
+                        <Grid
+                                Grid.Row="0"
+                                Grid.Column="0">
                             <Grid.RowDefinitions>
-                                <RowDefinition />
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="auto"/>
                             </Grid.RowDefinitions>
 
-                            <custom:LoadingSpinner
-                                Grid.Row="0"
-                                Grid.Column="0"
-                                Diameter="60"
-                                IsLoading="{Binding IsLoading}"
-                                Thickness="5"
-                                Color="Black"/>
+                            <StackPanel Grid.Row="0"
+                       HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        DataContext="{Binding listingViewModel}">
+                                <custom:LoadingSpinner
+                    Diameter="60"
+                    IsLoading="{Binding isLoading}"
+                    Thickness="5"
+                    Color="Black"/>
+                                <TextBlock Text="{Binding errorMessage}" 
+                       Foreground="DarkRed"
+                       FontSize="18"
+                       Visibility="{Binding hasErrorMessage, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                            </StackPanel>
 
-                            <Grid
-                                Grid.Row="0"
-                                Grid.Column="0"
-                                Visibility="{Binding IsLoading, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="auto"/>
-                                </Grid.RowDefinitions>
-                                
-                                <DataGrid
+                            <DataGrid
                                     Grid.Row="0"
-                                    ItemsSource="{Binding dataGridSource}"
+                                    ItemsSource="{Binding listingViewModel.listing}"
+                Visibility="{Binding listingViewModel.isListingVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
                                     Style="{DynamicResource ElementsDataGrid}"
                                     Margin="5 10 5 5"
                                     Height="135"
-                                    CanUserResizeColumns="false"
                                     Width="380"
                                     >
-                                    <DataGrid.Resources>
-                                        <DataTemplate x:Key="optionsCell">
-                                            <StackPanel
+                                <DataGrid.Resources>
+                                    <DataTemplate x:Key="optionsCell">
+                                        <StackPanel
                                                 HorizontalAlignment="Center"
                                                 Orientation="Horizontal">
-                                                <Button Content="Editar"
-                                                        Command="{Binding Path=DataContext.EditCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" 
+                                            <Button Content="Editar"
+                                                        Command="{Binding Path=DataContext.editCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" 
                                                         CommandParameter="{Binding}" 
                                                         Style="{DynamicResource ButtonStyle}"
                                                         Background="#2196F3"
                                                         Margin="0 0 5 0"/>
-                                                <RibbonCheckBox Command="{Binding Path=DataContext.ChangeStatusCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                            <RibbonCheckBox Command="{Binding Path=DataContext.changeStatusCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                                           CommandParameter="{Binding}" 
                                                           Style="{DynamicResource StatusCheckBoxDataGridStyle}"/>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </DataGrid.Resources>
-                                    <DataGrid.Columns>
-                                        <DataGridTextColumn Header="Cód." Width="auto" Binding="{Binding IdPresentation}"/>
-                                        <DataGridTextColumn Header="Nombre" Width="150" Binding="{Binding Name}"/>
-                                        <DataGridTemplateColumn Header="Opciones" Width="*" CellTemplate="{StaticResource optionsCell}"/>
-                                    </DataGrid.Columns>
-                                </DataGrid>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Cód." Width="auto" Binding="{Binding IdPresentation}"/>
+                                    <DataGridTextColumn Header="Nombre" Width="150" Binding="{Binding Name}"/>
+                                    <DataGridTemplateColumn Header="Opciones" Width="*" CellTemplate="{StaticResource optionsCell}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
 
-                                <WrapPanel 
+                            <WrapPanel 
                                     Grid.Row="1" 
                                     Margin="5 0"
                                     VerticalAlignment="Center"
-                                    HorizontalAlignment="Right">
-                                    <TextBlock 
+                                    HorizontalAlignment="Right"
+                    DataContext="{Binding listingViewModel}"
+                Visibility="{Binding isListingVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <TextBlock 
                                         Style="{DynamicResource TextBlockStyle}"
                                         FontSize="14"
-                                        Text="{Binding dataGridSource.Count}"/>
-                                    <TextBlock 
+                                        Text="{Binding listing.Count}"/>
+                                <TextBlock 
                                         Style="{DynamicResource TextBlockStyle}"
                                         FontSize="14"
                                         Text=" elementos"/>
-                                </WrapPanel>
-                            </Grid>
+                            </WrapPanel>
                         </Grid>
                     </GroupBox>
 

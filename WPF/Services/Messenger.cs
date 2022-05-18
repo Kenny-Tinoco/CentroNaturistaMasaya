@@ -7,8 +7,8 @@ namespace WPF.Services
 {
     public class Messenger : IMessenger
     {
-        private ConcurrentDictionary<Type, SynchronizedCollection<Subscription>> _subscriptions = new();
-        private ConcurrentDictionary<Type, object> _currentState = new();
+        private readonly ConcurrentDictionary<Type, SynchronizedCollection<Subscription>> _subscriptions = new();
+        private readonly ConcurrentDictionary<Type, object> _currentState = new();
 
         public void Send<TypeMessage>(TypeMessage message)
         {
@@ -45,7 +45,7 @@ namespace WPF.Services
             if (!_subscriptions.ContainsKey(messageType))
                 return;
 
-            var subscription = _subscriptions[messageType].FirstOrDefault(x => x.Subscriber == subscriber);
+            var subscription = _subscriptions[messageType].FirstOrDefault(x => x.subscriber == subscriber);
 
             if (subscription != null)
                 _subscriptions[messageType].Remove(subscription);
@@ -59,8 +59,8 @@ namespace WPF.Services
         }
         private void SendMessageToSubscriber<TypeMessage>(TypeMessage message, Subscription subscription)
         {
-            subscription.Action(message);
+            subscription.action(message);
         }
     }
-    public record Subscription(object Subscriber, Action<object> Action);
+    public record Subscription(object subscriber, Action<object> action);
 }

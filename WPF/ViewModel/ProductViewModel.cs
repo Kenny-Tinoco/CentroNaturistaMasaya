@@ -1,49 +1,71 @@
 ﻿using Domain.Entities;
 using Domain.Logic;
+using Domain.Logic.Base;
 using MVVMGenericStructure.Commands;
 using MVVMGenericStructure.Services;
+using MVVMGenericStructure.ViewModels;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Data;
 using System.Windows.Input;
 using WPF.Command.CRUD;
 using WPF.Command.Navigation;
 using WPF.Services;
 using WPF.Stores;
+using WPF.ViewModel.Base;
 
 namespace WPF.ViewModel
 {
-    public class ProductViewModel : ViewModelGeneric<Product>
+    public class ProductViewModel : ViewModelBase
     {
-        public INavigationService _navigationService;
+        private ICommand openModalCommand { get; }
 
-        private ICommand OpenModalCommand { get; }
+        private readonly IMessenger messenger;
+        private ProductMessage message;
 
-        private IMessenger messenger;
-        private productMessage message; 
+        private readonly ProductLogic logic;
+
+        public ListingViewModel listingViewModel { get; }
 
 
-        public ProductViewModel(BaseLogic<Product> parameter, IMessenger _messenger, INavigationService modalNavigationService) : base((ProductLogic)parameter)
+        public ProductViewModel(ILogic _logic, IMessenger _messenger, INavigationService modalNavigation)
         {
-            _navigationService = modalNavigationService;
-            OpenModalCommand = new NavigateCommand(_navigationService);
+            logic = (ProductLogic)_logic;
 
-            AddModalCommand = new RelayCommand(o => AddModal());
-            EditModalCommand = new RelayCommand(parameter => EditModal((Product)parameter));
+            listingViewModel = new ListingViewModel(GetProductListing, SortProductListing);
+
+            openModalCommand = new NavigateCommand(modalNavigation);
+
+            addModalCommand = new RelayCommand(o => AddModal());
+            editModalCommand = new RelayCommand(parameter => EditModal((Product)parameter));
 
             messenger = _messenger;
-            messenger.Subscribe<productModalMessage>(this, MessageReceived);
+            messenger.Subscribe<ProductModalMessage>(this, MessageReceived);
         }
 
 
-        public static ProductViewModel LoadViewModel(BaseLogic<Product> parameter, IMessenger messenger, INavigationService navigationService)
+
+        public static ProductViewModel LoadViewModel(ILogic parameter, IMessenger messenger, INavigationService navigationService)
         {
             ProductViewModel viewModel = new ProductViewModel(parameter, messenger, navigationService);
 
-            viewModel.loadCatalogueCommand.Execute(null);
+            viewModel.listingViewModel.loadCommand.Execute(null);
 
             return viewModel;
+        }
+
+
+        private void SortProductListing(ICollectionView listing)
+        {
+            listing.SortDescriptions.Clear();
+            listing.SortDescriptions
+                .Add(new SortDescription(nameof(Product.IdProduct), ListSortDirection.Descending));
+        }
+
+        private async Task<IEnumerable<BaseEntity>> GetProductListing()
+        {
+            return await logic.GetAll();
         }
 
         private string _searchText;
@@ -62,13 +84,13 @@ namespace WPF.ViewModel
 
         public void search()
         {
-            if (ValidateSearchString(searchText))
+            if (ListingViewModel.ValidateSearchString(searchText))
             {
-                dataGridSource.Filter = Filter;
+                listingViewModel.listing.Filter = Filter;
             }
             else if (searchText.Equals(""))
             {
-                dataGridSource.Filter = null;
+                listingViewModel.listing.Filter = null;
             }
         }
 
@@ -76,59 +98,34 @@ namespace WPF.ViewModel
         {
             if (obj is Product element)
             {
-                return ((ProductLogic)logic).searchLogic(element, searchText);
+                return logic.searchLogic(element, searchText);
             }
 
             return false;
         }
 
-        private ICollectionView _dataGridSource;
-        public ICollectionView dataGridSource
-        {
-            get
-            {
-                if(_dataGridSource != null)
-                    Sort();
-
-                return _dataGridSource;
-            }
-            set
-            {
-                _dataGridSource = value;
-                OnPropertyChanged(nameof(dataGridSource));
-            }
-        }
-
-        private void Sort()
-        {
-            _dataGridSource.SortDescriptions
-                .Clear();
-            _dataGridSource.SortDescriptions
-                .Add(new SortDescription(nameof(Product.IdProduct), ListSortDirection.Descending));
-        }
-
-        public ICommand AddModalCommand { get; }
+        public ICommand addModalCommand { get; }
         public void AddModal()
         {
-            message = new productMessage(null, false);
+            message = new ProductMessage(null, false);
             messenger.Send(message);
 
-            OpenModalCommand.Execute(-1);
+            openModalCommand.Execute(-1);
         }
 
 
-        public ICommand EditModalCommand { get; }
+        public ICommand editModalCommand { get; }
         public void EditModal(Product parameter)
         {
-            message = new productMessage(parameter, true);
+            message = new ProductMessage(parameter, true);
             messenger.Send(message);
 
-            OpenModalCommand.Execute(-1);
+            openModalCommand.Execute(-1);
         }
 
 
         private ICommand _changeStatusCommand;
-        public ICommand ChangeStatusCommand
+        public ICommand changeStatusCommand
         {
             get
             {
@@ -163,7 +160,7 @@ namespace WPF.ViewModel
 
         private void MessageReceived(object parameter)
         {
-            var element = (productModalMessage)parameter;
+            var element = (ProductModalMessage)parameter;
 
             if (element.operation is Operation.create or Operation.update)
                 Save(element.entity, message.isEdition);
@@ -171,38 +168,34 @@ namespace WPF.ViewModel
                 Delete(element.entity.IdProduct);
         }
 
-        
+
         private async void Delete(int idProduct)
         {
-            await new DeleteCommand<Product>(logic).ExecuteAsync(idProduct);
+            await new DeleteCommand(logic).ExecuteAsync(idProduct);
 
-            await Initialize();
+            listingViewModel.loadCommand.Execute(null);
         }
 
-        private async void Save(Product parameter, bool isEdition)
+        private void Save(Product parameter, bool isEdition)
         {
             logic.entity = parameter;
-            await new SaveCommand<Product>(logic, canCreate).ExecuteAsync(isEdition);
-            messenger.Send(Refresh.stock);
-            
-            await Initialize();
-        }
-        public override async Task Initialize()
-        {
-            dataGridSource = 
-                CollectionViewSource.
-                GetDefaultView(await logic.GetAll());
-            Sort();
-        }
+            new SaveCommand(logic).Execute(isEdition);
 
+            messenger.Send(Refresh.stock);
+
+            listingViewModel.loadCommand.Execute(null);
+        }
 
         public override void Dispose()
         {
             try
             {
-                dataGridSource.Filter = null;
+                if (listingViewModel.listing != null)
+                    listingViewModel.listing.Filter = null;
             }
-            catch { }
+            catch 
+            { 
+            }
 
             base.Dispose();
         }

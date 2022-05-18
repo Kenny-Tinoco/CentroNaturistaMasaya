@@ -1,6 +1,8 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.IO;
 using System.Windows;
+using System.Windows.Media.Imaging;
 
 namespace WPF.ViewComponents.Converters
 {
@@ -16,7 +18,7 @@ namespace WPF.ViewComponents.Converters
             {
                 try
                 {
-                    System.IO.Stream stream;
+                    Stream stream;
                     if ((stream = openFileDialog.OpenFile()) != null)
                     {
                         using (stream)
@@ -35,8 +37,9 @@ namespace WPF.ViewComponents.Converters
             return image;
         }
 
+
         public static string GetName(this bool status) => status ? "Activo" : "Inactivo";
 
-        public static DateTime PlusOneYear(this DateTime element) => new DateTime(element.Year + 1, element.Month, element.Day);
+        public static DateTime PlusOneYear(this DateTime element) => new(element.Year + 1, element.Month, element.Day);
     }
 }

@@ -41,6 +41,7 @@
     <None Remove="Resource\Image\help.png" />
     <None Remove="Resource\Image\home-black.png" />
     <None Remove="Resource\Image\home.png" />
+    <None Remove="Resource\Image\image-default.png" />
     <None Remove="Resource\Image\minimize.png" />
     <None Remove="Resource\Image\patient.png" />
     <None Remove="Resource\Image\plus.png" />
@@ -60,6 +61,9 @@
 
   <ItemGroup>
     <Content Include="Resource\Image\edit.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resource\Image\image-default.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resource\logo-cnm.ico" />
@@ -145,10 +149,6 @@
 
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="View\ProviderWindows\" />
   </ItemGroup>
 
   <ItemGroup>

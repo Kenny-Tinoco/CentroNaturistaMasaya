@@ -31,7 +31,7 @@
             Style="{DynamicResource StackPanelStyle}">
             <userControls:CustomButton
                 Title="Agregar Existencia"
-                buttonCommand="{Binding AddCommand}"
+                buttonCommand="{Binding addCommand}"
                 ImageSource="/Resource/Image/plus.png"/>
         </StackPanel>
 
@@ -55,27 +55,35 @@
             Text="{DynamicResource StockWindowTitle}"
             FontSize="{DynamicResource ElementsDataGridTitleFontSize}"/>
 
-        <custom:LoadingSpinner
-            Grid.Row="3"
-            Grid.Column="1" 
-            Diameter="100"
-            IsLoading="{Binding IsLoading}"
-            Thickness="5"
-            Color="Black"/>
 
-        <Grid 
+        <Grid
             Grid.Row="3"
-            Grid.Column="1"
-            Visibility="{Binding IsLoading, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+            Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
 
+            <StackPanel Grid.Row="0"
+                       HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        DataContext="{Binding listingViewModel}">
+                <custom:LoadingSpinner  
+                    Diameter="100"
+                    IsLoading="{Binding isLoading}"
+                    Thickness="5"
+                    Color="Black"/>
+                <TextBlock Text="{Binding errorMessage}" 
+                       Foreground="DarkRed"
+                       FontSize="18"
+                       Visibility="{Binding hasErrorMessage, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            </StackPanel>
+
             <DataGrid
                 Grid.Row="0"
                 x:Name="elementDataGrid"
-                ItemsSource="{Binding dataGridSource}"
+                ItemsSource="{Binding listingViewModel.listing}"
+                Visibility="{Binding listingViewModel.isListingVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
                 Margin="30 10"
                 Style="{DynamicResource ElementsDataGrid}"
                 RowDetailsVisibilityMode="Collapsed"
@@ -121,7 +129,7 @@
                                     </Grid.RowDefinitions>
                                     <Button
                                         Grid.Row="0"
-                                        Command="{Binding Path=DataContext.EditCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                        Command="{Binding Path=DataContext.editCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                         CommandParameter="{Binding IdStock}"
                                         Style="{DynamicResource CustomButtonSimpleBackStyle}"
                                         Width="40"
@@ -131,7 +139,7 @@
                                     </Button>
                                     <Button
                                         Grid.Row="1"
-                                        Command="{Binding Path=DataContext.DeleteCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                        Command="{Binding Path=DataContext.deleteCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                         CommandParameter="{Binding IdStock}"
                                         Style="{DynamicResource CustomButtonSimpleBackStyle}"
                                         Width="40"
@@ -458,12 +466,13 @@
                 <WrapPanel Grid.Column="0">
                 <CheckBox 
                     Margin="0 0 5 0" 
-                    IsChecked="{Binding groupSort, Mode=TwoWay}"
-                    Content="Agrupar/Ordenar"
-                    Style="{DynamicResource CheckBoxStyle}">
+                    IsChecked="{Binding group, Mode=TwoWay}"
+                    Content="Agrupar"
+                    Style="{DynamicResource CheckBoxStyle}"
+                    IsEnabled="{Binding listingViewModel.isListingVisible}">
                     <CheckBox.ToolTip>
                         <ToolTip>
-                            <TextBlock Text="Agrupar y ordenar por presentaciones" FontSize="16" Foreground="Black"/>
+                            <TextBlock Text="Agrupar por presentaciones" FontSize="16" Foreground="Black"/>
                         </ToolTip>
                     </CheckBox.ToolTip>
                 </CheckBox>
@@ -494,7 +503,8 @@
                     IsChecked="{Binding groupAll, Mode=TwoWay}"
                     Content="Agrupar"
                     Visibility="{Binding viewAll, Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Style="{DynamicResource CheckBoxStyle}">
+                    Style="{DynamicResource CheckBoxStyle}"
+                    IsEnabled="{Binding listingViewModel.isListingVisible}">
                     <CheckBox.ToolTip>
                         <ToolTip>
                             <TextBlock Text="Agrupar las existencias en activas e inactivas" FontSize="16" Foreground="Black"/>
@@ -506,10 +516,12 @@
                 <WrapPanel
                     Grid.Column="1"
                     VerticalAlignment="Center"
-                    HorizontalAlignment="Right">
+                    HorizontalAlignment="Right"
+                    DataContext="{Binding listingViewModel}"
+                Visibility="{Binding isListingVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <TextBlock 
-                    Style="{DynamicResource textBlockListViewStyle}"
-                    Text="{Binding dataGridSource.Count}"/>
+                        Style="{DynamicResource textBlockListViewStyle}"
+                        Text="{Binding listing.Count}"/>
                     <TextBlock 
                     Style="{DynamicResource textBlockListViewStyle}"
                     Grid.Column="1"

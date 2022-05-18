@@ -1,9 +1,11 @@
 using Domain.Entities;
 using Domain.Entities.Views;
 using Domain.Logic;
+using Domain.Logic.Base;
 using Domain.Utilities;
 using MVVMGenericStructure.Commands;
 using MVVMGenericStructure.Services;
+using MVVMGenericStructure.ViewModels;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
@@ -14,54 +16,67 @@ using WPF.Command.CRUD;
 using WPF.Command.Navigation;
 using WPF.Services;
 using WPF.Stores;
+using WPF.ViewModel.Base;
 
 namespace WPF.ViewModel
 {
-    public class StockViewModel : ViewModelGeneric<Stock>
+    public class StockViewModel : ViewModelBase
     {
-        private ICommand OpenFormCommand { get; }
+        private ICommand openFormCommand { get; }
+
+        private Views viewType;
+
+        private readonly StockLogic logic;
 
         private readonly IMessenger messenger;
-        public IEnumerable<StockView> StockViewCatalog { get; set; }
+
+        public ListingViewModel listingViewModel { get; }
 
 
-        public StockViewModel(BaseLogic<Stock> parameter, IMessenger _messenger, INavigationService FormNavigationService) : base((StockLogic)parameter)
+
+        public StockViewModel(ILogic _logic, IMessenger _messenger, INavigationService formNavigationService)
         {
-            OpenFormCommand = new NavigateCommand(FormNavigationService);
+            logic = (StockLogic)_logic;
+
+            listingViewModel = new ListingViewModel(GetStockViewListing, SortStockViewListing);
+
+            openFormCommand = new NavigateCommand(formNavigationService);
 
             messenger = _messenger;
             messenger.Subscribe<Refresh>(this, RefreshStockChanges);
+
+            viewType = Views.OnlyActive;
         }
 
 
-        public static StockViewModel LoadViewModel(BaseLogic<Stock> parameter, IMessenger _messenger, INavigationService FormNavigationService)
+        public static StockViewModel LoadViewModel(ILogic _logic, IMessenger _messenger, INavigationService formNavigationService)
         {
-            StockViewModel viewModel = new StockViewModel(parameter, _messenger, FormNavigationService);
+            StockViewModel viewModel = new(_logic, _messenger, formNavigationService);
 
-            viewModel.loadCatalogueCommand.Execute(null);
+            viewModel.listingViewModel.loadCommand.Execute(null);
 
             return viewModel;
         }
 
-        public async override Task Initialize()
+
+
+        private async Task<IEnumerable<BaseEntity>> GetStockViewListing()
         {
-            if(viewOnlyInactives == true)
-                await GetCatalogue(Views.OnlyInactive);
-            else if(viewAll == true)
-                await GetCatalogue(Views.All);
-            else
-                await GetCatalogue(Views.OnlyActive);
+            return await logic.viewsCollections.StockViewCatalog(viewType);
         }
 
-        private async Task GetCatalogue(Views type)
+        private void SortStockViewListing(ICollectionView listing)
         {
-            StockViewCatalog = await ((StockLogic)logic).viewsCollections.StockViewCatalog(type);
-            dataGridSource = CollectionViewSource.GetDefaultView(StockViewCatalog);
-            Sort();
+            listing.SortDescriptions
+                .Clear();
+
+            listing.SortDescriptions
+                .Add(new SortDescription(nameof(StockView.EntryDate), ListSortDirection.Descending));
         }
+
 
         private ICommand _editCommand;
-        public ICommand EditCommand
+        public ICommand editCommand
         {
             get
             {
@@ -71,23 +86,24 @@ namespace WPF.ViewModel
                 return _editCommand;
             }
         }
+
         private void Edit(int idStock)
         {
-            var hasChangeableState = ((StockLogic)logic).hasChangeableState(idStock);
+            var hasChangeableState = logic.hasChangeableState(idStock);
 
             if (!hasChangeableState)
             {
                 return;
             }
 
-            var entity = ((StockLogic)logic).getStock(idStock);
+            var entity = logic.getStock(idStock);
             messenger.Send(new StockMessage(entity, true));
 
-            OpenFormCommand.Execute(-1);
+            openFormCommand.Execute(-1);
         }
 
         private ICommand _addCommand;
-        public ICommand AddCommand
+        public ICommand addCommand
         {
             get
             {
@@ -101,12 +117,12 @@ namespace WPF.ViewModel
         {
             messenger.Send(new StockMessage(null, false));
 
-            OpenFormCommand.Execute(-1);
+            openFormCommand.Execute(-1);
         }
 
 
         private ICommand _deleteCommand;
-        public ICommand DeleteCommand
+        public ICommand deleteCommand
         {
             get
             {
@@ -117,7 +133,7 @@ namespace WPF.ViewModel
             }
         }
         private async void Delete(int idStock)
-        { 
+        {
             var result = MessageBox
                 .Show("¿Está seguro de eliminar esta existencia?\n" +
                       "Se desencadenará una eliminación en cascada de todos los registros que tengan alguna relación con esta existencia.\n\n" +
@@ -127,9 +143,10 @@ namespace WPF.ViewModel
 
             if (result != MessageBoxResult.Yes)
                 return;
-            
-            await new DeleteCommand<Stock>(logic).ExecuteAsync(idStock);
-            await Initialize();
+
+            await new DeleteCommand(logic).ExecuteAsync(idStock);
+
+            listingViewModel.loadCommand.Execute(null);
         }
 
 
@@ -146,13 +163,13 @@ namespace WPF.ViewModel
 
         private void Search()
         {
-            if (ValidateSearchString(searchText))
+            if (ListingViewModel.ValidateSearchString(searchText))
             {
-                dataGridSource.Filter = Filter;
+                listingViewModel.listing.Filter = Filter;
             }
             else if (searchText.Equals(""))
             {
-                dataGridSource.Filter = null;
+                listingViewModel.listing.Filter = null;
             }
         }
 
@@ -160,22 +177,22 @@ namespace WPF.ViewModel
         {
             if (parameter is StockView element)
             {
-                return ((StockLogic)logic).searchLogic(element, searchText);
+                return logic.searchLogic(element, searchText);
             }
 
             return false;
         }
 
 
-        private bool _groupSortPresentation;
-        public bool groupSort
+        private bool _groupPresentation;
+        public bool group
         {
-            get => _groupSortPresentation;
+            get => _groupPresentation;
             set
             {
-                _groupSortPresentation = value;
-                GroupSortForPresentation(_groupSortPresentation);
-                OnPropertyChanged(nameof(groupSort));
+                _groupPresentation = value;
+                GroupSortForPresentation(_groupPresentation);
+                OnPropertyChanged(nameof(group));
             }
         }
         private void GroupSortForPresentation(bool parameter)
@@ -186,31 +203,20 @@ namespace WPF.ViewModel
                 _groupAll = false;
                 OnPropertyChanged(nameof(groupAll));
 
-                _dataGridSource
+                listingViewModel.listing
                     .GroupDescriptions
                     .Add(new PropertyGroupDescription(nameof(StockView.Presentation)));
-                _dataGridSource
-                     .SortDescriptions
-                     .Add(new SortDescription(nameof(StockView.Presentation), ListSortDirection.Ascending));
             }
             else
-                Sort();
+                SortStockViewListing(listingViewModel.listing);
         }
         private void Clear()
         {
-            _dataGridSource.GroupDescriptions.Clear();
-            _dataGridSource.SortDescriptions.Clear();
+            listingViewModel.listing.GroupDescriptions.Clear();
         }
 
-        private void Sort()
-        {
-            _dataGridSource.SortDescriptions
-                .Clear();
-            _dataGridSource.SortDescriptions
-                .Add(new SortDescription(nameof(StockView.EntryDate), ListSortDirection.Descending));
-        }
-        
-        
+
+
         private bool _viewOnlyInactives;
         public bool viewOnlyInactives
         {
@@ -222,22 +228,23 @@ namespace WPF.ViewModel
                 OnPropertyChanged(nameof(viewOnlyInactives));
             }
         }
-        private async void ViewOnlyInactives(bool parameter)
+        private void ViewOnlyInactives(bool parameter)
         {
             _viewAll = false;
             _groupAll = false;
-            _groupSortPresentation = false;
+            _groupPresentation = false;
             OnPropertyChanged(nameof(viewAll));
             OnPropertyChanged(nameof(groupAll));
-            OnPropertyChanged(nameof(groupSort));
+            OnPropertyChanged(nameof(group));
             if (parameter)
             {
-                await GetCatalogue(Views.OnlyInactive);
+                viewType = Views.OnlyInactive;
             }
             else
             {
-                await GetCatalogue(Views.OnlyActive);
+                viewType = Views.OnlyActive;
             }
+            listingViewModel.loadCommand.Execute(null);
         }
 
 
@@ -252,22 +259,23 @@ namespace WPF.ViewModel
                 OnPropertyChanged(nameof(viewAll));
             }
         }
-        private async void ViewAll(bool parameter)
+        private void ViewAll(bool parameter)
         {
-            _groupSortPresentation = false;
+            _groupPresentation = false;
             _viewOnlyInactives = false;
-            OnPropertyChanged(nameof(groupSort));
+            OnPropertyChanged(nameof(group));
             OnPropertyChanged(nameof(viewOnlyInactives));
             if (parameter)
             {
-                await GetCatalogue(Views.All);
+                viewType = Views.All;
             }
             else
             {
                 _groupAll = false;
                 OnPropertyChanged(nameof(groupAll));
-                await GetCatalogue(Views.OnlyActive);
+                viewType = Views.OnlyActive;
             }
+            listingViewModel.loadCommand.Execute(null);
         }
 
 
@@ -287,55 +295,27 @@ namespace WPF.ViewModel
             Clear();
             if (parameter)
             {
-                _groupSortPresentation = false;
-                OnPropertyChanged(nameof(groupSort));
+                _groupPresentation = false;
+                OnPropertyChanged(nameof(group));
 
-                _dataGridSource
+                listingViewModel.listing
                     .GroupDescriptions
                     .Add(new PropertyGroupDescription(nameof(StockView.Status)));
             }
         }
 
-
-
-        private ICollectionView _dataGridSource;
-        public ICollectionView dataGridSource
+        private void RefreshStockChanges(object parameter)
         {
-            get
-            {
-                if (_dataGridSource == null)
-                {
-                    _dataGridSource = CollectionViewSource.GetDefaultView(StockViewCatalog);
-                }
-
-                Sort();
-                return _dataGridSource;
-            }
-            set
-            {
-                _dataGridSource = value;
-                OnPropertyChanged(nameof(dataGridSource));
-            }
-        }
-
-
-        private async void RefreshStockChanges(object parameter)
-        {
-            if( (Refresh)parameter is not Refresh.stock )
+            if ((Refresh)parameter is not Refresh.stock)
                 return;
 
-            await Initialize();
+            listingViewModel.loadCommand.Execute(null);
         }
-
 
         public override void Dispose()
         {
-            try
-            {
-                dataGridSource.Filter = null;
-                Clear();
-            }
-            catch { }
+            if (listingViewModel.listing != null)
+                listingViewModel.listing.Filter = null;
 
             base.Dispose();
         }

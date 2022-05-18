@@ -1,22 +1,30 @@
-﻿using Domain.Entities;
-using Domain.Logic;
+﻿using Domain.Logic.Base;
 using MVVMGenericStructure.Commands;
+using System;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace WPF.Command.CRUD
 {
-    public class DeleteCommand<Entity> : AsyncCommandBase where Entity : BaseEntity
+    public class DeleteCommand : AsyncCommandBase
     {
-        private readonly BaseLogic<Entity> logic;
+        private readonly ILogic logic;
 
-        public DeleteCommand(BaseLogic<Entity> parameter)
+        public DeleteCommand(ILogic parameter)
         {
             logic = parameter;
         }
 
         public override async Task ExecuteAsync(object parameter)
         {
-            await logic.Delete((int)parameter);
+            try
+            {
+                await logic.Delete((int)parameter);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Error al eliminar el registro.");
+            }
         }
     }
 }

@@ -1,32 +1,59 @@
 ﻿using Domain.Entities;
-using Domain.Logic;
+using Domain.Logic.Base;
 using MVVMGenericStructure.Commands;
+using System;
 using System.Threading.Tasks;
+using WPF.ViewModel.Base;
 
 namespace WPF.Command.CRUD
 {
-    public class SaveCommand<Entity> : AsyncCommandBase where Entity : BaseEntity
+    public class SaveCommand : AsyncCommandBase
     {
-        private BaseLogic<Entity> logicElement;
-        private bool canSave;
+        private readonly ILogic logic;
+        private readonly FormViewModel viewModel;
 
-        public SaveCommand( BaseLogic<Entity> parameter, bool _canSave)
+        public SaveCommand( ILogic parameter, FormViewModel _viewModel = null)
         {
-            logicElement = parameter;
-            canSave = _canSave;
+            logic = parameter;
+            viewModel = _viewModel;
+
+            if (viewModel == null)
+                viewModel = new FormViewModel();
         }
 
         public override bool CanExecute( object parameter )
         {
-            return canSave && base.CanExecute(parameter);
+            return viewModel.canCreate && base.CanExecute(parameter);
         }
 
-        public override async Task ExecuteAsync( object isUpdateOperation)
+        public override async Task ExecuteAsync(object isUpdateOperation)
         {
+            viewModel.statusMessage = string.Empty;
+
             if ((bool)isUpdateOperation)
-                await logicElement.Edit();
+            {
+                try
+                {
+                    await logic.Edit();
+                    viewModel.statusMessage = "Cambios guardados correctamente";
+                }
+                catch(Exception)
+                {
+                    viewModel.statusMessage = "Fallo la operción de edición";
+                }
+            }
             else
-                await logicElement.Save();
+            {
+                try
+                {
+                    await logic.Create();
+                    viewModel.statusMessage = "Creación exitosa";
+                }
+                catch (Exception)
+                {
+                    viewModel.statusMessage = "Fallo la operción de agregar";
+                }
+            }
         }
     }
 }

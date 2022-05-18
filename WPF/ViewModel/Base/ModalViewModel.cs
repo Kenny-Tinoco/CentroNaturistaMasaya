@@ -7,11 +7,11 @@ namespace WPF.ViewModel.Base
 {
     public class ModalViewModel : ViewModelBase
     {
-        public ICommand ExitCommand { get; }
+        public ICommand exitCommand { get; }
 
         public ModalViewModel(INavigationService closeModalNavigationService)
         {
-            ExitCommand = new ExitModalCommand(closeModalNavigationService);
+            exitCommand = new ExitModalCommand(closeModalNavigationService);
         }
     }
 }

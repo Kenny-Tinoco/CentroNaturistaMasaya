@@ -35,7 +35,7 @@
                        HorizontalAlignment="center"/>
 
             <userControls:BackButton Grid.Row="1"
-                                     buttonCommand="{Binding BackCommand}"
+                                     buttonCommand="{Binding backCommand}"
                                      HorizontalAlignment="Left"
                                      Height="25"
                                      Width="25  "/>
@@ -70,7 +70,7 @@
                             FontSize="17"
                             VerticalAlignment="Center"
                             FontWeight="Normal"
-                            Command="{Binding SearchCommand}"
+                            Command="{Binding searchCommand}"
                             Style="{DynamicResource CustomButtonSimpleBackStyle}"/>
 
                         <DockPanel
@@ -194,7 +194,7 @@
                 </DockPanel>
                 <Button Grid.Column="2"
                         FontSize="17"
-                        Command="{Binding SelectImageCommand}"
+                        Command="{Binding selectImageCommand}"
                         Content="Selecionar imagen"
                             Style="{DynamicResource CustomButtonSimpleBackStyle}"/>
             </Grid>
@@ -288,7 +288,7 @@
                                    HorizontalAlignment="Center"/>
                         <CheckBox
                             Padding="10 2"
-                            Command="{Binding ChangeStatusCommand}"
+                            Command="{Binding changeStatusCommand}"
                             Style="{DynamicResource StatusCheckBoxStyle}"/>
                     </StackPanel>
                     
@@ -300,13 +300,14 @@
                 Width="130"
                 Margin="10"
                 Title="Guardar"
-                buttonCommand="{Binding SaveCommand}"
-                buttonParameter="{Binding isEdition}"
+                buttonCommand="{Binding saveCommand}"
+                buttonParameter="{Binding isEditable}"
                 ImageSource="/Resource/Image/save.png"
                 IsEnabled="{Binding canCreate}"/>
             <TextBlock 
                 Grid.Row="8"
-                Text="{Binding notification}" 
+                Text="{Binding statusMessage}"
+                Visibility="{Binding hasStatusMessage, Converter={StaticResource BooleanToVisibilityConverter}}"
                 Margin="0 10 0 10"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
@@ -343,7 +344,7 @@
                                     >
                                 <Border.ToolTip>
                                     <ToolTip>
-                                        <TextBlock Text="{Binding ErrorContent}" FontSize="16" Foreground="Black"/>
+                                        <TextBlock Text="{Binding ErrorContent}" FontSize="16" Foreground="Black" Width="200" TextWrapping="Wrap"/>
                                     </ToolTip>
                                 </Border.ToolTip>
                                 <TextBlock Text="!" 

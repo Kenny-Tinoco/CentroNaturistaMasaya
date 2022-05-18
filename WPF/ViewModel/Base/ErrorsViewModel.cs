@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
-namespace WPF.ViewModel
+namespace WPF.ViewModel.Base
 {
     public class ErrorsViewModel : INotifyDataErrorInfo
     {

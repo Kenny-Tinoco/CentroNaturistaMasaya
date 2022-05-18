@@ -1,13 +1,14 @@
 ﻿using Domain.DAO;
 using Domain.Entities;
 using Domain.Entities.Views;
+using Domain.Logic.Base;
 using Domain.Services;
 
 namespace Domain.Logic
 {
     public class StockLogic : BaseLogic<Stock>
     {
-        public IViewsCollections viewsCollections;
+        public IViewsCollections viewsCollections = null!;
         public StockLogic(DAOFactory parameter, IViewsCollections _viewsCollections) : this(parameter)
         {
             viewsCollections = _viewsCollections;
