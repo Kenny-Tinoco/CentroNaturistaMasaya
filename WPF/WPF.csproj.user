@@ -44,12 +44,6 @@
     <Compile Update="View\ProductWindows\StockPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="View\ProviderWindows\ProviderModal.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="View\ProviderWindows\ProviderPage.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="View\Startup.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -143,12 +137,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Resource\Values\strings.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="View\ProviderWindows\ProviderModal.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="View\ProviderWindows\ProviderPage.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\Startup.xaml">

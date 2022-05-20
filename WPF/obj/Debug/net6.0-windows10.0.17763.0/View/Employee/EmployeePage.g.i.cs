@@ -53,7 +53,7 @@ namespace WPF.View.Employee {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Centro Naturista Masaya;V1.0.0.0;component/view/employee/employeepage.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/Centro Naturista Masaya;component/view/employee/employeepage.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\View\Employee\EmployeePage.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

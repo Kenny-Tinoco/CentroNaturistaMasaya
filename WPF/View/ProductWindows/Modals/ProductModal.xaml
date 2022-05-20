@@ -9,7 +9,7 @@
         <userControls:Popup
             titleBar="{Binding titleBar}"
             iconBar="/Resource/Image/product.png"
-            buttonExitCommand="{Binding closeCommand}">
+            buttonExitCommand="{Binding exitCommand}">
 
             <userControls:Popup.popupContent>
 

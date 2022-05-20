@@ -99,7 +99,7 @@ namespace WPF.ViewModel
             if (result != MessageBoxResult.Yes)
                 return;
 
-            messenger.Send(new ProductModalMessage(entity, Operation.delete));
+            messenger.Send(new ProductModalMessage(entity, Operation.delete, this));
             exitCommand.Execute(null);
         }
 
@@ -119,22 +119,14 @@ namespace WPF.ViewModel
         {
             if (!isEdition)
             {
-                messenger.Send(new ProductModalMessage(GetEntity(), Operation.create));
+                messenger.Send(new ProductModalMessage(GetEntity(), Operation.create, this));
                 ResetEntity();
             }
             else
             {
-                messenger.Send(new ProductModalMessage(GetEntity(), Operation.update));
+                messenger.Send(new ProductModalMessage(GetEntity(), Operation.update, this));
                 exitCommand.Execute(null);
             }
-        }
-
-
-        public ICommand closeCommand => new RelayCommand(o => Close());
-        private void Close()
-        {
-            messenger.Unsubscribe<ProductMessage>(this);
-            exitCommand.Execute(null);
         }
 
         public string name

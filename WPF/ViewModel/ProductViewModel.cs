@@ -22,7 +22,6 @@ namespace WPF.ViewModel
         private ICommand openModalCommand { get; }
 
         private readonly IMessenger messenger;
-        private ProductMessage message;
 
         private readonly ProductLogic logic;
 
@@ -107,8 +106,7 @@ namespace WPF.ViewModel
         public ICommand addModalCommand { get; }
         public void AddModal()
         {
-            message = new ProductMessage(null, false);
-            messenger.Send(message);
+            messenger.Send(new ProductMessage(null, false));
 
             openModalCommand.Execute(-1);
         }
@@ -117,8 +115,7 @@ namespace WPF.ViewModel
         public ICommand editModalCommand { get; }
         public void EditModal(Product parameter)
         {
-            message = new ProductMessage(parameter, true);
-            messenger.Send(message);
+            messenger.Send( new ProductMessage(parameter, true));
 
             openModalCommand.Execute(-1);
         }
@@ -161,9 +158,10 @@ namespace WPF.ViewModel
         private void MessageReceived(object parameter)
         {
             var element = (ProductModalMessage)parameter;
+            var isEdition = element.operation is Operation.update;
 
             if (element.operation is Operation.create or Operation.update)
-                Save(element.entity, message.isEdition);
+                Save(element.entity, isEdition, element.viewModel);
             else
                 Delete(element.entity.IdProduct);
         }
@@ -176,10 +174,10 @@ namespace WPF.ViewModel
             listingViewModel.loadCommand.Execute(null);
         }
 
-        private void Save(Product parameter, bool isEdition)
+        private void Save(Product parameter, bool isEdition, FormViewModel viewModel = null)
         {
             logic.entity = parameter;
-            new SaveCommand(logic).Execute(isEdition);
+            new SaveCommand(logic, viewModel).Execute(isEdition);
 
             messenger.Send(Refresh.stock);
 
