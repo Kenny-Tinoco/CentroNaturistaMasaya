@@ -5,7 +5,6 @@ using MVVMGenericStructure.Services;
 using MVVMGenericStructure.Stores;
 using System;
 using WPF.Services;
-using WPF.Stores;
 using WPF.ViewModel;
 using WPF.ViewModel.Components;
 
@@ -22,8 +21,12 @@ namespace WPF.HostBuilders
                 services.AddTransient<StockFormViewModel>(s => createStockFormViewModel(s));
                 services.AddTransient<PresentationModalViewModel>(s => createPresentationModalViewModel(s));
                 services.AddTransient<ProductModalFormViewModel>(s => createProductModalViewModel(s));
+                services.AddTransient<ProviderModalFormViewModel>(s => createProviderModalViewModel(s));
+                services.AddTransient<EmployeeModalFormViewModel>(s => createEmployeeModalViewModel(s));
 
                 services.AddSingleton<ProductViewModel>(s => createProductViewModel(s));
+                services.AddSingleton<ProviderViewModel>(s => createProviderViewModel(s));
+                services.AddSingleton<EmployeeViewModel>(s => createEmployeeViewModel(s));
                 services.AddSingleton<StockViewModel>(s => createStockViewModel(s));
                 services.AddSingleton<HomeViewModel>(s => createHomeViewModel(s));
 
@@ -65,6 +68,24 @@ namespace WPF.HostBuilders
                 createProductModalNavigationService(servicesProvider)
             );
         }
+        private static ProviderViewModel createProviderViewModel(IServiceProvider servicesProvider)
+        {
+            return ProviderViewModel.LoadViewModel
+            (
+                servicesProvider.GetRequiredService<LogicFactory>().providerLogic,
+                servicesProvider.GetRequiredService<IMessenger>(),
+                createProviderModalNavigationService(servicesProvider)
+            );
+        }
+        private static EmployeeViewModel createEmployeeViewModel(IServiceProvider servicesProvider)
+        {
+            return EmployeeViewModel.LoadViewModel
+            (
+                servicesProvider.GetRequiredService<LogicFactory>().employeeLogic,
+                servicesProvider.GetRequiredService<IMessenger>(),
+                createEmployeeModalNavigationService(servicesProvider)
+            );
+        }
         private static StartupViewModel createStartupViewModel(IServiceProvider servicesProvider)
         {
             return new StartupViewModel
@@ -95,6 +116,23 @@ namespace WPF.HostBuilders
         private static ProductSelectionModalViewModel createStockModalViewModel(IServiceProvider servicesProvider)
         {
             return new ProductSelectionModalViewModel
+            (
+                servicesProvider.GetRequiredService<IMessenger>(),
+                servicesProvider.GetRequiredService<CloseModalNavigationService>()
+            );
+        }
+        private static ProviderModalFormViewModel createProviderModalViewModel(IServiceProvider servicesProvider)
+        {
+            return new ProviderModalFormViewModel
+            (
+                servicesProvider.GetRequiredService<IMessenger>(),
+                servicesProvider.GetRequiredService<LogicFactory>().providerPhoneLogic,
+                servicesProvider.GetRequiredService<CloseModalNavigationService>()
+            );
+        }
+        private static EmployeeModalFormViewModel createEmployeeModalViewModel(IServiceProvider servicesProvider)
+        {
+            return new EmployeeModalFormViewModel
             (
                 servicesProvider.GetRequiredService<IMessenger>(),
                 servicesProvider.GetRequiredService<CloseModalNavigationService>()
@@ -157,11 +195,19 @@ namespace WPF.HostBuilders
         }
         private static INavigationService createProviderNavigationService(IServiceProvider serviceProvider)
         {
-            return createHomeNavigationService(serviceProvider);
+            return new NavigationService<ProviderViewModel>
+            (
+                serviceProvider.GetRequiredService<NavigationStore>(),
+                () => serviceProvider.GetRequiredService<ProviderViewModel>()
+            );
         }
         private static INavigationService createEmployeeNavigationService(IServiceProvider serviceProvider)
         {
-            return createHomeNavigationService(serviceProvider);
+            return new NavigationService<EmployeeViewModel>
+            (
+                serviceProvider.GetRequiredService<NavigationStore>(),
+                () => serviceProvider.GetRequiredService<EmployeeViewModel>()
+            );
         }
         private static INavigationService createStockNavigationService(IServiceProvider serviceProvider)
         {
@@ -212,6 +258,22 @@ namespace WPF.HostBuilders
             (
                 serviceProvider.GetRequiredService<ModalNavigationStore>(),
                 () => serviceProvider.GetRequiredService<ProductModalFormViewModel>()
+            );
+        }
+        private static INavigationService createProviderModalNavigationService(IServiceProvider servicesProvider)
+        {
+            return new NavigationService<ProviderModalFormViewModel>
+            (
+                servicesProvider.GetRequiredService<ModalNavigationStore>(),
+                () => servicesProvider.GetRequiredService<ProviderModalFormViewModel>()
+            );
+        }
+        private static INavigationService createEmployeeModalNavigationService(IServiceProvider servicesProvider)
+        {
+            return new NavigationService<EmployeeModalFormViewModel>
+            (
+                servicesProvider.GetRequiredService<ModalNavigationStore>(),
+                () => servicesProvider.GetRequiredService<EmployeeModalFormViewModel>()
             );
         }
     }

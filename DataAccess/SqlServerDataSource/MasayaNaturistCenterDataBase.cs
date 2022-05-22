@@ -353,7 +353,7 @@ namespace DataAccess.SqlServerDataSource
                     .HasMaxLength(12)
                     .HasColumnName("phone");
 
-                entity.HasOne(d => d.IdProviderNavigation)
+                entity.HasOne(d => d.ProviderNavigation)
                     .WithMany(p => p.ProviderPhones)
                     .HasForeignKey(d => d.IdProvider)
                     .OnDelete(DeleteBehavior.ClientSetNull)

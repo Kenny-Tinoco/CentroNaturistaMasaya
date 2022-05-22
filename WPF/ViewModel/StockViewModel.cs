@@ -89,14 +89,14 @@ namespace WPF.ViewModel
 
         private void Edit(int idStock)
         {
-            var hasChangeableState = logic.hasChangeableState(idStock);
+            var hasChangeableState = logic.HasChangeableState(idStock);
 
             if (!hasChangeableState)
             {
                 return;
             }
 
-            var entity = logic.getStock(idStock);
+            var entity = logic.GetStock(idStock);
             messenger.Send(new StockMessage(entity, true));
 
             openFormCommand.Execute(-1);
@@ -177,7 +177,7 @@ namespace WPF.ViewModel
         {
             if (parameter is StockView element)
             {
-                return logic.searchLogic(element, searchText);
+                return logic.SearchLogic(element, searchText);
             }
 
             return false;

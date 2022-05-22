@@ -17,7 +17,7 @@ namespace Domain.Logic
         {
         }
        
-        public bool searchLogic(StockView element, string parameter)
+        public bool SearchLogic(StockView element, string parameter)
         {
             return
                 element.IdStock.ToString().Contains(parameter.Trim()) ||
@@ -25,14 +25,14 @@ namespace Domain.Logic
                 element.Presentation.ToLower().StartsWith(parameter.Trim().ToLower());
         }
 
-        public Stock getStock(int id)
+        public Stock GetStock(int id)
         {
             return ((StockDAO)_dao).GetStock(id);
         }
 
-        public bool hasChangeableState(int id)
+        public bool HasChangeableState(int id)
         {
-            var element = getStock(id);
+            var element = GetStock(id);
             return element.ProductNavigation.Status && element.PresentationNavigation.Status;
         }
     }

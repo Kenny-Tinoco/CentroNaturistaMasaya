@@ -9,7 +9,9 @@
         xmlns:viewsMenus="clr-namespace:WPF.ViewComponents.Menus"
         xmlns:viewsHomeWindows="clr-namespace:WPF.View.HomeWindows"
         xmlns:usercontrols="clr-namespace:WPF.ViewComponents.UserControls" 
-        xmlns:custom="clr-namespace:WPF.ViewComponents.CustomControls"
+        xmlns:custom="clr-namespace:WPF.ViewComponents.CustomControls" 
+        xmlns:viewsProviderWindows="clr-namespace:WPF.View.ProviderWindows"
+        xmlns:viewsEmployeeWindows="clr-namespace:WPF.View.EmployeeWindows"
         mc:Ignorable="d"
         WindowStyle="None"
         ResizeMode="NoResize"
@@ -42,6 +44,18 @@
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewmodel:ProductModalFormViewModel}">
                 <viewsProductWindows:ProductModal/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodel:ProviderViewModel}">
+                <viewsProviderWindows:ProviderPage/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodel:ProviderModalFormViewModel}">
+                <viewsProviderWindows:ProviderModal/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodel:EmployeeViewModel}">
+                <viewsEmployeeWindows:EmployeePage/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodel:EmployeeModalFormViewModel}">
+                <viewsEmployeeWindows:EmployeeModal/>
             </DataTemplate>
         </Grid.Resources>
         <Grid.ColumnDefinitions>
@@ -117,16 +131,16 @@
 
                     <usercontrols:TitleBarButton
                         Icon="/Resource/Image/minimize.png"
-                        buttonCommand="{Binding stateBarCommand}"
-                        buttonParameter="minimize"
-                        styleButton="{StaticResource CustomButtonMinimizeStyle}"/>
+                        ButtonCommand="{Binding stateBarCommand}"
+                        ButtonParameter="minimize"
+                        StyleButton="{StaticResource CustomButtonMinimizeStyle}"/>
 
                     <usercontrols:TitleBarButton
                         Margin="4 0 0 0"
                         Icon="/Resource/Image/exit.png"
-                        buttonCommand="{Binding stateBarCommand}"
-                        buttonParameter="exit"
-                        styleButton="{StaticResource CustomButtonExitStyle}"/>
+                        ButtonCommand="{Binding stateBarCommand}"
+                        ButtonParameter="exit"
+                        StyleButton="{StaticResource CustomButtonExitStyle}"/>
 
                 </StackPanel>
 

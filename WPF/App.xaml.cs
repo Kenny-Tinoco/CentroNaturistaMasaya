@@ -46,6 +46,7 @@ namespace WPF
             await _host.StopAsync();
             _host.Dispose();
 
+            
             base.OnExit(e);
         }
     }

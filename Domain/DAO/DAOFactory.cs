@@ -9,6 +9,7 @@
         public virtual PresentationDAO presentationDAO { get; } = null!;
         public virtual ProductDAO productDAO { get; } = null!;
         public virtual ProviderDAO providerDAO { get; } = null!;
+        public virtual ProviderPhoneDAO providerPhoneDAO { get; } = null!;
         public virtual StockDAO stockDAO { get; } = null!;
         public virtual SellDAO sellDAO { get; } = null!;
         public virtual SaleDetailDAO saleDetailDAO { get; } = null!;

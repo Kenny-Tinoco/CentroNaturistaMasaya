@@ -13,14 +13,14 @@ namespace WPF.ViewComponents.UserControls
         }
 
 
-        public object styleButton
+        public object StyleButton
         {
-            get { return (object)GetValue(styleButtonProperty); }
-            set { SetValue(styleButtonProperty, value); }
+            get { return (object)GetValue(StyleButtonProperty); }
+            set { SetValue(StyleButtonProperty, value); }
         }
 
-        public static readonly DependencyProperty styleButtonProperty =
-            DependencyProperty.Register("styleButton", typeof(object), typeof(TitleBarButton), new PropertyMetadata());
+        public static readonly DependencyProperty StyleButtonProperty =
+            DependencyProperty.Register("StyleButton", typeof(object), typeof(TitleBarButton), new PropertyMetadata());
 
 
 
@@ -34,25 +34,25 @@ namespace WPF.ViewComponents.UserControls
         public static readonly DependencyProperty IconProperty =
             DependencyProperty.Register("Icon", typeof(ImageSource), typeof(TitleBarButton), new PropertyMetadata());
 
-        public ICommand buttonCommand
+        public ICommand ButtonCommand
         {
-            get { return (ICommand)GetValue(buttonCommandPropety); }
-            set { SetValue(buttonCommandPropety, value); }
+            get { return (ICommand)GetValue(ButtonCommandProperty); }
+            set { SetValue(ButtonCommandProperty, value); }
         }
 
-        public static readonly DependencyProperty buttonCommandPropety =
-            DependencyProperty.Register("buttonCommand", typeof(ICommand), typeof(TitleBarButton), new PropertyMetadata());
+        public static readonly DependencyProperty ButtonCommandProperty =
+            DependencyProperty.Register("ButtonCommand", typeof(ICommand), typeof(TitleBarButton), new PropertyMetadata());
 
 
 
-        public object buttonParameter
+        public object ButtonParameter
         {
-            get { return (object)GetValue(buttonParameterProperty); }
-            set { SetValue(buttonParameterProperty, value); }
+            get { return (object)GetValue(ButtonParameterProperty); }
+            set { SetValue(ButtonParameterProperty, value); }
         }
 
-        public static readonly DependencyProperty buttonParameterProperty =
-            DependencyProperty.Register("buttonParameter", typeof(object), typeof(TitleBarButton), new PropertyMetadata(string.Empty));
+        public static readonly DependencyProperty ButtonParameterProperty =
+            DependencyProperty.Register("ButtonParameter", typeof(object), typeof(TitleBarButton), new PropertyMetadata(string.Empty));
 
 
     }

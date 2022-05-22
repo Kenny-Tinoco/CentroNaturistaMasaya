@@ -164,24 +164,22 @@ namespace WPF.ViewModel
                 Save(element.entity, isEdition, element.viewModel);
             else
                 Delete(element.entity.IdProduct);
+
+
+            messenger.Send(Refresh.stock);
+            listingViewModel.loadCommand.Execute(null);
         }
 
 
         private async void Delete(int idProduct)
         {
             await new DeleteCommand(logic).ExecuteAsync(idProduct);
-
-            listingViewModel.loadCommand.Execute(null);
         }
 
         private void Save(Product parameter, bool isEdition, FormViewModel viewModel = null)
         {
             logic.entity = parameter;
             new SaveCommand(logic, viewModel).Execute(isEdition);
-
-            messenger.Send(Refresh.stock);
-
-            listingViewModel.loadCommand.Execute(null);
         }
 
         public override void Dispose()

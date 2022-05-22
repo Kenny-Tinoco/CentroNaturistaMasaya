@@ -126,7 +126,6 @@ C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\ViewComponents\UserControls\ListViewControl.g.cs
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\ViewComponents\UserControls\MenuButton.g.cs
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\ViewComponents\UserControls\PageTitle.g.cs
-C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\ViewComponents\UserControls\Popup.g.cs
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\ViewComponents\UserControls\SearchBar.g.cs
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\ViewComponents\UserControls\SpinBox.g.cs
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\ViewComponents\UserControls\TitleBarButton.g.cs
@@ -151,7 +150,6 @@ C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\ViewComponents\Menus\TabControlMenu.baml
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\ViewComponents\UserControls\CustomButton.baml
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\ViewComponents\UserControls\MenuButton.baml
-C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\ViewComponents\UserControls\Popup.baml
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\View\HomeWindows\HomeView.baml
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\View\HomeWindows\SellView.baml
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\View\ProductWindows\Modals\PresentationModal.baml
@@ -171,10 +169,16 @@ C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\Centro Naturista Masaya.dll
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\ref\Centro Naturista Masaya.dll
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\WPF.genruntimeconfig.cache
-C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\View\Employee\EmployeePage.g.cs
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\View\HomeWindows\ConsultView.g.cs
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\View\HomeWindows\PurchaseView.g.cs
-C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\View\Employee\EmployeePage.baml
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\View\HomeWindows\ConsultView.baml
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\View\HomeWindows\PurchaseView.baml
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\bin\Debug\net6.0-windows10.0.17763.0\Resource\Image\image-default.png
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\View\ProviderWindows\ProviderModal.g.cs
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\View\ProviderWindows\ProviderPage.g.cs
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\View\ProviderWindows\ProviderModal.baml
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\View\ProviderWindows\ProviderPage.baml
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\View\EmployeeWindows\EmployeeModal.g.cs
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\View\EmployeeWindows\EmployeePage.g.cs
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\View\EmployeeWindows\EmployeeModal.baml
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\View\EmployeeWindows\EmployeePage.baml

@@ -41,7 +41,6 @@ namespace WPF.ViewModel.Base
             }
             catch (Exception)
             {
-                MessageBox.Show("Qué nota perrito, fijate que paso una cagada.");
                 throw;
             }
         }

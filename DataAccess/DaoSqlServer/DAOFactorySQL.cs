@@ -14,6 +14,7 @@ namespace DataAccess.DaoSqlServer
         private PresentationDAO _presentationDAO = null!;
         private ProductDAO _productDAO = null!;
         private ProviderDAO _providerDAO = null!;
+        private ProviderPhoneDAO _providerPhoneDAO = null!;
         private StockDAO _stockDAO = null!;
         private SellDAO _sellDAO = null!;
         private SaleDetailDAO _saleDetailDAO = null!;
@@ -88,6 +89,17 @@ namespace DataAccess.DaoSqlServer
                     _providerDAO = new ProviderDAOSQL(_contextFactory);
 
                 return _providerDAO;
+            }
+        }
+
+        public override ProviderPhoneDAO providerPhoneDAO
+        {
+            get
+            {
+                if (_providerPhoneDAO == null)
+                    _providerPhoneDAO = new ProviderPhoneDAOSQL(_contextFactory);
+
+                return _providerPhoneDAO;
             }
         }
 

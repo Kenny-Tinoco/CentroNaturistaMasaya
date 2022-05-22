@@ -29,6 +29,10 @@ namespace Domain.DAO
     public interface ProviderDAO : BaseDAO<Provider, object>
     {
     }
+    public interface ProviderPhoneDAO : BaseDAO<ProviderPhone, object>
+    {
+        Task<IEnumerable<ProviderPhone>> GetWhere(int id);
+    }
 
     public interface StockDAO : BaseDAO<Stock, object>
     {

@@ -10,12 +10,11 @@
     <Grid
         >
         <Button
-            x:Name="titleBarButton"
-            Style="{Binding styleButton, ElementName=root}"
+            Style="{Binding StyleButton, ElementName=root}"
             HorizontalContentAlignment="Center"
             VerticalContentAlignment="Center"
-            Command="{Binding buttonCommand, ElementName=root}"
-            CommandParameter="{Binding buttonParameter, ElementName=root}"
+            Command="{Binding ButtonCommand, ElementName=root}"
+            CommandParameter="{Binding ButtonParameter, ElementName=root}"
             >
             <Image
                 Source="{Binding Icon, ElementName=root}"

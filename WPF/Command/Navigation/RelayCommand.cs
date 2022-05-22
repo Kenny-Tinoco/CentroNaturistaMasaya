@@ -11,7 +11,7 @@ namespace WPF.Command.Navigation
         public RelayCommand( Action<object> execute ) : this(execute, null)
         { }
 
-        public RelayCommand( Action<object> execute, Predicate<object>? canExecute )
+        public RelayCommand( Action<object> execute, Predicate<object> canExecute )
         {
             if (execute == null)
                 throw new ArgumentNullException("execute");
@@ -19,18 +19,18 @@ namespace WPF.Command.Navigation
             _canExecute = canExecute;
         }
 
-        public bool CanExecute( object? parameter )
+        public bool CanExecute( object parameter )
         {
             return _canExecute == null ? true : _canExecute(parameter);
         }
 
-        public event EventHandler? CanExecuteChanged
+        public event EventHandler CanExecuteChanged
         {
             add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
         }
 
-        public void Execute( object? parameter )
+        public void Execute( object parameter )
         {
             _execute(parameter);
         }

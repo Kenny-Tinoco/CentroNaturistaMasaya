@@ -1,4 +1,4 @@
-﻿
+﻿C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\GeneratedInternalTypeHelper.g.cs
 
 FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\Resource\Resource.xaml;;
 FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\Themes\Generic.xaml;;
@@ -6,8 +6,8 @@ FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\ViewComp
 FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\ViewComponents\Menus\TabControlMenu.xaml;;
 FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\ViewComponents\UserControls\CustomButton.xaml;;
 FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\ViewComponents\UserControls\MenuButton.xaml;;
-FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\ViewComponents\UserControls\Popup.xaml;;
-FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\Employee\EmployeePage.xaml;;
+FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\EmployeeWindows\EmployeeModal.xaml;;
+FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\EmployeeWindows\EmployeePage.xaml;;
 FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\HomeWindows\ConsultView.xaml;;
 FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\HomeWindows\HomeView.xaml;;
 FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\HomeWindows\PurchaseView.xaml;;
@@ -19,5 +19,7 @@ FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\Pro
 FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\ProductWindows\ProductWindowsView.xaml;;
 FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\ProductWindows\StockForm.xaml;;
 FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\ProductWindows\StockPage.xaml;;
+FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\ProviderWindows\ProviderModal.xaml;;
+FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\ProviderWindows\ProviderPage.xaml;;
 FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\Startup.xaml;;
 

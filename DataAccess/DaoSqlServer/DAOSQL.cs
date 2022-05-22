@@ -1,6 +1,7 @@
 ﻿using DataAccess.SqlServerDataSource;
 using Domain.DAO;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.DaoSqlServer
 {
@@ -47,6 +48,47 @@ namespace DataAccess.DaoSqlServer
         public ProviderDAOSQL(MasayaNaturistCenterDataBaseFactory dataBaseContext) : base(dataBaseContext) { }
 
         protected override string nameTable => "Provider";
+
+        public override async Task<IEnumerable<Provider>> GetAll()
+        {
+            using MasayaNaturistCenterDataBase context = _contextFactory.CreateDbContext();
+            IEnumerable<Provider> entities = await context
+                .Providers
+                .Include(x => x.ProviderPhones)
+                .ToListAsync();
+
+            return entities;
+        }
+    }
+
+    public class ProviderPhoneDAOSQL : BaseDAOSQL<ProviderPhone>, ProviderPhoneDAO
+    {
+        public ProviderPhoneDAOSQL(MasayaNaturistCenterDataBaseFactory dataBaseContext) : base(dataBaseContext) 
+        { }
+
+        public async Task<IEnumerable<ProviderPhone>> GetWhere(int id)
+        {
+            using MasayaNaturistCenterDataBase context = _contextFactory.CreateDbContext();
+            IEnumerable<ProviderPhone> entities = await context
+                .Set<ProviderPhone>()
+                .Where(item => item.IdProvider == id)
+                .ToListAsync();
+
+            return entities;
+        }
+        public override async Task<bool> DeleteById(object id)
+        {
+            using MasayaNaturistCenterDataBase context = _contextFactory.CreateDbContext();
+            ProviderPhone element = await Read(id);
+
+            if (element is null)
+                throw new ArgumentException(nameof(element));
+
+            context.Set<ProviderPhone>().Remove(element);
+            context.SaveChanges();
+
+            return true;
+        }
     }
 
     public class SaleDetailDAOSQL : BaseDAOSQL<SaleDetail>, SaleDetailDAO

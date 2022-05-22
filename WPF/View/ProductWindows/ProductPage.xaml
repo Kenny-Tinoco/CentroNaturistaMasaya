@@ -116,7 +116,18 @@
                     <DataGridTemplateColumn Header="Opciones" Width="155" CellTemplate="{StaticResource optionsCell}"/>
                 </DataGrid.Columns>
             </DataGrid>
-
+            <WrapPanel
+                    Margin="30 0"
+                    Grid.Row="1"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Left"
+                    DataContext="{Binding listingViewModel}"
+                    Visibility="{Binding hasErrorMessage, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Button Content="Recargar"
+                            Padding="10 0"
+                            FontSize="14"
+                            Command="{Binding loadCommand}"/>
+            </WrapPanel>
             <WrapPanel
                     Margin="30 0"
                     Grid.Row="1"

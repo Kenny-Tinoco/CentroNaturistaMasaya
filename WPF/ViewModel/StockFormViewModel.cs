@@ -337,7 +337,7 @@ namespace WPF.ViewModel
         }
 
 
-        public bool hasChangeableState => logicFactory.stockLogic.hasChangeableState(entity.IdStock) && isEditable;
+        public bool hasChangeableState => logicFactory.stockLogic.HasChangeableState(entity.IdStock) && isEditable;
         public string changeableStateMessageError => !hasChangeableState ?
             "No se puede editar esta existencia debido a que el producto y/o la presentación no existen." +
             " \n\nVerifique que dichas entidades estén activadas." : "";

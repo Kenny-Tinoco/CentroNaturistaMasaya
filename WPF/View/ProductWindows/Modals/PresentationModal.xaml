@@ -2,19 +2,16 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:userControls="clr-namespace:WPF.ViewComponents.UserControls" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:custom="clr-namespace:WPF.ViewComponents.CustomControls"
              mc:Ignorable="d">
     <Grid Width="440">
-        <userControls:Popup
-            titleBar="{Binding titleBar}"
-            iconBar="/Resource/Image/presentation.png"
-            buttonExitCommand="{Binding closeCommand}">
+        <custom:Popup
+            TitleBar="{Binding titleBar}"
+            IconBar="/Resource/Image/presentation.png"
+            ExitCommand="{Binding closeCommand}">
 
-            <userControls:Popup.popupContent>
-
-                <Grid>
+            <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="5"/>
                         <RowDefinition Height="auto"/>
@@ -190,9 +187,7 @@
 
                 </Grid>
 
-            </userControls:Popup.popupContent>
-
-        </userControls:Popup>
+        </custom:Popup>
 
     </Grid>
     <UserControl.Resources>
