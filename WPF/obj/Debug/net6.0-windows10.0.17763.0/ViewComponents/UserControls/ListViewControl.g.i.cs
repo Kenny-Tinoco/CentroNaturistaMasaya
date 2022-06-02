@@ -32,7 +32,7 @@ using System.Windows.Shapes;
 using System.Windows.Shell;
 
 
-namespace WPF.ViewComponents.UserControls {
+namespace WPF.ViewsComponent.UserControls {
     
     
     /// <summary>

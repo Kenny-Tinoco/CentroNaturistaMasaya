@@ -32,7 +32,7 @@ namespace WPF.ViewModel
         {
             logic = (ProductLogic)_logic;
 
-            listingViewModel = new ListingViewModel(GetProductListing, SortProductListing);
+            listingViewModel = new ListingViewModel(GetProductListing, SortProductListing, ProductFilter);
 
             openModalCommand = new NavigateCommand(modalNavigation);
 
@@ -44,16 +44,14 @@ namespace WPF.ViewModel
         }
 
 
-
         public static ProductViewModel LoadViewModel(ILogic parameter, IMessenger messenger, INavigationService navigationService)
         {
-            ProductViewModel viewModel = new ProductViewModel(parameter, messenger, navigationService);
+            ProductViewModel viewModel = new(parameter, messenger, navigationService);
 
             viewModel.listingViewModel.loadCommand.Execute(null);
 
             return viewModel;
         }
-
 
         private void SortProductListing(ICollectionView listing)
         {
@@ -62,64 +60,23 @@ namespace WPF.ViewModel
                 .Add(new SortDescription(nameof(Product.IdProduct), ListSortDirection.Descending));
         }
 
-        private async Task<IEnumerable<BaseEntity>> GetProductListing()
-        {
-            return await logic.GetAll();
-        }
-
-        private string _searchText;
-        public string searchText
-        {
-            get
-            {
-                return _searchText;
-            }
-            set
-            {
-                _searchText = value;
-                search();
-            }
-        }
-
-        public void search()
-        {
-            if (ListingViewModel.ValidateSearchString(searchText))
-            {
-                listingViewModel.listing.Filter = Filter;
-            }
-            else if (searchText.Equals(""))
-            {
-                listingViewModel.listing.Filter = null;
-            }
-        }
-
-        private bool Filter(object obj)
-        {
-            if (obj is Product element)
-            {
-                return logic.searchLogic(element, searchText);
-            }
-
-            return false;
-        }
+        private async Task<IEnumerable<BaseEntity>> GetProductListing() => await logic.GetAll();
 
         public ICommand addModalCommand { get; }
-        public void AddModal()
+        private void AddModal()
         {
             messenger.Send(new ProductMessage(null, false));
 
             openModalCommand.Execute(-1);
         }
 
-
         public ICommand editModalCommand { get; }
-        public void EditModal(Product parameter)
+        private void EditModal(Product parameter)
         {
             messenger.Send( new ProductMessage(parameter, true));
 
             openModalCommand.Execute(-1);
         }
-
 
         private ICommand _changeStatusCommand;
         public ICommand changeStatusCommand
@@ -132,7 +89,7 @@ namespace WPF.ViewModel
                 return _changeStatusCommand;
             }
         }
-        private void ChangeStatus(Product parameter)
+        private async void ChangeStatus(Product parameter)
         {
             if (parameter == null)
                 return;
@@ -146,52 +103,54 @@ namespace WPF.ViewModel
                     "'?\nTodas las ocurrencias de este producto serán ocultadas de los catalogos donde aparezca",
                     "Confirmar desactivación", MessageBoxButton.YesNo);
 
-                if (result == MessageBoxResult.Yes) parameter.Status = false;
+                if (result == MessageBoxResult.Yes) 
+                    parameter.Status = false;
             }
             else
                 parameter.Status = true;
 
             if (flag != parameter.Status)
-                Save(parameter, true);
+                await Save(parameter, true);
         }
 
-        private void MessageReceived(object parameter)
+        private async void MessageReceived(object parameter)
         {
             var element = (ProductModalMessage)parameter;
             var isEdition = element.operation is Operation.update;
 
             if (element.operation is Operation.create or Operation.update)
-                Save(element.entity, isEdition, element.viewModel);
+                await Save(element.entity, isEdition, element.viewModel);
             else
-                Delete(element.entity.IdProduct);
+                await Delete(element.entity.IdProduct);
 
 
             messenger.Send(Refresh.stock);
-            listingViewModel.loadCommand.Execute(null);
+            await ((AsyncCommandBase)listingViewModel.loadCommand).ExecuteAsync(null);
         }
 
-
-        private async void Delete(int idProduct)
+        private async Task Delete(int idProduct)
         {
             await new DeleteCommand(logic).ExecuteAsync(idProduct);
         }
 
-        private void Save(Product parameter, bool isEdition, FormViewModel viewModel = null)
+        private async Task Save(Product parameter, bool isEdition, FormViewModel viewModel = null)
         {
             logic.entity = parameter;
-            new SaveCommand(logic, viewModel).Execute(isEdition);
+            await new SaveCommand(logic, viewModel).ExecuteAsync(isEdition);
+        }
+
+        private bool ProductFilter(object parameter, string text)
+        {
+            if (parameter is not Product)
+                return false;
+
+            return ProductLogic.SearchLogic((Product)parameter, text);
         }
 
         public override void Dispose()
         {
-            try
-            {
-                if (listingViewModel.listing != null)
-                    listingViewModel.listing.Filter = null;
-            }
-            catch 
-            { 
-            }
+            if (listingViewModel.listing != null)
+                listingViewModel.listing.Filter = null;
 
             base.Dispose();
         }

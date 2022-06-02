@@ -30,10 +30,10 @@ using System.Windows.Media.TextFormatting;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Shell;
-using WPF.ViewComponents.UserControls;
+using WPF.ViewsComponent.UserControls;
 
 
-namespace WPF.ViewComponents.UserControls {
+namespace WPF.ViewsComponent.UserControls {
     
     
     /// <summary>

@@ -47,7 +47,7 @@ namespace WPF.Services
 
             var subscription = _subscriptions[messageType].FirstOrDefault(x => x.subscriber == subscriber);
 
-            if (subscription != null)
+            if (subscription is not null)
                 _subscriptions[messageType].Remove(subscription);
         }
 
@@ -57,6 +57,7 @@ namespace WPF.Services
             if (!_subscriptions.ContainsKey(typeof(TypeMessage)))
                 _subscriptions.TryAdd(typeof(TypeMessage), new SynchronizedCollection<Subscription>());
         }
+
         private void SendMessageToSubscriber<TypeMessage>(TypeMessage message, Subscription subscription)
         {
             subscription.action(message);

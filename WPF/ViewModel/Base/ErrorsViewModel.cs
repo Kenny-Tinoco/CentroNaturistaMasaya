@@ -8,7 +8,7 @@ namespace WPF.ViewModel.Base
 {
     public class ErrorsViewModel : INotifyDataErrorInfo
     {
-        private readonly Dictionary<string, List<string>> _propertyErrors = new Dictionary<string, List<string>>();
+        private readonly Dictionary<string, List<string>> _propertyErrors = new();
         public bool HasErrors => _propertyErrors.Any();
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;

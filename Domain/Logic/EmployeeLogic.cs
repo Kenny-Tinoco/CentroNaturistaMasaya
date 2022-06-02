@@ -11,12 +11,9 @@ namespace Domain.Logic
             entity = new Employee();
         }
 
-        public bool searchLogic(Employee element, string parameter)
-        {
-            return
-                element.IdEmployee.ToString().Contains(parameter.Trim()) ||
-                element.LastName.ToString().Contains(parameter.Trim()) ||
-                element.Name.ToLower().StartsWith(parameter.Trim().ToLower());
-        }
+        public static bool SearchLogic(Employee element, string parameter) => 
+            element.IdEmployee.ToString().Contains(parameter) ||
+            element.LastName.ToString().Contains(parameter) ||
+            element.Name.ToLower().StartsWith(parameter.ToLower());
     }
 }

@@ -22,14 +22,14 @@ namespace DataAccess
             return await GetCollection<ConsultView>("ConsultView", type);
         }
 
-        public async Task<IEnumerable<SaleDetailView>> SaleDetailViewCatalog(Views type)
+        public async Task<IEnumerable<SaleDetailView>> SaleDetailViewCatalog()
         {
-            return await GetCollection<SaleDetailView>("SaleDetailView", type);
+            return await GetCollection<SaleDetailView>("SaleDetailView", Views.All);
         }
 
-        public async Task<IEnumerable<SellView>> SellViewCatalog(Views type)
+        public async Task<IEnumerable<SellView>> SellViewCatalog()
         {
-            return await GetCollection<SellView>("SellView", type);
+            return await GetCollection<SellView>("SellView", Views.All);
         }
 
         public async Task<IEnumerable<StockView>> StockViewCatalog(Views type)
@@ -51,34 +51,33 @@ namespace DataAccess
 
         private async Task<IEnumerable<Entity>> GetCollection<Entity>(string nameTable, Views type) where Entity : BaseEntity
         {
-            using (MasayaNaturistCenterDataBase context = _contextFactory.CreateDbContext())
+            using MasayaNaturistCenterDataBase context = _contextFactory.CreateDbContext();
+            
+            if (nameTable is null)
+                throw new ArgumentException(nameof(nameTable));
+
+            IEnumerable<Entity> entities;
+
+            if (type is Views.All)
             {
-                if (nameTable is null)
-                    throw new ArgumentException(nameof(nameTable));
-
-                IEnumerable<Entity> entities; 
-
-                if(type is Views.All)
-                {
-                    entities = await context.Set<Entity>().ToListAsync();
-                }
-                else if(type is Views.OnlyActive)
-                {
-                    entities = await context.Set<Entity>()
-                    .FromSqlInterpolated($"EXECUTE dbo.sp_GetActives {nameTable}")
-                    .ToListAsync();
-                }
-                else
-                {
-                    entities = await context.Set<Entity>()
-                    .FromSqlInterpolated($"EXECUTE dbo.sp_GetInactives {nameTable}")
-                    .ToListAsync();
-
-                }
-
-
-                return entities;
+                entities = await context.Set<Entity>().ToListAsync();
             }
+            else if (type is Views.OnlyActive)
+            {
+                entities = await context.Set<Entity>()
+                .FromSqlInterpolated($"EXECUTE dbo.sp_GetActives {nameTable}")
+                .ToListAsync();
+            }
+            else
+            {
+                entities = await context.Set<Entity>()
+                .FromSqlInterpolated($"EXECUTE dbo.sp_GetInactives {nameTable}")
+                .ToListAsync();
+
+            }
+
+
+            return entities;
         }
     }
 }

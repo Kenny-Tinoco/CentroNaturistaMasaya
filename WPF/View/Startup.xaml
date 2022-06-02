@@ -5,13 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewmodel="clr-namespace:WPF.ViewModel"
         xmlns:componentsViewModels="clr-namespace:WPF.ViewModel.Components"
-        xmlns:viewsProductWindows="clr-namespace:WPF.View.ProductWindows"
-        xmlns:viewsMenus="clr-namespace:WPF.ViewComponents.Menus"
-        xmlns:viewsHomeWindows="clr-namespace:WPF.View.HomeWindows"
-        xmlns:usercontrols="clr-namespace:WPF.ViewComponents.UserControls" 
-        xmlns:custom="clr-namespace:WPF.ViewComponents.CustomControls" 
-        xmlns:viewsProviderWindows="clr-namespace:WPF.View.ProviderWindows"
-        xmlns:viewsEmployeeWindows="clr-namespace:WPF.View.EmployeeWindows"
+        xmlns:viewsProductWindows="clr-namespace:WPF.View.ProductModule"
+        xmlns:viewsMenus="clr-namespace:WPF.ViewsComponent.Menus"
+        xmlns:viewsHomeWindows="clr-namespace:WPF.View.HomeModule"
+        xmlns:usercontrols="clr-namespace:WPF.ViewsComponent.UserControls" 
+        xmlns:custom="clr-namespace:WPF.ViewsComponent.CustomControls" 
+        xmlns:viewsProviderWindows="clr-namespace:WPF.View.ProviderModule"
+        xmlns:viewsEmployeeWindows="clr-namespace:WPF.View.EmployeeModule"
+        xmlns:viewsSaleWindows="clr-namespace:WPF.View.SaleModule"
+        xmlns:local="clr-namespace:WPF.View" 
         mc:Ignorable="d"
         WindowStyle="None"
         ResizeMode="NoResize"
@@ -21,8 +23,11 @@
 
     <Grid>
         <Grid.Resources>
+            <DataTemplate DataType="{x:Type viewmodel:LoginViewModel}">
+                <local:Login/>
+            </DataTemplate>
             <DataTemplate DataType="{x:Type componentsViewModels:ProductWindowsViewModel}">
-                <viewsProductWindows:ProductWindowsView/>
+                <viewsProductWindows:ProductMainView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewmodel:HomeViewModel}">
                 <viewsHomeWindows:HomeView/>
@@ -57,7 +62,17 @@
             <DataTemplate DataType="{x:Type viewmodel:EmployeeModalFormViewModel}">
                 <viewsEmployeeWindows:EmployeeModal/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodel:SaleViewModel}">
+                <viewsSaleWindows:SalePage/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodel:ProductSaleViewModel}">
+                <viewsSaleWindows:ProductSalePage/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodel:SalesChargeModalViewModel}">
+                <viewsSaleWindows:SalesChargeModal/>
+            </DataTemplate>
         </Grid.Resources>
+        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="*"/>

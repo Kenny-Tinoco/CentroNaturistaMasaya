@@ -10,12 +10,10 @@ namespace Domain.Logic
         {
         }
 
-        public bool searchLogic(Product element, string parameter)
-        {
-            return
-                element.IdProduct.ToString().Contains(parameter.Trim()) ||
-                element.Name.ToLower().StartsWith(parameter.Trim().ToLower());
-        }
+        public static bool SearchLogic(Product element, string parameter) => 
+            element.IdProduct.ToString().Contains(parameter) ||
+            element.Name.ToLower().StartsWith(parameter.ToLower());
+
         public override void ResetEntity()
         {
             var element = new Product

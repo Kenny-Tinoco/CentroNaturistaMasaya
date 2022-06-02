@@ -10,11 +10,8 @@ namespace Domain.Logic
         {
         }
 
-        public bool searchLogic(Provider element, string parameter)
-        {
-            return
-                element.IdProvider.ToString().Contains(parameter.Trim()) ||
-                element.Name.ToLower().StartsWith(parameter.Trim().ToLower());
-        }
+        public static bool SearchLogic(Provider element, string parameter) => 
+            element.IdProvider.ToString().Contains(parameter) ||
+            element.Name.ToLower().StartsWith(parameter.ToLower());
     }
 }

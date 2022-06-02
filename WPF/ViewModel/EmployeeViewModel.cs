@@ -15,7 +15,6 @@ using WPF.Services;
 using WPF.Stores;
 using WPF.ViewModel.Base;
 
-
 namespace WPF.ViewModel
 {
     public class EmployeeViewModel : ViewModelBase
@@ -33,7 +32,7 @@ namespace WPF.ViewModel
         {
             logic = (EmployeeLogic)_logic;
 
-            listingViewModel = new ListingViewModel(GetEmployeeListing, SortEmployeeListing);
+            listingViewModel = new ListingViewModel(GetEmployeeListing, SortEmployeeListing, EmployeeFilter);
 
             openModalCommand = new NavigateCommand(modalNavigation);
 
@@ -45,7 +44,6 @@ namespace WPF.ViewModel
         }
 
 
-
         public static EmployeeViewModel LoadViewModel(ILogic parameter, IMessenger messenger, INavigationService navigationService)
         {
             EmployeeViewModel viewModel = new(parameter, messenger, navigationService);
@@ -55,7 +53,6 @@ namespace WPF.ViewModel
             return viewModel;
         }
 
-
         private void SortEmployeeListing(ICollectionView listing)
         {
             listing.SortDescriptions.Clear();
@@ -63,46 +60,7 @@ namespace WPF.ViewModel
                 .Add(new SortDescription(nameof(Employee.IdEmployee), ListSortDirection.Descending));
         }
 
-        private async Task<IEnumerable<BaseEntity>> GetEmployeeListing()
-        {
-            return await logic.GetAll();
-        }
-
-        private string _searchText;
-        public string searchText
-        {
-            get
-            {
-                return _searchText;
-            }
-            set
-            {
-                _searchText = value;
-                Search();
-            }
-        }
-
-        private void Search()
-        {
-            if (ListingViewModel.ValidateSearchString(searchText))
-            {
-                listingViewModel.listing.Filter = Filter;
-            }
-            else if (searchText.Equals(""))
-            {
-                listingViewModel.listing.Filter = null;
-            }
-        }
-
-        private bool Filter(object obj)
-        {
-            if (obj is Employee element)
-            {
-                return logic.searchLogic(element, searchText);
-            }
-
-            return false;
-        }
+        private async Task<IEnumerable<BaseEntity>> GetEmployeeListing() => await logic.GetAll();
 
         public ICommand addModalCommand { get; }
         public void AddModal()
@@ -112,7 +70,6 @@ namespace WPF.ViewModel
             openModalCommand.Execute(-1);
         }
 
-
         public ICommand editModalCommand { get; }
         public void EditModal(Employee parameter)
         {
@@ -120,7 +77,6 @@ namespace WPF.ViewModel
 
             openModalCommand.Execute(-1);
         }
-
 
         private ICommand _changeStatusCommand;
         public ICommand changeStatusCommand
@@ -133,7 +89,7 @@ namespace WPF.ViewModel
                 return _changeStatusCommand;
             }
         }
-        private void ChangeStatus(Employee parameter)
+        private async void ChangeStatus(Employee parameter)
         {
             if (parameter == null)
                 return;
@@ -147,55 +103,54 @@ namespace WPF.ViewModel
                     "'?\nTodas las ocurrencias de este empleado serán ocultadas de los catalogos donde aparezca",
                     "Confirmar desactivación", MessageBoxButton.YesNo);
 
-                if (result == MessageBoxResult.Yes) parameter.Status = false;
+                if (result == MessageBoxResult.Yes) 
+                    parameter.Status = false;
             }
             else
                 parameter.Status = true;
 
             if (flag != parameter.Status)
-                Save(parameter, true);
+                await Save(parameter, true);
         }
 
-        private void MessageReceived(object parameter)
+        private async void MessageReceived(object parameter)
         {
             var element = (EmployeeModalMessage)parameter;
             var isEdition = element.operation is Operation.update;
 
             if (element.operation is Operation.create or Operation.update)
-                Save(element.entity, isEdition, element.viewModel);
+                await Save(element.entity, isEdition, element.viewModel);
             else
-                Delete(element.entity.IdEmployee);
+                await Delete(element.entity.IdEmployee);
+
+            await ((AsyncCommandBase)listingViewModel.loadCommand).ExecuteAsync(null);
         }
 
-
-        private async void Delete(int idEmployee)
+        private async Task Delete(int idEmployee)
         {
             await new DeleteCommand(logic).ExecuteAsync(idEmployee);
-
-            listingViewModel.loadCommand.Execute(null);
         }
 
-        private void Save(Employee parameter, bool isEdition, FormViewModel viewModel = null)
+        private async Task Save(Employee parameter, bool isEdition, FormViewModel viewModel = null)
         {
             logic.entity = parameter;
-            new SaveCommand(logic, viewModel).Execute(isEdition);
+            await new SaveCommand(logic, viewModel).ExecuteAsync(isEdition);
+        }
 
-            listingViewModel.loadCommand.Execute(null);
+        private bool EmployeeFilter(object parameter, string text)
+        {
+            if (parameter is not Employee)
+                return false;
+
+            return EmployeeLogic.SearchLogic((Employee)parameter, text);
         }
 
         public override void Dispose()
         {
-            try
-            {
-                if (listingViewModel.listing != null)
-                    listingViewModel.listing.Filter = null;
-            }
-            catch
-            {
-            }
-
+            if (listingViewModel.listing is not null)
+                listingViewModel.listing.Filter = null;
+            
             base.Dispose();
         }
-
     }
 }

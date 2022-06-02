@@ -10,13 +10,22 @@ namespace WPF.Stores
     public record ProviderModalMessage(Provider entity, Operation operation, FormViewModel viewModel);
     public record EmployeeMessage(Employee entity, bool isEdition);
     public record EmployeeModalMessage(Employee entity, Operation operation, FormViewModel viewModel);
+    public record SaleChargeModalMessage(double total); 
+    public record SaleMessage(bool canSave);
 
+
+    public enum SaveSale
+    {
+        cancel,
+        save
+    }
 
     public enum Refresh
     {
         stock,
         product,
-        presentation
+        presentation,
+        sale
     }
 
     public enum Operation

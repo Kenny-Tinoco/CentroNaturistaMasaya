@@ -8,6 +8,6 @@
         public string Password { get; set; } = null!;
         public DateTime? Created { get; set; }
 
-        public virtual Employee IdEmployeeNavigation { get; set; } = null!;
+        public virtual Employee EmployeeNavigation { get; set; } = null!;
     }
 }

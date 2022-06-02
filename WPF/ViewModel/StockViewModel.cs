@@ -33,12 +33,11 @@ namespace WPF.ViewModel
         public ListingViewModel listingViewModel { get; }
 
 
-
         public StockViewModel(ILogic _logic, IMessenger _messenger, INavigationService formNavigationService)
         {
             logic = (StockLogic)_logic;
 
-            listingViewModel = new ListingViewModel(GetStockViewListing, SortStockViewListing);
+            listingViewModel = new ListingViewModel(GetStockViewListing, SortStockViewListing, StockViewFilter);
 
             openFormCommand = new NavigateCommand(formNavigationService);
 
@@ -58,12 +57,8 @@ namespace WPF.ViewModel
             return viewModel;
         }
 
-
-
-        private async Task<IEnumerable<BaseEntity>> GetStockViewListing()
-        {
-            return await logic.viewsCollections.StockViewCatalog(viewType);
-        }
+        private async Task<IEnumerable<BaseEntity>> GetStockViewListing() =>
+            await logic.viewsCollections.StockViewCatalog(viewType);
 
         private void SortStockViewListing(ICollectionView listing)
         {
@@ -86,21 +81,19 @@ namespace WPF.ViewModel
                 return _editCommand;
             }
         }
-
         private void Edit(int idStock)
         {
             var hasChangeableState = logic.HasChangeableState(idStock);
 
             if (!hasChangeableState)
-            {
                 return;
-            }
 
             var entity = logic.GetStock(idStock);
             messenger.Send(new StockMessage(entity, true));
 
             openFormCommand.Execute(-1);
         }
+
 
         private ICommand _addCommand;
         public ICommand addCommand
@@ -146,41 +139,7 @@ namespace WPF.ViewModel
 
             await new DeleteCommand(logic).ExecuteAsync(idStock);
 
-            listingViewModel.loadCommand.Execute(null);
-        }
-
-
-        private string _searchText;
-        public string searchText
-        {
-            get => _searchText;
-            set
-            {
-                _searchText = value;
-                Search();
-            }
-        }
-
-        private void Search()
-        {
-            if (ListingViewModel.ValidateSearchString(searchText))
-            {
-                listingViewModel.listing.Filter = Filter;
-            }
-            else if (searchText.Equals(""))
-            {
-                listingViewModel.listing.Filter = null;
-            }
-        }
-
-        private bool Filter(object parameter)
-        {
-            if (parameter is StockView element)
-            {
-                return logic.SearchLogic(element, searchText);
-            }
-
-            return false;
+            await ((AsyncCommandBase)listingViewModel.loadCommand).ExecuteAsync(null);
         }
 
 
@@ -210,12 +169,7 @@ namespace WPF.ViewModel
             else
                 SortStockViewListing(listingViewModel.listing);
         }
-        private void Clear()
-        {
-            listingViewModel.listing.GroupDescriptions.Clear();
-        }
-
-
+       
 
         private bool _viewOnlyInactives;
         public bool viewOnlyInactives
@@ -304,17 +258,30 @@ namespace WPF.ViewModel
             }
         }
 
-        private void RefreshStockChanges(object parameter)
+        private async void RefreshStockChanges(object parameter)
         {
             if ((Refresh)parameter is not Refresh.stock)
                 return;
+            
+            await ((AsyncCommandBase)listingViewModel.loadCommand).ExecuteAsync(null);
+        }
 
-            listingViewModel.loadCommand.Execute(null);
+        private bool StockViewFilter(object parameter, string text)
+        {
+            if (parameter is not StockView)
+                return false;
+
+            return StockLogic.SearchLogic((StockView)parameter, text);
+        }
+
+        private void Clear()
+        {
+            listingViewModel.listing.GroupDescriptions.Clear();
         }
 
         public override void Dispose()
         {
-            if (listingViewModel.listing != null)
+            if (listingViewModel.listing is not null)
                 listingViewModel.listing.Filter = null;
 
             base.Dispose();

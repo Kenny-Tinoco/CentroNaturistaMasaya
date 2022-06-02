@@ -9,6 +9,7 @@ using System;
 using MVVMGenericStructure.Services;
 using WPF.Services;
 using Domain.Services;
+using Domain.Services.Implementation;
 
 namespace WPF.HostBuilders
 {
@@ -28,6 +29,13 @@ namespace WPF.HostBuilders
                 services.AddSingleton<DAOFactory, DAOFactorySQL>();
 
                 services.AddSingleton<LogicFactory>();
+
+                services.AddSingleton<IAuthenticationService, AuthenticationService>(s =>
+                {
+                    return new AuthenticationService(s.GetRequiredService<DAOFactory>().accountDAO);
+                });
+
+                services.AddSingleton<IAuthenticator, Authenticator>();
             });
 
             return host;

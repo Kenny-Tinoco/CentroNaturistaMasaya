@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="WPF.ViewsComponent.UserControls.TitleBarButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             x:Name="root"
+             mc:Ignorable="d" 
+             d:DesignHeight="30" 
+             d:DesignWidth="30">
+    <Grid
+        >
+        <Button
+            Style="{Binding StyleButton, ElementName=root}"
+            HorizontalContentAlignment="Center"
+            VerticalContentAlignment="Center"
+            Command="{Binding ButtonCommand, ElementName=root}"
+            CommandParameter="{Binding ButtonParameter, ElementName=root}"
+            >
+            <Image
+                Source="{Binding Icon, ElementName=root}"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Height="30"
+                Width="30"/>
+        </Button>
+    </Grid>
+</UserControl>

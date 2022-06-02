@@ -13,6 +13,7 @@ namespace WPF.ViewModel
     {
         private readonly IMessenger messenger;
 
+
         public ProductModalFormViewModel(IMessenger _messenger, INavigationService closeModal) : base(closeModal)
         {
             messenger = _messenger;
@@ -52,6 +53,7 @@ namespace WPF.ViewModel
             OnPropertyChanged(nameof(name));
             OnPropertyChanged(nameof(description));
         }
+        
         private Product GetEntity()
         {
             return new Product()
@@ -149,6 +151,7 @@ namespace WPF.ViewModel
                 OnPropertyChanged(nameof(name));
             }
         }
+        
         public string description
         {
             get

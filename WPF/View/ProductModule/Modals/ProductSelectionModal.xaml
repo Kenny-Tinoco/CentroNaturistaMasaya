@@ -1,0 +1,126 @@
+﻿<UserControl x:Class="WPF.View.ProductModule.ProductSelectionModal"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:userControls="clr-namespace:WPF.ViewsComponent.UserControls" 
+             xmlns:custom="clr-namespace:WPF.ViewsComponent.CustomControls">
+    <Grid
+        Height="400"
+        Width="800">
+        <custom:Popup
+            TitleBar="{Binding titleBar}"
+            IconBar="/Resource/Image/product.png"
+            ExitCommand="{Binding exitCommand}">
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid
+                    Grid.Row="0">
+                        <userControls:SearchBar
+                    Height="30"
+                    Width="250"
+                    Text="{Binding text, Mode=TwoWay}"
+                    Margin="0 0 20 0"
+                    />
+                    </Grid>
+
+                    <Grid
+                    Grid.Row="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+
+
+                        <DataGrid
+                        ItemsSource="{Binding listing}"
+                        Style="{DynamicResource ElementsDataGrid}"
+                            Grid.Row="0"
+                            Margin="30 10">
+
+                            <DataGrid.Resources>
+                                <DataTemplate x:Key="optionsCell">
+                                    <StackPanel
+                                    HorizontalAlignment="Center"
+                                    Orientation="Horizontal">
+                                        <Button Content="Ir"
+                                            Command="{Binding Path=DataContext.goCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                            CommandParameter="{Binding}"
+                                            Style="{DynamicResource ButtonStyle}"
+                                            Background="#2196F3"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Cód." Width="auto" Binding="{Binding IdProduct}"/>
+                                <DataGridTextColumn Header="Nombre" Width="180" Binding="{Binding Name}"/>
+                                <DataGridTextColumn Header="Descripción" Width="*" Binding="{Binding Description}"/>
+                                <DataGridTemplateColumn Header="Opciones" Width="auto" CellTemplate="{StaticResource optionsCell}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <WrapPanel
+                    Margin="30 0"
+                    Grid.Row="1"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Right">
+                            <TextBlock 
+                                FontSize="15"
+                                Text="{Binding listing.Count}"/>
+                            <TextBlock 
+                                FontSize="15"
+                                Text=" elementos"/>
+                        </WrapPanel>
+                    </Grid>
+
+                </Grid>
+
+        </custom:Popup>
+    </Grid>
+    <UserControl.Resources>
+        <Style x:Key="ButtonStyle"
+               TargetType="Button">
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+
+                        <Border x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="4"
+                            Padding="8 0 8 0"
+                            BorderBrush="white"
+                            BorderThickness="0.6"
+                            SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" 
+                                          Focusable="False" 
+                                          HorizontalAlignment="Center"
+                                          Margin="1" 
+                                          RecognizesAccessKey="True" 
+                                          SnapsToDevicePixels="True" 
+                                          VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="white"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="black"/>
+                                <Setter Property="Foreground" Value="Black"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="White"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="Black"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+</UserControl>

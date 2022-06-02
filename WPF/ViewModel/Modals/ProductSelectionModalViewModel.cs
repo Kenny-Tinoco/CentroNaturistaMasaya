@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Logic;
 using MVVMGenericStructure.Services;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,6 +17,8 @@ namespace WPF.ViewModel
 
         public IMessenger messenger;
 
+        private SearchBarViewModel searchViewModel = new();
+
         public ProductSelectionModalViewModel(IMessenger _messenger, INavigationService closeModal) : base(closeModal)
         {
             titleBar = "Selecionar un producto";
@@ -27,8 +30,10 @@ namespace WPF.ViewModel
 
         private void CatalogueReceived(object parameter)
         {
-            dataGridSource = CollectionViewSource.GetDefaultView((IEnumerable<Product>)parameter);
+            listing = CollectionViewSource.GetDefaultView((IEnumerable<Product>)parameter);
             Sort();
+
+            searchViewModel = new(listing, ProductFilter);
         }
 
         public ICommand goCommand { get; }
@@ -39,66 +44,38 @@ namespace WPF.ViewModel
             exitCommand.Execute(-1);
         }
 
-        private string _searchText;
-        public string searchText
+        public string text
         {
-            get
-            {
-                return _searchText;
-            }
-            set
-            {
-                _searchText = value;
-                Search();
-            }
+            get => searchViewModel.text;
+            set => searchViewModel.text = value;
         }
 
-        public void Search()
+        private bool ProductFilter(object parameter, string text)
         {
-            if (dataGridSource is null)
-                return;
+            if (parameter is not Product)
+                return false;
 
-            if (ListingViewModel.ValidateSearchString(searchText))
-            {
-                dataGridSource.Filter = Filter;
-            }
-            else if (searchText.Equals(""))
-            {
-                dataGridSource.Filter = null;
-            }
+            return ProductLogic.SearchLogic((Product)parameter, text);
         }
 
-        private bool Filter(object parameter)
-        {
-            if (parameter is Product element)
-            {
-                return SearchLogic(element, searchText);
-            }
-
-            return false;
-        }
-        public static bool SearchLogic(Product element, string parameter) =>
-            element.IdProduct.ToString().Contains(parameter.Trim()) ||
-            element.Name.ToLower().StartsWith(parameter.Trim().ToLower());
-
-
-        public ICollectionView dataGridSource
+        public ICollectionView listing
         {
             get;
             private set;
         }
+
         private void Sort()
         {
-            dataGridSource.SortDescriptions
+            listing.SortDescriptions
                 .Clear();
-            dataGridSource.SortDescriptions
+            listing.SortDescriptions
                 .Add(new SortDescription(nameof(Product.IdProduct), ListSortDirection.Descending));
         }
 
-
         public override void Dispose()
         {
-            searchText = "";
+            listing.Filter = null;
+
             base.Dispose();
         }
 

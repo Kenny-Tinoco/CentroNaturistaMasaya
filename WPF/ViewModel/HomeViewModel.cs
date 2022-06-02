@@ -8,10 +8,16 @@ namespace WPF.ViewModel
     public class HomeViewModel : ViewModelBase
     {
         public ICommand navigateLoginCommand { get; }
+        public ICommand navigateSaleProductCommand { get; }
 
-        public HomeViewModel(INavigationService logicNavigationService)
+        public HomeViewModel
+        (
+            INavigationService logicNavigationService,
+            INavigationService _navigateSaleProductCommand
+        )
         {
             navigateLoginCommand = new NavigateCommand(logicNavigationService);
+            navigateSaleProductCommand = new NavigateCommand(_navigateSaleProductCommand);
         }
     }
 }

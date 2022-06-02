@@ -3,6 +3,7 @@
     public partial class SaleDetailView : BaseEntity
     {
         public int IdSaleDetail { get; set; }
+        public int IdSell { get; set; }
         public int IdStock { get; set; }
         public string ProductName { get; set; } = null!;
         public string? ProductDescription { get; set; }

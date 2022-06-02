@@ -7,7 +7,7 @@ namespace WPF.ViewModel.Base
 {
     public class FormViewModel : ViewModelBase, INotifyDataErrorInfo
     {
-        private MessageViewModel _statusMessage;
+        private readonly MessageViewModel _statusMessage;
 
         public FormViewModel()
         {
@@ -29,11 +29,7 @@ namespace WPF.ViewModel.Base
             }
         }
 
-        public virtual bool canCreate
-        {
-            get => !HasErrors;
-            set { }
-        }
+        public virtual bool canCreate => !HasErrors;
 
         public string statusMessage
         {

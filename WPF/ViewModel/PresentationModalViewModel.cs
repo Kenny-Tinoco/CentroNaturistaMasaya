@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Domain.Logic;
 using Domain.Logic.Base;
+using MVVMGenericStructure.Commands;
 using MVVMGenericStructure.Services;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,6 +26,7 @@ namespace WPF.ViewModel
 
         private PresentationLogic logic { get; }
 
+
         public PresentationModalViewModel(ILogic _logic, IMessenger _messenger, INavigationService closeModal) : base(closeModal)
         {
             messenger = _messenger;
@@ -46,8 +48,6 @@ namespace WPF.ViewModel
             return viewModel;
         }
 
-
-
         private void SortPresentationListing(ICollectionView listing)
         {
             listing.SortDescriptions.Clear();
@@ -55,10 +55,7 @@ namespace WPF.ViewModel
                 .Add(new SortDescription(nameof(Presentation.IdPresentation), ListSortDirection.Descending));
         }
 
-        private async Task<IEnumerable<BaseEntity>> GetPresentationListing()
-        {
-            return await logic.GetAll();
-        }
+        private async Task<IEnumerable<BaseEntity>> GetPresentationListing() => await logic.GetAll();
 
         private ICommand _saveCommand;
         public ICommand saveCommand
@@ -73,25 +70,25 @@ namespace WPF.ViewModel
                 return _saveCommand;
             }
         }
-        private void RunSaveCommand(bool isEdition)
+        private async void RunSaveCommand(bool isEdition)
         {
-            Save(isEdition);
+            await Save(isEdition);
             Reset();
         }
 
-        private void Save(bool isEdition)
+        private async Task Save(bool isEdition)
         {
-            Save(GetEntity(), isEdition);
+            await Save(GetEntity(), isEdition);
             RefreshCatalogues(isEdition);
         }
 
-        private async void Save(Presentation parameter, bool isEdition)
+        private async Task Save(Presentation parameter, bool isEdition)
         {
             logic.entity = parameter;
             
             await new SaveCommand(logic).ExecuteAsync(isEdition);
 
-            listingViewModel.loadCommand.Execute(null);
+            await ((AsyncCommandBase)listingViewModel.loadCommand).ExecuteAsync(null);
         }
 
         private void RefreshCatalogues(bool isEdition)
@@ -188,7 +185,7 @@ namespace WPF.ViewModel
 
             Reset();
 
-            listingViewModel.loadCommand.Execute(null);
+            await ((AsyncCommandBase)listingViewModel.loadCommand).ExecuteAsync(null);
 
             RefreshCatalogues(true);
         }
@@ -205,9 +202,9 @@ namespace WPF.ViewModel
                 return _changeStatusCommand;
             }
         }
-        private void ChangeStatus(Presentation parameter)
+        private async void ChangeStatus(Presentation parameter)
         {
-            if (parameter == null)
+            if (parameter is null)
                 return;
 
             bool flag = parameter.Status;
@@ -219,14 +216,15 @@ namespace WPF.ViewModel
                     "'?\nTodas las ocurrencias de esta presentación serán ocultadas de los catalogos donde aparezca",
                     "Confirmar desactivación", MessageBoxButton.YesNo);
 
-                if (result == MessageBoxResult.Yes) parameter.Status = false;
+                if (result == MessageBoxResult.Yes) 
+                    parameter.Status = false;
             }
             else
                 parameter.Status = true;
 
             if (flag != parameter.Status)
             {
-                Save(parameter, true);
+                await Save(parameter, true);
                 RefreshCatalogues(true);
             }
         }
@@ -235,7 +233,7 @@ namespace WPF.ViewModel
         {
             get
             {
-                if (_entity == null)
+                if (_entity is null)
                     _entity = new Presentation();
                 return (Presentation)_entity;
             }
@@ -250,6 +248,7 @@ namespace WPF.ViewModel
                 OnPropertyChanged(nameof(id));
             }
         }
+
         public string name
         {
             get => entity.Name;
@@ -264,6 +263,7 @@ namespace WPF.ViewModel
                 OnPropertyChanged(nameof(name));
             }
         }
+        
         private bool status
         {
             get => entity.Status;

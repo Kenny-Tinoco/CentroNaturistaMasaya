@@ -1,0 +1,17 @@
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\DataAccess\bin\Release\net6.0\DataAccess.deps.json
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\DataAccess\bin\Release\net6.0\DataAccess.runtimeconfig.json
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\DataAccess\bin\Release\net6.0\DataAccess.dll
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\DataAccess\bin\Release\net6.0\ref\DataAccess.dll
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\DataAccess\bin\Release\net6.0\DataAccess.pdb
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\DataAccess\bin\Release\net6.0\Domain.dll
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\DataAccess\bin\Release\net6.0\Domain.pdb
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\DataAccess\obj\Release\net6.0\DataAccess.csproj.AssemblyReference.cache
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\DataAccess\obj\Release\net6.0\DataAccess.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\DataAccess\obj\Release\net6.0\DataAccess.AssemblyInfoInputs.cache
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\DataAccess\obj\Release\net6.0\DataAccess.AssemblyInfo.cs
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\DataAccess\obj\Release\net6.0\DataAccess.csproj.CoreCompileInputs.cache
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\DataAccess\obj\Release\net6.0\DataAccess.csproj.CopyComplete
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\DataAccess\obj\Release\net6.0\DataAccess.dll
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\DataAccess\obj\Release\net6.0\ref\DataAccess.dll
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\DataAccess\obj\Release\net6.0\DataAccess.pdb
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\DataAccess\obj\Release\net6.0\DataAccess.genruntimeconfig.cache

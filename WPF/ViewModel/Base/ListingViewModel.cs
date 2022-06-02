@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using WPF.Command.CRUD;
@@ -13,25 +12,28 @@ namespace WPF.ViewModel.Base
 {
     public class ListingViewModel : ViewModelBase
     {
-        public ICommand loadCommand{ get; }
+        public ICommand loadCommand { get; }
 
         public GetListing getListing;
+        
         public SortListing sortListing;
 
         private MessageViewModel _errorMessage { get; }
 
+        private SearchBarViewModel searchViewModel;
 
-        public ListingViewModel(GetListing _getListing, SortListing _sortListing = null)
+        public ListingViewModel(GetListing _getListing, SortListing _sortListing = null, FilterLogic _filter = null)
         {
             getListing = _getListing;
+
             sortListing = _sortListing;
 
             _errorMessage = new MessageViewModel();
 
+            searchViewModel = new(_filter);
+
             loadCommand = new LoadCommand(this);
         }
-
-
 
         public async Task Load()
         {
@@ -50,6 +52,7 @@ namespace WPF.ViewModel.Base
             var resultListing = await getListing();
 
             listing = CollectionViewSource.GetDefaultView(resultListing);
+            searchViewModel.listing = listing;
         }
 
         private bool _isLoading;
@@ -83,7 +86,7 @@ namespace WPF.ViewModel.Base
 
         public string errorMessage
         {
-            get =>_errorMessage.message;
+            get => _errorMessage.message;
             set
             {
                 _errorMessage.message = value;
@@ -92,17 +95,16 @@ namespace WPF.ViewModel.Base
                 OnPropertyChanged(nameof(isListingVisible));
             }
         }
-        
+
+        public string text
+        {
+            get => searchViewModel.text;
+            set => searchViewModel.text = value;
+        }
+
         public bool hasErrorMessage => _errorMessage.hasMessage;
 
         public bool isListingVisible => !hasErrorMessage && !isLoading;
-
-        public static bool ValidateSearchString(string parameter)
-        {
-            return
-                !parameter.Trim().Equals("Búscar") &&
-                !parameter.Trim().Equals("");
-        }
 
     }
 

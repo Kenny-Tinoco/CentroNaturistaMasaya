@@ -11,7 +11,7 @@
 
         public int IdEmployee { get; set; }
         public string Name { get; set; } = null!;
-        public string LastName { get; set; }
+        public string LastName { get; set; } = null!;
         public string? Address { get; set; }
         public bool Status { get; set; }
 

@@ -32,7 +32,7 @@ namespace WPF.ViewModel
         {
             logic = (ProviderLogic)_logic;
 
-            listingViewModel = new ListingViewModel(GetProviderListing, SortProviderListing);
+            listingViewModel = new ListingViewModel(GetProviderListing, SortProviderListing, PrividerFilter);
 
             openModalCommand = new NavigateCommand(modalNavigation);
 
@@ -44,7 +44,6 @@ namespace WPF.ViewModel
         }
 
 
-
         public static ProviderViewModel LoadViewModel(ILogic parameter, IMessenger messenger, INavigationService navigationService)
         {
             ProviderViewModel viewModel = new(parameter, messenger, navigationService);
@@ -54,7 +53,6 @@ namespace WPF.ViewModel
             return viewModel;
         }
 
-
         private void SortProviderListing(ICollectionView listing)
         {
             listing.SortDescriptions.Clear();
@@ -62,46 +60,7 @@ namespace WPF.ViewModel
                 .Add(new SortDescription(nameof(Provider.IdProvider), ListSortDirection.Descending));
         }
 
-        private async Task<IEnumerable<BaseEntity>> GetProviderListing()
-        {
-            return await logic.GetAll();
-        }
-
-        private string _searchText;
-        public string searchText
-        {
-            get
-            {
-                return _searchText;
-            }
-            set
-            {
-                _searchText = value;
-                Search();
-            }
-        }
-
-        private void Search()
-        {
-            if (ListingViewModel.ValidateSearchString(searchText))
-            {
-                listingViewModel.listing.Filter = Filter;
-            }
-            else if (searchText.Equals(""))
-            {
-                listingViewModel.listing.Filter = null;
-            }
-        }
-
-        private bool Filter(object obj)
-        {
-            if (obj is Provider element)
-            {
-                return logic.searchLogic(element, searchText);
-            }
-
-            return false;
-        }
+        private async Task<IEnumerable<BaseEntity>> GetProviderListing() => await logic.GetAll();
 
         public ICommand addModalCommand { get; }
         public void AddModal()
@@ -111,7 +70,6 @@ namespace WPF.ViewModel
             openModalCommand.Execute(-1);
         }
 
-
         public ICommand editModalCommand { get; }
         public void EditModal(Provider parameter)
         {
@@ -119,7 +77,6 @@ namespace WPF.ViewModel
 
             openModalCommand.Execute(-1);
         }
-
 
         private ICommand _changeStatusCommand;
         public ICommand changeStatusCommand
@@ -132,9 +89,9 @@ namespace WPF.ViewModel
                 return _changeStatusCommand;
             }
         }
-        private void ChangeStatus(Provider parameter)
+        private async void ChangeStatus(Provider parameter)
         {
-            if (parameter == null)
+            if (parameter is null)
                 return;
 
             bool flag = parameter.Status;
@@ -146,55 +103,54 @@ namespace WPF.ViewModel
                     "'?\nTodas las ocurrencias de este proveedor serán ocultadas de los catalogos donde aparezca",
                     "Confirmar desactivación", MessageBoxButton.YesNo);
 
-                if (result == MessageBoxResult.Yes) parameter.Status = false;
+                if (result == MessageBoxResult.Yes) 
+                    parameter.Status = false;
             }
             else
                 parameter.Status = true;
 
             if (flag != parameter.Status)
-                Save(parameter, true);
+                await Save(parameter, true);
         }
 
-        private void MessageReceived(object parameter)
+        private async void MessageReceived(object parameter)
         {
             var element = (ProviderModalMessage)parameter;
             var isEdition = element.operation is Operation.update;
 
             if (element.operation is Operation.create or Operation.update)
-                Save(element.entity, isEdition, element.viewModel);
+                await Save(element.entity, isEdition, element.viewModel);
             else
-                Delete(element.entity.IdProvider);
+                await Delete(element.entity.IdProvider);
+
+            await ((AsyncCommandBase)listingViewModel.loadCommand).ExecuteAsync(null);
         }
 
-
-        private async void Delete(int idProvider)
+        private async Task Delete(int idProvider)
         {
             await new DeleteCommand(logic).ExecuteAsync(idProvider);
-
-            listingViewModel.loadCommand.Execute(null);
         }
 
-        private void Save(Provider parameter, bool isEdition, FormViewModel viewModel = null)
+        private async Task Save(Provider parameter, bool isEdition, FormViewModel viewModel = null)
         {
             logic.entity = parameter;
-            new SaveCommand(logic, viewModel).Execute(isEdition);
+            await new SaveCommand(logic, viewModel).ExecuteAsync(isEdition);
+        }
 
-            listingViewModel.loadCommand.Execute(null);
+        private bool PrividerFilter(object parameter, string text)
+        {
+            if (parameter is not Provider)
+                return false;
+
+            return ProviderLogic.SearchLogic((Provider)parameter, text);
         }
 
         public override void Dispose()
         {
-            try
-            {
-                if (listingViewModel.listing != null)
-                    listingViewModel.listing.Filter = null;
-            }
-            catch
-            {
-            }
+            if (listingViewModel.listing is not null)
+                listingViewModel.listing.Filter = null;
 
             base.Dispose();
         }
-
     }
 }

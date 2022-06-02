@@ -33,7 +33,7 @@ using System.Windows.Shell;
 using WPF.ViewComponents.CustomControls;
 
 
-namespace WPF.View.ProductWindows {
+namespace WPF.View.ProductModule {
     
     
     /// <summary>

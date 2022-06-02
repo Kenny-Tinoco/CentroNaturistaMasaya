@@ -2,6 +2,7 @@
 {
     public abstract class DAOFactory
     {
+        public virtual AccountDAO accountDAO { get; } = null!;
         public virtual ConsultDAO consultDAO { get; } = null!;
         public virtual EmployeeDAO employeeDAO { get; } = null!;
         public virtual PatientDAO patientDAO { get; } = null!;

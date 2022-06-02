@@ -2,6 +2,12 @@
 
 namespace Domain.DAO
 {
+    public interface AccountDAO : BaseDAO<Account, object>
+    {
+        Task<Account?> GetByUserName(string userName);
+        Task<bool> VerifyPassword(string userName, string password);
+    }
+
     public interface ConsultDAO : BaseDAO<Consult, object> 
     {
     }
@@ -41,10 +47,12 @@ namespace Domain.DAO
 
     public interface SellDAO : BaseDAO<Sell, object>
     {
+        Task<int> GetLastedId();
     }
 
     public interface SaleDetailDAO : BaseDAO<SaleDetail, object>
     {
+        Task Create(IEnumerable<SaleDetail> elements);
     }
 
     public interface SupplyDAO : BaseDAO<Supply, object>

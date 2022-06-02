@@ -40,6 +40,19 @@
         <Setter Property="Foreground" Value="Black"/>
     </Style>
 
+
+    <Style x:Key="DataGridGenericColumnHeader" 
+           TargetType="{x:Type DataGridColumnHeader}">
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="BorderBrush" Value="White"/>
+        <Setter Property="BorderThickness" Value="0.8"/>
+        <Setter Property="Padding" Value="3"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Background" Value="{DynamicResource colorSecondary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeElementsDataGridHeader}"/>
+    </Style>
+
     <Style x:Key="CustomButtonStyle"
            TargetType="Button">
         <Setter Property="Template">

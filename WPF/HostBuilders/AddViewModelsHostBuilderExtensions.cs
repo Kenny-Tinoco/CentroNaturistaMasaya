@@ -5,6 +5,7 @@ using MVVMGenericStructure.Services;
 using MVVMGenericStructure.Stores;
 using System;
 using WPF.Services;
+using WPF.Stores;
 using WPF.ViewModel;
 using WPF.ViewModel.Components;
 
@@ -17,76 +18,98 @@ namespace WPF.HostBuilders
             host.ConfigureServices
             (services =>
             {
-                services.AddTransient<ProductSelectionModalViewModel>(s => createStockModalViewModel(s));
-                services.AddTransient<StockFormViewModel>(s => createStockFormViewModel(s));
-                services.AddTransient<PresentationModalViewModel>(s => createPresentationModalViewModel(s));
-                services.AddTransient<ProductModalFormViewModel>(s => createProductModalViewModel(s));
-                services.AddTransient<ProviderModalFormViewModel>(s => createProviderModalViewModel(s));
-                services.AddTransient<EmployeeModalFormViewModel>(s => createEmployeeModalViewModel(s));
+                services.AddTransient<ProductSelectionModalViewModel>(s => CreateStockModalViewModel(s));
+                services.AddTransient<StockFormViewModel>(s => CreateStockFormViewModel(s));
+                services.AddSingleton<ProductSaleViewModel>(s => CreateSellProductViewModel(s));
+                services.AddTransient<PresentationModalViewModel>(s => CreatePresentationModalViewModel(s));
+                services.AddTransient<ProductModalFormViewModel>(s => CreateProductModalViewModel(s));
+                services.AddTransient<ProviderModalFormViewModel>(s => CreateProviderModalViewModel(s));
+                services.AddTransient<EmployeeModalFormViewModel>(s => CreateEmployeeModalViewModel(s));
+                services.AddTransient<SalesChargeModalViewModel>(s => CreateSaleChargeModalViewModel(s));
 
-                services.AddSingleton<ProductViewModel>(s => createProductViewModel(s));
-                services.AddSingleton<ProviderViewModel>(s => createProviderViewModel(s));
-                services.AddSingleton<EmployeeViewModel>(s => createEmployeeViewModel(s));
-                services.AddSingleton<StockViewModel>(s => createStockViewModel(s));
-                services.AddSingleton<HomeViewModel>(s => createHomeViewModel(s));
+                services.AddSingleton<ProductViewModel>(s => CreateProductViewModel(s));
+                services.AddSingleton<ProviderViewModel>(s => CreateProviderViewModel(s));
+                services.AddSingleton<EmployeeViewModel>(s => CreateEmployeeViewModel(s));
+                services.AddSingleton<StockViewModel>(s => CreateStockViewModel(s));
+                services.AddSingleton<SaleViewModel>(s => CreateSaleViewModel(s));
+                services.AddSingleton<HomeViewModel>(s => CreateHomeViewModel(s));
+                services.AddSingleton<LoginViewModel>(s => CreateLoginViewModel(s));
 
-                services.AddSingleton<INavigationService>(s => createHomeNavigationService(s));
+                services.AddSingleton<INavigationService>(s => CreateLoginNavigationService(s));
 
-                services.AddTransient<TabControlMenuViewModel>(s => createTabControlMenuViewModel(s));
-                services.AddSingleton<ProductWindowsViewModel>(s => createProductWindowsViewModel(s));
-                services.AddSingleton<NavigationMenuViewModel>(s => createNavigationMenuViewModel(s));
+                services.AddTransient<TabControlMenuViewModel>(s => CreateTabControlMenuViewModel(s));
+                services.AddSingleton<ProductWindowsViewModel>(s => CreateProductWindowsViewModel(s));
+                services.AddSingleton<NavigationMenuViewModel>(s => CreateNavigationMenuViewModel(s));
 
-                services.AddSingleton<StartupViewModel>(s => createStartupViewModel(s));
+                services.AddSingleton<StartupViewModel>(s => CreateStartupViewModel(s));
             }
             );
 
             return host;
         }
-
-        private static HomeViewModel createHomeViewModel(IServiceProvider serviceProvider)
+        private static LoginViewModel CreateLoginViewModel(IServiceProvider servicesProvider)
+        {
+            return new LoginViewModel
+            (
+                servicesProvider.GetRequiredService<IAuthenticator>(),
+                CreateHomeNavigationService(servicesProvider),
+                servicesProvider.GetRequiredService<CloseModalNavigationService>()
+            );
+        }
+        private static HomeViewModel CreateHomeViewModel(IServiceProvider serviceProvider)
         {
             return new HomeViewModel
             (
-                createStockFormNavigationService(serviceProvider)
+                CreateStockFormNavigationService(serviceProvider),
+                CreateSellProductNavigationService(serviceProvider)
             );
         }
-        private static StockViewModel createStockViewModel(IServiceProvider serviceProvider)
+        private static StockViewModel CreateStockViewModel(IServiceProvider serviceProvider)
         {
             return StockViewModel.LoadViewModel
             (
                 serviceProvider.GetRequiredService<LogicFactory>().stockLogic,
                 serviceProvider.GetRequiredService<IMessenger>(),
-                createStockFormNavigationService(serviceProvider)
+                CreateStockFormNavigationService(serviceProvider)
             );
         }
-        private static ProductViewModel createProductViewModel(IServiceProvider servicesProvider)
+        private static SaleViewModel CreateSaleViewModel(IServiceProvider serviceProvider)
+        {
+            return SaleViewModel.LoadViewModel
+            (
+                serviceProvider.GetRequiredService<LogicFactory>().saleLogic,
+                serviceProvider.GetRequiredService<IMessenger>(),
+                CreateSellProductNavigationService(serviceProvider)
+            );
+        }
+        private static ProductViewModel CreateProductViewModel(IServiceProvider servicesProvider)
         {
             return ProductViewModel.LoadViewModel
             (
                 servicesProvider.GetRequiredService<LogicFactory>().productLogic,
                 servicesProvider.GetRequiredService<IMessenger>(),
-                createProductModalNavigationService(servicesProvider)
+                CreateProductModalNavigationService(servicesProvider)
             );
         }
-        private static ProviderViewModel createProviderViewModel(IServiceProvider servicesProvider)
+        private static ProviderViewModel CreateProviderViewModel(IServiceProvider servicesProvider)
         {
             return ProviderViewModel.LoadViewModel
             (
                 servicesProvider.GetRequiredService<LogicFactory>().providerLogic,
                 servicesProvider.GetRequiredService<IMessenger>(),
-                createProviderModalNavigationService(servicesProvider)
+                CreateProviderModalNavigationService(servicesProvider)
             );
         }
-        private static EmployeeViewModel createEmployeeViewModel(IServiceProvider servicesProvider)
+        private static EmployeeViewModel CreateEmployeeViewModel(IServiceProvider servicesProvider)
         {
             return EmployeeViewModel.LoadViewModel
             (
                 servicesProvider.GetRequiredService<LogicFactory>().employeeLogic,
                 servicesProvider.GetRequiredService<IMessenger>(),
-                createEmployeeModalNavigationService(servicesProvider)
+                CreateEmployeeModalNavigationService(servicesProvider)
             );
         }
-        private static StartupViewModel createStartupViewModel(IServiceProvider servicesProvider)
+        private static StartupViewModel CreateStartupViewModel(IServiceProvider servicesProvider)
         {
             return new StartupViewModel
             (
@@ -95,17 +118,28 @@ namespace WPF.HostBuilders
                 servicesProvider.GetRequiredService<NavigationMenuViewModel>()
             );
         }
-        private static StockFormViewModel createStockFormViewModel(IServiceProvider servicesProvider)
+        private static StockFormViewModel CreateStockFormViewModel(IServiceProvider servicesProvider)
         {
             return new StockFormViewModel
             (
-                servicesProvider.GetRequiredService<LogicFactory>(),
+                servicesProvider.GetRequiredService<LogicFactory>().stockLogic,
                 servicesProvider.GetRequiredService<IMessenger>(),
-                createStockNavigationService(servicesProvider),
-                createStockModalNavigationService(servicesProvider)
+                CreateStockNavigationService(servicesProvider),
+                CreateStockModalNavigationService(servicesProvider)
             );
         }
-        private static ProductWindowsViewModel createProductWindowsViewModel(IServiceProvider servicesProvider)
+        private static ProductSaleViewModel CreateSellProductViewModel(IServiceProvider servicesProvider)
+        {
+            return new ProductSaleViewModel
+            (
+                servicesProvider.GetRequiredService<LogicFactory>().saleLogic,
+                servicesProvider.GetRequiredService<IMessenger>(),
+                CreateSaleNavigationService(servicesProvider),
+                CreateSalesChargeModalNavigationService(servicesProvider),
+                servicesProvider.GetRequiredService<IAccountStore>()
+            );
+        }
+        private static ProductWindowsViewModel CreateProductWindowsViewModel(IServiceProvider servicesProvider)
         {
             return new ProductWindowsViewModel
             (
@@ -113,7 +147,7 @@ namespace WPF.HostBuilders
                 servicesProvider.GetRequiredService<StockViewModel>()
             );
         }
-        private static ProductSelectionModalViewModel createStockModalViewModel(IServiceProvider servicesProvider)
+        private static ProductSelectionModalViewModel CreateStockModalViewModel(IServiceProvider servicesProvider)
         {
             return new ProductSelectionModalViewModel
             (
@@ -121,7 +155,7 @@ namespace WPF.HostBuilders
                 servicesProvider.GetRequiredService<CloseModalNavigationService>()
             );
         }
-        private static ProviderModalFormViewModel createProviderModalViewModel(IServiceProvider servicesProvider)
+        private static ProviderModalFormViewModel CreateProviderModalViewModel(IServiceProvider servicesProvider)
         {
             return new ProviderModalFormViewModel
             (
@@ -130,7 +164,7 @@ namespace WPF.HostBuilders
                 servicesProvider.GetRequiredService<CloseModalNavigationService>()
             );
         }
-        private static EmployeeModalFormViewModel createEmployeeModalViewModel(IServiceProvider servicesProvider)
+        private static EmployeeModalFormViewModel CreateEmployeeModalViewModel(IServiceProvider servicesProvider)
         {
             return new EmployeeModalFormViewModel
             (
@@ -138,7 +172,15 @@ namespace WPF.HostBuilders
                 servicesProvider.GetRequiredService<CloseModalNavigationService>()
             );
         }
-        private static PresentationModalViewModel createPresentationModalViewModel(IServiceProvider servicesProvider)
+        private static SalesChargeModalViewModel CreateSaleChargeModalViewModel(IServiceProvider servicesProvider)
+        {
+            return new SalesChargeModalViewModel
+            (
+                servicesProvider.GetRequiredService<IMessenger>(),
+                servicesProvider.GetRequiredService<CloseModalNavigationService>()
+            );
+        }
+        private static PresentationModalViewModel CreatePresentationModalViewModel(IServiceProvider servicesProvider)
         {
             return PresentationModalViewModel.LoadViewModel
             (
@@ -147,7 +189,7 @@ namespace WPF.HostBuilders
                 servicesProvider.GetRequiredService<CloseModalNavigationService>()
             );
         }
-        private static ProductModalFormViewModel createProductModalViewModel(IServiceProvider servicesProvider)
+        private static ProductModalFormViewModel CreateProductModalViewModel(IServiceProvider servicesProvider)
         {
             return new ProductModalFormViewModel
             (
@@ -155,28 +197,37 @@ namespace WPF.HostBuilders
                 servicesProvider.GetRequiredService<CloseModalNavigationService>()
             );
         }
-        private static NavigationMenuViewModel createNavigationMenuViewModel(IServiceProvider serviceProvider)
+        private static NavigationMenuViewModel CreateNavigationMenuViewModel(IServiceProvider serviceProvider)
         {
             return new NavigationMenuViewModel
             (
-                createHomeNavigationService(serviceProvider),
-                createProductWindowsNavigationService(serviceProvider),
-                createProviderNavigationService(serviceProvider),
-                createEmployeeNavigationService(serviceProvider)
+                CreateLoginNavigationService(serviceProvider),
+                CreateHomeNavigationService(serviceProvider),
+                CreateProductWindowsNavigationService(serviceProvider),
+                CreateSaleNavigationService(serviceProvider),
+                CreateProviderNavigationService(serviceProvider),
+                CreateEmployeeNavigationService(serviceProvider)
             );
         }
-        private static TabControlMenuViewModel createTabControlMenuViewModel(IServiceProvider serviceProvider)
+        private static TabControlMenuViewModel CreateTabControlMenuViewModel(IServiceProvider serviceProvider)
         {
             return new TabControlMenuViewModel
             (
-                createStockNavigationService(serviceProvider),
-                createProductNavigationService(serviceProvider),
-                createPresentationModalNavigationService(serviceProvider)
+                CreateStockNavigationService(serviceProvider),
+                CreateProductNavigationService(serviceProvider),
+                CreatePresentationModalNavigationService(serviceProvider)
             );
         }
 
-
-        private static INavigationService createHomeNavigationService(IServiceProvider serviceProvider)
+        private static INavigationService CreateLoginNavigationService(IServiceProvider serviceProvider)
+        {
+            return new NavigationService<LoginViewModel>
+            (
+                serviceProvider.GetRequiredService<ModalNavigationStore>(),
+                () => serviceProvider.GetRequiredService<LoginViewModel>()
+            );
+        }
+        private static INavigationService CreateHomeNavigationService(IServiceProvider serviceProvider)
         {
             return new NavigationService<HomeViewModel>
             (
@@ -184,7 +235,7 @@ namespace WPF.HostBuilders
                 () => serviceProvider.GetRequiredService<HomeViewModel>()
             );
         }
-        private static INavigationService createProductWindowsNavigationService(IServiceProvider serviceProvider)
+        private static INavigationService CreateProductWindowsNavigationService(IServiceProvider serviceProvider)
         {
 
             return new NavigationService<ProductWindowsViewModel>
@@ -193,7 +244,7 @@ namespace WPF.HostBuilders
                 () => serviceProvider.GetRequiredService<ProductWindowsViewModel>()
             );
         }
-        private static INavigationService createProviderNavigationService(IServiceProvider serviceProvider)
+        private static INavigationService CreateProviderNavigationService(IServiceProvider serviceProvider)
         {
             return new NavigationService<ProviderViewModel>
             (
@@ -201,7 +252,7 @@ namespace WPF.HostBuilders
                 () => serviceProvider.GetRequiredService<ProviderViewModel>()
             );
         }
-        private static INavigationService createEmployeeNavigationService(IServiceProvider serviceProvider)
+        private static INavigationService CreateEmployeeNavigationService(IServiceProvider serviceProvider)
         {
             return new NavigationService<EmployeeViewModel>
             (
@@ -209,7 +260,7 @@ namespace WPF.HostBuilders
                 () => serviceProvider.GetRequiredService<EmployeeViewModel>()
             );
         }
-        private static INavigationService createStockNavigationService(IServiceProvider serviceProvider)
+        private static INavigationService CreateStockNavigationService(IServiceProvider serviceProvider)
         {
             return new TabControlNavigationService<StockViewModel>
             (
@@ -218,7 +269,15 @@ namespace WPF.HostBuilders
                 () => serviceProvider.GetRequiredService<TabControlMenuViewModel>()
             );
         }
-        private static INavigationService createProductNavigationService(IServiceProvider serviceProvider)
+        private static INavigationService CreateSaleNavigationService(IServiceProvider serviceProvider)
+        {
+            return new NavigationService<SaleViewModel>
+            (
+                serviceProvider.GetRequiredService<NavigationStore>(),
+                () => serviceProvider.GetRequiredService<SaleViewModel>()
+            );
+        }
+        private static INavigationService CreateProductNavigationService(IServiceProvider serviceProvider)
         {
             return new TabControlNavigationService<ProductViewModel>
             (
@@ -227,7 +286,7 @@ namespace WPF.HostBuilders
                 () => serviceProvider.GetRequiredService<TabControlMenuViewModel>()
             );
         }
-        private static INavigationService createStockModalNavigationService(IServiceProvider serviceProvider)
+        private static INavigationService CreateStockModalNavigationService(IServiceProvider serviceProvider)
         {
             return new NavigationService<ProductSelectionModalViewModel>
             (
@@ -235,7 +294,7 @@ namespace WPF.HostBuilders
                 () => serviceProvider.GetRequiredService<ProductSelectionModalViewModel>()
             );
         }
-        private static INavigationService createStockFormNavigationService(IServiceProvider serviceProvider)
+        private static INavigationService CreateStockFormNavigationService(IServiceProvider serviceProvider)
         {
             return new TabControlNavigationService<StockFormViewModel>
             (
@@ -244,7 +303,15 @@ namespace WPF.HostBuilders
                 () => serviceProvider.GetRequiredService<TabControlMenuViewModel>()
             );
         }
-        private static INavigationService createPresentationModalNavigationService(IServiceProvider serviceProvider)
+        private static INavigationService CreateSellProductNavigationService(IServiceProvider serviceProvider)
+        {
+            return new NavigationService<ProductSaleViewModel>
+            (
+                serviceProvider.GetRequiredService<NavigationStore>(),
+                () => serviceProvider.GetRequiredService<ProductSaleViewModel>()
+            );
+        }
+        private static INavigationService CreatePresentationModalNavigationService(IServiceProvider serviceProvider)
         {
             return new NavigationService<PresentationModalViewModel>
             (
@@ -252,7 +319,7 @@ namespace WPF.HostBuilders
                 () => serviceProvider.GetRequiredService<PresentationModalViewModel>()
             );
         }
-        private static INavigationService createProductModalNavigationService(IServiceProvider serviceProvider)
+        private static INavigationService CreateProductModalNavigationService(IServiceProvider serviceProvider)
         {
             return new NavigationService<ProductModalFormViewModel>
             (
@@ -260,7 +327,7 @@ namespace WPF.HostBuilders
                 () => serviceProvider.GetRequiredService<ProductModalFormViewModel>()
             );
         }
-        private static INavigationService createProviderModalNavigationService(IServiceProvider servicesProvider)
+        private static INavigationService CreateProviderModalNavigationService(IServiceProvider servicesProvider)
         {
             return new NavigationService<ProviderModalFormViewModel>
             (
@@ -268,12 +335,20 @@ namespace WPF.HostBuilders
                 () => servicesProvider.GetRequiredService<ProviderModalFormViewModel>()
             );
         }
-        private static INavigationService createEmployeeModalNavigationService(IServiceProvider servicesProvider)
+        private static INavigationService CreateEmployeeModalNavigationService(IServiceProvider servicesProvider)
         {
             return new NavigationService<EmployeeModalFormViewModel>
             (
                 servicesProvider.GetRequiredService<ModalNavigationStore>(),
                 () => servicesProvider.GetRequiredService<EmployeeModalFormViewModel>()
+            );
+        }
+        private static INavigationService CreateSalesChargeModalNavigationService(IServiceProvider servicesProvider)
+        {
+            return new NavigationService<SalesChargeModalViewModel>
+            (
+                servicesProvider.GetRequiredService<ModalNavigationStore>(),
+                () => servicesProvider.GetRequiredService<SalesChargeModalViewModel>()
             );
         }
     }

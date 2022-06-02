@@ -30,10 +30,10 @@ using System.Windows.Media.TextFormatting;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Shell;
-using WPF.ViewComponents.CustomControls;
+using WPF.ViewsComponent.CustomControls;
 
 
-namespace WPF.ViewComponents.Menus {
+namespace WPF.ViewsComponent.Menus {
     
     
     /// <summary>

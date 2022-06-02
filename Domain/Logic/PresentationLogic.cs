@@ -19,6 +19,7 @@ namespace Domain.Logic
                 Name = "",
                 Status = true
             };
+
             entity = element;
         }
     }

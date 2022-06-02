@@ -30,10 +30,10 @@ using System.Windows.Media.TextFormatting;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Shell;
-using WPF.ViewComponents.UserControls;
+using WPF.ViewsComponent.UserControls;
 
 
-namespace WPF.ViewComponents.UserControls {
+namespace WPF.ViewsComponent.UserControls {
     
     
     /// <summary>
@@ -44,7 +44,7 @@ namespace WPF.ViewComponents.UserControls {
         
         #line 7 "..\..\..\..\..\ViewComponents\UserControls\CustomButton.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
-        internal WPF.ViewComponents.UserControls.CustomButton root;
+        internal WPF.ViewsComponent.UserControls.CustomButton root;
         
         #line default
         #line hidden
@@ -88,7 +88,7 @@ namespace WPF.ViewComponents.UserControls {
             switch (connectionId)
             {
             case 1:
-            this.root = ((WPF.ViewComponents.UserControls.CustomButton)(target));
+            this.root = ((WPF.ViewsComponent.UserControls.CustomButton)(target));
             return;
             case 2:
             this.customButton = ((System.Windows.Controls.Button)(target));

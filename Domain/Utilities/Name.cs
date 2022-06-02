@@ -1,21 +1,18 @@
-﻿using System.Diagnostics.Contracts;
-
-namespace Domain.Utilities
+﻿namespace Domain.Utilities
 {
     public class Name
     {
-        private string name;
-        private string lastName;
+        private readonly string? name;
+        private readonly string? lastName;
 
 
         public Name(string name, string lastName)
         {
-            Contract.Requires(name != null && lastName != null);
             this.name = name;
             this.lastName = lastName;
         }
 
-        public string fullName()
+        public string FullName()
         {
             return name + " " + lastName;
         }

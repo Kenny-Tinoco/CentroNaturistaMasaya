@@ -7,6 +7,7 @@ namespace DataAccess.DaoSqlServer
     {
         private MasayaNaturistCenterDataBaseFactory _contextFactory;
 
+        private AccountDAO _accountDAO = null!;
         private ConsultDAO _consultDAO = null!;
         private EmployeeDAO _employeeDAO = null!;
         private PatientDAO _patientDAO = null!;
@@ -24,6 +25,17 @@ namespace DataAccess.DaoSqlServer
         public DAOFactorySQL(MasayaNaturistCenterDataBaseFactory contextFactory)
         {
             _contextFactory = contextFactory;
+        }
+
+        public override AccountDAO accountDAO
+        {
+            get
+            {
+                if (_accountDAO == null)
+                    _accountDAO = new AccountDAOSQL(_contextFactory);
+
+                return _accountDAO;
+            }
         }
 
         public override ConsultDAO consultDAO

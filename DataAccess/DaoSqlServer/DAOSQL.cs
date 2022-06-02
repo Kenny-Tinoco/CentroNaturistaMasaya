@@ -1,10 +1,68 @@
 ﻿using DataAccess.SqlServerDataSource;
 using Domain.DAO;
 using Domain.Entities;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.DaoSqlServer
 {
+    public class AccountDAOSQL : BaseDAOSQL<Account>, AccountDAO
+    {
+        public AccountDAOSQL(MasayaNaturistCenterDataBaseFactory dataBaseContext) : base(dataBaseContext)
+        {
+        }
+
+        public async Task<Account?> GetByUserName(string userName)
+        {
+            using MasayaNaturistCenterDataBase context = _contextFactory.CreateDbContext();
+
+            return await context.Accounts
+                .Include(a => a.EmployeeNavigation)
+                .FirstOrDefaultAsync(a => a.UserName == userName);
+        }
+
+        public async Task<bool> VerifyPassword(string userName, string password)
+        {
+            using MasayaNaturistCenterDataBase context = _contextFactory.CreateDbContext();
+
+            var result = new SqlParameter
+            {
+                ParameterName = "result",
+                SqlDbType = System.Data.SqlDbType.Bit,
+                Direction = System.Data.ParameterDirection.Output
+            };
+
+            await context.Database.ExecuteSqlRawAsync($"EXEC @result = [dbo].[sp_VerifyPassword] {userName}, {password}", result);
+
+            return (bool)result.Value;
+        }
+
+        public override async Task Create(Account element) => await CreateAndUpdateAccount(element, 0);
+
+        public override async Task Update(Account element) => await CreateAndUpdateAccount(element, 1);
+
+        private async Task CreateAndUpdateAccount(Account element, int operation)
+        {
+            if (element is null)
+                return;
+
+            using MasayaNaturistCenterDataBase context = _contextFactory.CreateDbContext();
+
+            await context
+                .Database
+                .ExecuteSqlRawAsync
+                (
+                    $"EXEC [dbo].[sp_AddOrUpdateAccount] " +
+                    $"{element.IdAccount}, " +
+                    $"{element.IdEmployee} " +
+                    $"{element.UserName} " +
+                    $"{element.Password} " +
+                    $"{element.Created} " +
+                    $"{operation}"
+                );
+        }
+    }
+
     public class ConsultDAOSQL : BaseDAOSQL<Consult>, ConsultDAO
     {
         public ConsultDAOSQL(MasayaNaturistCenterDataBaseFactory dataBaseContext) : base(dataBaseContext) { }
@@ -63,7 +121,7 @@ namespace DataAccess.DaoSqlServer
 
     public class ProviderPhoneDAOSQL : BaseDAOSQL<ProviderPhone>, ProviderPhoneDAO
     {
-        public ProviderPhoneDAOSQL(MasayaNaturistCenterDataBaseFactory dataBaseContext) : base(dataBaseContext) 
+        public ProviderPhoneDAOSQL(MasayaNaturistCenterDataBaseFactory dataBaseContext) : base(dataBaseContext)
         { }
 
         public async Task<IEnumerable<ProviderPhone>> GetWhere(int id)
@@ -93,12 +151,45 @@ namespace DataAccess.DaoSqlServer
 
     public class SaleDetailDAOSQL : BaseDAOSQL<SaleDetail>, SaleDetailDAO
     {
-        public SaleDetailDAOSQL(MasayaNaturistCenterDataBaseFactory dataBaseContext) : base(dataBaseContext) { }
+        public SaleDetailDAOSQL(MasayaNaturistCenterDataBaseFactory dataBaseContext) : base(dataBaseContext)
+        {
+        }
+
+        public async Task Create(IEnumerable<SaleDetail> elements)
+        {
+            using MasayaNaturistCenterDataBase context = _contextFactory.CreateDbContext();
+            
+            await context.Set<SaleDetail>().AddRangeAsync(elements);
+            await context.SaveChangesAsync();
+        }
     }
 
     public class SellDAOSQL : BaseDAOSQL<Sell>, SellDAO
     {
-        public SellDAOSQL(MasayaNaturistCenterDataBaseFactory dataBaseContext) : base(dataBaseContext) { }
+        public SellDAOSQL(MasayaNaturistCenterDataBaseFactory dataBaseContext) : base(dataBaseContext) 
+        {
+        }
+
+        protected override string nameTable => "Sell";
+
+        public async Task<int> GetLastedId()
+        {
+            using MasayaNaturistCenterDataBase context = _contextFactory.CreateDbContext();
+
+            if (nameTable is null)
+                throw new ArgumentException(nameof(nameTable));
+
+            var result = new SqlParameter
+            {
+                ParameterName = "result",
+                SqlDbType = System.Data.SqlDbType.Int,
+                Direction = System.Data.ParameterDirection.Output
+            };
+
+            await context.Database.ExecuteSqlRawAsync($"EXEC @result = [dbo].[sp_GetLastedId] {nameTable}", result);
+
+            return (int)result.Value;
+        }
     }
 
     public class StockDAOSQL : BaseDAOSQL<Stock>, StockDAO

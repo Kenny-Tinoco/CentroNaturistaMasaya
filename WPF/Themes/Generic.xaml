@@ -1,9 +1,9 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:customControls="clr-namespace:WPF.ViewComponents.CustomControls" 
-    xmlns:converters="clr-namespace:WPF.ViewComponents.Converters" 
-    xmlns:userControls="clr-namespace:WPF.ViewComponents.UserControls">
+    xmlns:customControls="clr-namespace:WPF.ViewsComponent.CustomControls" 
+    xmlns:converters="clr-namespace:WPF.ViewsComponent.Utilities" 
+    xmlns:userControls="clr-namespace:WPF.ViewsComponent.UserControls">
 
 
     <Style TargetType="{x:Type customControls:HamburgerMenu}">

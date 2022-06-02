@@ -181,3 +181,7 @@ C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Relea
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Release\net6.0-windows10.0.17763.0\Centro Naturista Masaya.dll
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Release\net6.0-windows10.0.17763.0\ref\Centro Naturista Masaya.dll
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Release\net6.0-windows10.0.17763.0\WPF.genruntimeconfig.cache
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Release\net6.0-windows10.0.17763.0\View\EmployeeWindows\EmployeeModal.g.cs
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Release\net6.0-windows10.0.17763.0\View\EmployeeWindows\EmployeePage.g.cs
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Release\net6.0-windows10.0.17763.0\View\SaleWindows\SalePage.g.cs
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Release\net6.0-windows10.0.17763.0\View\SaleWindows\SellProductPage.g.cs

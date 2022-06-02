@@ -13,6 +13,7 @@ namespace WPF.ViewModel
     {
         private readonly IMessenger messenger;
 
+
         public EmployeeModalFormViewModel(IMessenger _messenger, INavigationService closeModal) : base(closeModal)
         {
             messenger = _messenger;

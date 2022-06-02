@@ -32,7 +32,7 @@ using System.Windows.Shapes;
 using System.Windows.Shell;
 
 
-namespace WPF.ViewComponents.UserControls {
+namespace WPF.ViewsComponent.UserControls {
     
     
     /// <summary>
@@ -43,7 +43,7 @@ namespace WPF.ViewComponents.UserControls {
         
         #line 6 "..\..\..\..\..\ViewComponents\UserControls\PageTitle.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
-        internal WPF.ViewComponents.UserControls.PageTitle root;
+        internal WPF.ViewsComponent.UserControls.PageTitle root;
         
         #line default
         #line hidden
@@ -80,7 +80,7 @@ namespace WPF.ViewComponents.UserControls {
             switch (connectionId)
             {
             case 1:
-            this.root = ((WPF.ViewComponents.UserControls.PageTitle)(target));
+            this.root = ((WPF.ViewsComponent.UserControls.PageTitle)(target));
             return;
             }
             this._contentLoaded = true;

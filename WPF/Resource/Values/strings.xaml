@@ -7,6 +7,5 @@
     <System:String x:Key="ProductWindowTitle">Registros de productos</System:String>
     <System:String x:Key="ProviderWindowTitle">Registros de los proveedores</System:String>
     <System:String x:Key="EmployeeWindowTitle">Cátalogo de empleados</System:String>
-    <System:String x:Key="tituloVPPd">Lista datos de Productos</System:String>
-    <System:String x:Key="tituloVPPs">Lista datos de Presentaciones</System:String>
+    <System:String x:Key="SaleWindowTitle">Registros de ventas</System:String>
 </ResourceDictionary>

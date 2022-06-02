@@ -8,7 +8,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resource/image/arrow-right-circle.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resource/image/edit.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resource/image/image-default.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resource/logo-cnm.ico")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resource/image/back-black.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resource/image/cnm-icon.png")]

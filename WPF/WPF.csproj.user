@@ -2,76 +2,82 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup />
   <ItemGroup>
-    <Compile Update="ViewComponents\Menus\TabControlMenu.xaml.cs">
+    <Compile Update="ViewsComponent\Menus\TabControlMenu.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="ViewComponents\UserControls\ListViewControl.xaml.cs">
+    <Compile Update="ViewsComponent\UserControls\BindablePasswordBox.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="View\EmployeeWindows\EmployeeModal.xaml.cs">
+    <Compile Update="ViewsComponent\UserControls\ListViewControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="View\EmployeeWindows\EmployeePage.xaml.cs">
+    <Compile Update="View\EmployeeModule\EmployeeModal.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="View\HomeWindows\ConsultView.xaml.cs">
+    <Compile Update="View\EmployeeModule\EmployeePage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="View\HomeWindows\PurchaseView.xaml.cs">
+    <Compile Update="ViewsComponent\Menus\NavigationMenu.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="View\HomeWindows\SellView.xaml.cs">
+    <Compile Update="View\Login.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="ViewComponents\Menus\NavigationMenu.xaml.cs">
+    <Compile Update="View\ProductModule\Modals\PresentationModal.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="View\ProductWindows\Modals\PresentationModal.xaml.cs">
+    <Compile Update="View\ProductModule\Modals\ProductModal.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="View\ProductWindows\Modals\ProductModal.xaml.cs">
+    <Compile Update="View\ProductModule\ProductPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="View\ProductWindows\ProductPage.xaml.cs">
+    <Compile Update="View\ProductModule\ProductMainView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="View\ProductWindows\ProductWindowsView.xaml.cs">
+    <Compile Update="View\ProductModule\StockForm.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="View\ProductWindows\StockForm.xaml.cs">
+    <Compile Update="View\ProductModule\Modals\ProductSelectionModal.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="View\ProductWindows\Modals\ProductSelectionModal.xaml.cs">
+    <Compile Update="View\ProductModule\StockPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="View\ProductWindows\StockPage.xaml.cs">
+    <Compile Update="View\SaleModule\SalePage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\SaleModule\SalesChargeModal.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\SaleModule\ProductSalePage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="View\Startup.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="ViewComponents\UserControls\BackButton.xaml.cs">
+    <Compile Update="ViewsComponent\UserControls\BackButton.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="ViewComponents\UserControls\CustomButton.xaml.cs">
+    <Compile Update="ViewsComponent\UserControls\CustomButton.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="ViewComponents\UserControls\HomeButton.xaml.cs">
+    <Compile Update="ViewsComponent\UserControls\HomeButton.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="ViewComponents\UserControls\MenuButton.xaml.cs">
+    <Compile Update="ViewsComponent\UserControls\MenuButton.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="ViewComponents\UserControls\PageTitle.xaml.cs">
+    <Compile Update="ViewsComponent\UserControls\PageTitle.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="ViewComponents\UserControls\SearchBar.xaml.cs">
+    <Compile Update="ViewsComponent\UserControls\SearchBar.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="ViewComponents\UserControls\SpinBox.xaml.cs">
+    <Compile Update="ViewsComponent\UserControls\SpinBox.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="ViewComponents\UserControls\TitleBarButton.xaml.cs">
+    <Compile Update="ViewsComponent\UserControls\TitleBarButton.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -79,52 +85,49 @@
     <Page Update="Themes\Generic.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="ViewComponents\Menus\TabControlMenu.xaml">
+    <Page Update="ViewsComponent\Menus\TabControlMenu.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="ViewComponents\UserControls\ListViewControl.xaml">
+    <Page Update="ViewsComponent\UserControls\BindablePasswordBox.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\EmployeeWindows\EmployeeModal.xaml">
+    <Page Update="ViewsComponent\UserControls\ListViewControl.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\EmployeeWindows\EmployeePage.xaml">
+    <Page Update="View\EmployeeModule\EmployeeModal.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\HomeWindows\ConsultView.xaml">
+    <Page Update="View\EmployeeModule\EmployeePage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\HomeWindows\HomeView.xaml">
+    <Page Update="View\HomeModule\HomeView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\HomeWindows\PurchaseView.xaml">
+    <Page Update="ViewsComponent\Menus\NavigationMenu.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\HomeWindows\SellView.xaml">
+    <Page Update="View\Login.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="ViewComponents\Menus\NavigationMenu.xaml">
+    <Page Update="View\ProductModule\Modals\PresentationModal.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\ProductWindows\Modals\PresentationModal.xaml">
+    <Page Update="View\ProductModule\Modals\ProductModal.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\ProductWindows\Modals\ProductModal.xaml">
+    <Page Update="View\ProductModule\ProductPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\ProductWindows\ProductPage.xaml">
+    <Page Update="View\ProductModule\ProductMainView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\ProductWindows\ProductWindowsView.xaml">
+    <Page Update="View\ProductModule\StockForm.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\ProductWindows\StockForm.xaml">
+    <Page Update="View\ProductModule\Modals\ProductSelectionModal.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\ProductWindows\Modals\ProductSelectionModal.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="View\ProductWindows\StockPage.xaml">
+    <Page Update="View\ProductModule\StockPage.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Resource\Style\ControlStyles.xaml">
@@ -142,37 +145,46 @@
     <Page Update="Resource\Values\strings.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\ProviderWindows\ProviderModal.xaml">
+    <Page Update="View\ProviderModule\ProviderModal.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\ProviderWindows\ProviderPage.xaml">
+    <Page Update="View\ProviderModule\ProviderPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\SaleModule\SalePage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\SaleModule\SalesChargeModal.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\SaleModule\ProductSalePage.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\Startup.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="ViewComponents\UserControls\BackButton.xaml">
+    <Page Update="ViewsComponent\UserControls\BackButton.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="ViewComponents\UserControls\CustomButton.xaml">
+    <Page Update="ViewsComponent\UserControls\CustomButton.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="ViewComponents\UserControls\HomeButton.xaml">
+    <Page Update="ViewsComponent\UserControls\HomeButton.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="ViewComponents\UserControls\MenuButton.xaml">
+    <Page Update="ViewsComponent\UserControls\MenuButton.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="ViewComponents\UserControls\PageTitle.xaml">
+    <Page Update="ViewsComponent\UserControls\PageTitle.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="ViewComponents\UserControls\SearchBar.xaml">
+    <Page Update="ViewsComponent\UserControls\SearchBar.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="ViewComponents\UserControls\SpinBox.xaml">
+    <Page Update="ViewsComponent\UserControls\SpinBox.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="ViewComponents\UserControls\TitleBarButton.xaml">
+    <Page Update="ViewsComponent\UserControls\TitleBarButton.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

@@ -17,7 +17,9 @@ namespace WPF.ViewModel
     public class ProviderModalFormViewModel : ModalFormViewModel
     {
         private readonly IMessenger messenger;
+
         private readonly ProviderPhoneLogic logic;
+        
         public ProviderModalFormViewModel(IMessenger _messenger, ILogic _logic, INavigationService closeModal) : base(closeModal)
         {
             logic = (ProviderPhoneLogic)_logic;
@@ -25,7 +27,6 @@ namespace WPF.ViewModel
             messenger = _messenger;
             messenger.Subscribe<ProviderMessage>(this, ProviderMessageSent);
         }
-
 
         private async void ProviderMessageSent(object parameter)
         {
@@ -68,6 +69,7 @@ namespace WPF.ViewModel
             OnPropertyChanged(nameof(ruc));
             OnPropertyChanged(nameof(providerPhones));
         }
+        
         private Provider GetEntity()
         {
             var element = new Provider()
@@ -122,6 +124,7 @@ namespace WPF.ViewModel
                 return;
 
             messenger.Send(new ProviderModalMessage(entity, Operation.delete, this));
+
             exitCommand.Execute(null);
         }
 
@@ -171,6 +174,7 @@ namespace WPF.ViewModel
                 OnPropertyChanged(nameof(name));
             }
         }
+        
         public string address
         {
             get
@@ -191,6 +195,7 @@ namespace WPF.ViewModel
                 OnPropertyChanged(nameof(address));
             }
         }
+        
         public string ruc
         {
             get
@@ -217,7 +222,7 @@ namespace WPF.ViewModel
         {
             get
             {
-                if (providerPhones.Count() == 0)
+                if (providerPhones.Count == 0)
                     errorsViewModel.AddError(nameof(phone), "Debe ingresar al menos un teléfono");
 
                 return _phone;
@@ -233,17 +238,12 @@ namespace WPF.ViewModel
             }
         }
 
-
-
-
-
-
         private ObservableCollection<ProviderPhone> _providerPhones;
         public ObservableCollection<ProviderPhone> providerPhones
         {
             get
             {
-                if (_providerPhones == null)
+                if (_providerPhones is null)
                     _providerPhones = new ObservableCollection<ProviderPhone>();
 
                 return _providerPhones;
@@ -255,13 +255,12 @@ namespace WPF.ViewModel
             }
         }
 
-
         private ICommand _addPhoneCommand;
         public ICommand addPhoneCommand
         {
             get
             {
-                if (_addPhoneCommand == null)
+                if (_addPhoneCommand is null)
                     _addPhoneCommand = new RelayCommand(o => AddPhone());
 
                 return _addPhoneCommand;
@@ -281,7 +280,9 @@ namespace WPF.ViewModel
             if (isEditable)
             {
                 element.IdProvider = entity.IdProvider;
+
                 logic.entity = element;
+                
                 await new SaveCommand(logic).ExecuteAsync(false);
 
                 await RefreshProviderPhones();
@@ -291,36 +292,30 @@ namespace WPF.ViewModel
                 providerPhones.Add(element);
             }
 
-
             phone = string.Empty;
         }
 
         private bool IsRepeatedPhone(string parameter)
         {
-            if (providerPhones.Count() == 0)
+            if (providerPhones.Count == 0)
                 return false;
 
-            if (parameter == null)
+            if (parameter is null)
                 return true;
 
             foreach (ProviderPhone item in providerPhones)
-            {
                 if (item.Phone.Equals(parameter))
-                {
                     return true;
-                }
-            }
 
             return false;
         }
-
 
         private ICommand _editPhoneCommand;
         public ICommand editPhoneCommand
         {
             get
             {
-                if (_editPhoneCommand == null)
+                if (_editPhoneCommand is null)
                     _editPhoneCommand = new RelayCommand(parameter => EditPhone((ProviderPhone)parameter));
 
                 return _editPhoneCommand;
@@ -361,7 +356,7 @@ namespace WPF.ViewModel
         {
             get
             {
-                if (_deletePhoneCommand == null)
+                if (_deletePhoneCommand is null)
                     _deletePhoneCommand = new RelayCommand(parameter => DeletePhone((ProviderPhone)parameter));
 
                 return _deletePhoneCommand;
@@ -372,7 +367,6 @@ namespace WPF.ViewModel
         {
             if (element == null)
                 return;
-
 
             if (isEditable)
             {
@@ -389,7 +383,6 @@ namespace WPF.ViewModel
             itemSelected = null;
         }
 
-
         private ProviderPhone _itemSelected;
         public ProviderPhone itemSelected
         {
@@ -401,7 +394,7 @@ namespace WPF.ViewModel
             {
                 _itemSelected = value;
 
-                if (_itemSelected != null)
+                if (_itemSelected is not null)
                     phone = _itemSelected.Phone;
 
                 OnPropertyChanged(nameof(itemSelected));
@@ -411,7 +404,7 @@ namespace WPF.ViewModel
         }
 
         public bool isAdd => !isEditionOrDelete;
-        public bool isEditionOrDelete => itemSelected != null;
+        public bool isEditionOrDelete => itemSelected is not null;
 
         private async Task RefreshProviderPhones()
         {

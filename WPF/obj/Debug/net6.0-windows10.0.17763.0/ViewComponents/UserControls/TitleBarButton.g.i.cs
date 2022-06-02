@@ -32,7 +32,7 @@ using System.Windows.Shapes;
 using System.Windows.Shell;
 
 
-namespace WPF.ViewComponents.UserControls {
+namespace WPF.ViewsComponent.UserControls {
     
     
     /// <summary>
@@ -43,7 +43,7 @@ namespace WPF.ViewComponents.UserControls {
         
         #line 6 "..\..\..\..\..\ViewComponents\UserControls\TitleBarButton.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
-        internal WPF.ViewComponents.UserControls.TitleBarButton root;
+        internal WPF.ViewsComponent.UserControls.TitleBarButton root;
         
         #line default
         #line hidden
@@ -60,8 +60,8 @@ namespace WPF.ViewComponents.UserControls {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Centro Naturista Masaya;component/viewcomponents/usercontrols/titlebarbutton.xam" +
-                    "l", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/Centro Naturista Masaya;V1.0.0.0;component/viewcomponents/usercontrols/titlebarb" +
+                    "utton.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\ViewComponents\UserControls\TitleBarButton.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
@@ -80,7 +80,7 @@ namespace WPF.ViewComponents.UserControls {
             switch (connectionId)
             {
             case 1:
-            this.root = ((WPF.ViewComponents.UserControls.TitleBarButton)(target));
+            this.root = ((WPF.ViewsComponent.UserControls.TitleBarButton)(target));
             return;
             }
             this._contentLoaded = true;

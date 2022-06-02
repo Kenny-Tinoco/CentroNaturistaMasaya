@@ -8,6 +8,7 @@ namespace Domain.Logic
     {
         private readonly DAOFactory _daoFactory;
         private StockLogic? _stockLogic;
+        private SaleLogic? _saleLogic;
         private ProductLogic? _productLogic;
         private ProviderLogic? _providerLogic;
         private EmployeeLogic? _employeeLogic;
@@ -33,6 +34,16 @@ namespace Domain.Logic
                 if (_stockLogic == null)
                     _stockLogic = new StockLogic(_daoFactory, viewsCollections);
                 return _stockLogic;
+            }
+        }
+
+        public SaleLogic saleLogic
+        {
+            get
+            {
+                if (_saleLogic == null)
+                    _saleLogic = new SaleLogic(_daoFactory, viewsCollections);
+                return _saleLogic;
             }
         }
 

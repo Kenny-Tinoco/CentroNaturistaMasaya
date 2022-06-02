@@ -32,7 +32,7 @@ using System.Windows.Shapes;
 using System.Windows.Shell;
 
 
-namespace WPF.ViewComponents.UserControls {
+namespace WPF.ViewsComponent.UserControls {
     
     
     /// <summary>
@@ -43,7 +43,7 @@ namespace WPF.ViewComponents.UserControls {
         
         #line 6 "..\..\..\..\..\ViewComponents\UserControls\BackButton.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
-        internal WPF.ViewComponents.UserControls.BackButton root;
+        internal WPF.ViewsComponent.UserControls.BackButton root;
         
         #line default
         #line hidden
@@ -88,7 +88,7 @@ namespace WPF.ViewComponents.UserControls {
             switch (connectionId)
             {
             case 1:
-            this.root = ((WPF.ViewComponents.UserControls.BackButton)(target));
+            this.root = ((WPF.ViewsComponent.UserControls.BackButton)(target));
             return;
             case 2:
             this.backButton = ((System.Windows.Controls.Button)(target));

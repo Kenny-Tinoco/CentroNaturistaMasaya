@@ -10,8 +10,7 @@ namespace DataAccess.SqlServerDataSource
         {
         }
 
-        public MasayaNaturistCenterDataBase(DbContextOptions<MasayaNaturistCenterDataBase> options)
-            : base(options)
+        public MasayaNaturistCenterDataBase(DbContextOptions<MasayaNaturistCenterDataBase> options) : base(options)
         {
         }
 
@@ -39,14 +38,6 @@ namespace DataAccess.SqlServerDataSource
         public virtual DbSet<SupplyDetailView> SupplyDetailViews { get; set; } = null!;
         public virtual DbSet<SupplyView> SupplyViews { get; set; } = null!;
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    if (!optionsBuilder.IsConfigured)
-        //    {
-        //        optionsBuilder.UseSqlServer("Server=(local)\\SQLEXPRESS;Database=MasayaNaturistCenter;Trusted_Connection=True;");
-        //    }
-        //}
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Account>(entity =>
@@ -65,7 +56,7 @@ namespace DataAccess.SqlServerDataSource
                 entity.Property(e => e.IdEmployee).HasColumnName("idEmployee");
 
                 entity.Property(e => e.Password)
-                    .HasMaxLength(100)
+                    .HasColumnType("varbinary")
                     .HasColumnName("password");
 
                 entity.Property(e => e.UserName)
@@ -73,7 +64,7 @@ namespace DataAccess.SqlServerDataSource
                     .IsUnicode(false)
                     .HasColumnName("userName");
 
-                entity.HasOne(d => d.IdEmployeeNavigation)
+                entity.HasOne(d => d.EmployeeNavigation)
                     .WithMany(p => p.Accounts)
                     .HasForeignKey(d => d.IdEmployee)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -378,7 +369,7 @@ namespace DataAccess.SqlServerDataSource
             modelBuilder.Entity<SaleDetail>(entity =>
             {
                 entity.HasKey(e => e.IdSaleDetail)
-                    .HasName("PK__SaleDeta__B23385CD29B46516");
+                     .HasName("PK__SaleDeta__B23385CD29B46516");
 
                 entity.ToTable("SaleDetail");
 
@@ -405,6 +396,7 @@ namespace DataAccess.SqlServerDataSource
                     .HasForeignKey(d => d.IdStock)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__SaleDetai__idSto__4222D4EF");
+
             });
 
             modelBuilder.Entity<SaleDetailView>(entity =>
@@ -415,6 +407,7 @@ namespace DataAccess.SqlServerDataSource
 
                 entity.Property(e => e.IdSaleDetail).HasColumnName("idSaleDetail");
 
+                entity.Property(e => e.IdSell).HasColumnName("idSell");
                 entity.Property(e => e.IdStock).HasColumnName("idStock");
 
                 entity.Property(e => e.Presentation)
@@ -442,7 +435,7 @@ namespace DataAccess.SqlServerDataSource
             modelBuilder.Entity<Sell>(entity =>
             {
                 entity.HasKey(e => e.IdSell)
-                    .HasName("PK__Sell__C5AEA0D398F35ACB");
+                .HasName("PK__Sell__C5AEA0D398F35ACB");
 
                 entity.ToTable("Sell");
 
@@ -481,6 +474,8 @@ namespace DataAccess.SqlServerDataSource
                     .HasMaxLength(101)
                     .IsUnicode(false)
                     .HasColumnName("name");
+
+                entity.Property(e => e.Discount).HasColumnName("discount");
 
                 entity.Property(e => e.Total).HasColumnName("total");
             });
@@ -527,6 +522,7 @@ namespace DataAccess.SqlServerDataSource
                     .HasForeignKey(d => d.IdProduct)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Stock__idProduct__3B75D760");
+
             });
 
             modelBuilder.Entity<StockView>(entity =>
@@ -614,11 +610,6 @@ namespace DataAccess.SqlServerDataSource
 
                 entity.Property(e => e.Total).HasColumnName("total");
 
-                entity.HasOne(d => d.IdStockNavigation)
-                    .WithMany(p => p.SupplyDetails)
-                    .HasForeignKey(d => d.IdStock)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__SupplyDet__idSto__48CFD27E");
 
                 entity.HasOne(d => d.IdSupplyNavigation)
                     .WithMany(p => p.SupplyDetails)

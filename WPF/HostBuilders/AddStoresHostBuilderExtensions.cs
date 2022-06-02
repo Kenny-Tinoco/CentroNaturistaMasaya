@@ -13,6 +13,7 @@ namespace WPF.HostBuilders
             {
                 services.AddSingleton<NavigationStore>();
                 services.AddSingleton<ModalNavigationStore>();
+                services.AddSingleton<IAccountStore, AccountStore>();
             });
 
             return host;

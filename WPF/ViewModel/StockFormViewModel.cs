@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Logic;
+using Domain.Logic.Base;
 using Domain.Utilities;
 using MVVMGenericStructure.Commands;
 using MVVMGenericStructure.Services;
@@ -12,7 +13,7 @@ using WPF.Command.CRUD;
 using WPF.Command.Navigation;
 using WPF.Services;
 using WPF.Stores;
-using WPF.ViewComponents.Converters;
+using WPF.ViewsComponent.Utilities;
 using WPF.ViewModel.Base;
 
 namespace WPF.ViewModel
@@ -24,17 +25,17 @@ namespace WPF.ViewModel
         public ICommand backCommand { get; }
         public ICommand searchCommand { get; }
 
-        private readonly LogicFactory logicFactory;
+        private readonly StockLogic logic;
 
         public IMessenger messenger;
 
 
-        public StockFormViewModel(LogicFactory logic, IMessenger _messenger, INavigationService backNavigation, INavigationService modalNavigation)
+        public StockFormViewModel(ILogic _logic, IMessenger _messenger, INavigationService backNavigation, INavigationService modalNavigation)
         {
             backCommand = new NavigateCommand(backNavigation);
             searchCommand = new NavigateCommand(modalNavigation);
 
-            logicFactory = logic;
+            logic = (StockLogic)_logic;
 
             messenger = _messenger;
             messenger.Subscribe<Refresh>(this, RefreshPresentation);
@@ -48,7 +49,7 @@ namespace WPF.ViewModel
             if ((Refresh)parameter is not Refresh.presentation)
                 return;
 
-            presentations = (IEnumerable<Presentation>)await logicFactory.presentationModalLogic.GetActives();
+            presentations = await logic.GetPresentationListing();
         }
 
         private void ProductMessageSent(object parameter)
@@ -67,8 +68,8 @@ namespace WPF.ViewModel
 
         public async void Load(Stock element)
         {
-            presentations = (IEnumerable<Presentation>)await logicFactory.presentationModalLogic.GetActives();
-            IEnumerable<Product> catalogue = (IEnumerable<Product>)await logicFactory.productLogic.GetActives();
+            presentations = await logic.GetPresentationListing();
+            var catalogue = await logic.GetProductListing();
 
             messenger.Send(catalogue);
 
@@ -317,8 +318,8 @@ namespace WPF.ViewModel
 
         private void RunSaveCommand(bool isEdition)
         {
-            logicFactory.stockLogic.entity = GetStock();
-            new SaveCommand(logicFactory.stockLogic, this).Execute(isEdition);
+            logic.entity = GetStock();
+            new SaveCommand(logic, this).Execute(isEdition);
         }
         private Stock GetStock()
         {
@@ -337,7 +338,7 @@ namespace WPF.ViewModel
         }
 
 
-        public bool hasChangeableState => logicFactory.stockLogic.HasChangeableState(entity.IdStock) && isEditable;
+        public bool hasChangeableState => logic.HasChangeableState(entity.IdStock) && isEditable;
         public string changeableStateMessageError => !hasChangeableState ?
             "No se puede editar esta existencia debido a que el producto y/o la presentación no existen." +
             " \n\nVerifique que dichas entidades estén activadas." : "";

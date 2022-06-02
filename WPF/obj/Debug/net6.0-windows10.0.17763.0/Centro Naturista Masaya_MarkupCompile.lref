@@ -1,25 +1,27 @@
-﻿C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\GeneratedInternalTypeHelper.g.cs
+﻿
 
 FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\Resource\Resource.xaml;;
 FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\Themes\Generic.xaml;;
-FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\ViewComponents\Menus\NavigationMenu.xaml;;
-FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\ViewComponents\Menus\TabControlMenu.xaml;;
-FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\ViewComponents\UserControls\CustomButton.xaml;;
-FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\ViewComponents\UserControls\MenuButton.xaml;;
-FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\EmployeeWindows\EmployeeModal.xaml;;
-FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\EmployeeWindows\EmployeePage.xaml;;
-FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\HomeWindows\ConsultView.xaml;;
-FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\HomeWindows\HomeView.xaml;;
-FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\HomeWindows\PurchaseView.xaml;;
-FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\HomeWindows\SellView.xaml;;
-FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\ProductWindows\Modals\PresentationModal.xaml;;
-FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\ProductWindows\Modals\ProductModal.xaml;;
-FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\ProductWindows\Modals\ProductSelectionModal.xaml;;
-FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\ProductWindows\ProductPage.xaml;;
-FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\ProductWindows\ProductWindowsView.xaml;;
-FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\ProductWindows\StockForm.xaml;;
-FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\ProductWindows\StockPage.xaml;;
-FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\ProviderWindows\ProviderModal.xaml;;
-FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\ProviderWindows\ProviderPage.xaml;;
+FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\Login.xaml;;
 FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\Startup.xaml;;
+FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\ViewsComponent\Menus\NavigationMenu.xaml;;
+FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\ViewsComponent\Menus\TabControlMenu.xaml;;
+FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\ViewsComponent\UserControls\BindablePasswordBox.xaml;;
+FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\ViewsComponent\UserControls\CustomButton.xaml;;
+FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\ViewsComponent\UserControls\MenuButton.xaml;;
+FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\EmployeeModule\EmployeeModal.xaml;;
+FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\EmployeeModule\EmployeePage.xaml;;
+FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\HomeModule\HomeView.xaml;;
+FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\ProductModule\Modals\PresentationModal.xaml;;
+FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\ProductModule\Modals\ProductModal.xaml;;
+FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\ProductModule\Modals\ProductSelectionModal.xaml;;
+FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\ProductModule\ProductMainView.xaml;;
+FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\ProductModule\ProductPage.xaml;;
+FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\ProductModule\StockForm.xaml;;
+FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\ProductModule\StockPage.xaml;;
+FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\ProviderModule\ProviderModal.xaml;;
+FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\ProviderModule\ProviderPage.xaml;;
+FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\SaleModule\SalePage.xaml;;
+FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\SaleModule\SalesChargeModal.xaml;;
+FC:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\View\SaleModule\ProductSalePage.xaml;;
 
