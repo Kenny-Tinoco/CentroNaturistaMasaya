@@ -60,8 +60,8 @@ namespace WPF.ViewsComponent.UserControls {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Centro Naturista Masaya;component/viewscomponent/usercontrols/titlebarbutton.xam" +
-                    "l", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/Centro Naturista Masaya;V1.0.0.0;component/viewscomponent/usercontrols/titlebarb" +
+                    "utton.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\ViewsComponent\UserControls\TitleBarButton.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

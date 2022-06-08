@@ -9,7 +9,7 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using WPF.Command.CRUD;
+using WPF.Command.Generic;
 using WPF.Command.Navigation;
 using WPF.Services;
 using WPF.Stores;
@@ -40,6 +40,7 @@ namespace WPF.ViewModel
             editModalCommand = new RelayCommand(parameter => EditModal((Product)parameter));
 
             messenger = _messenger;
+            messenger.Subscribe<Refresh>(this, RefreshListing);
             messenger.Subscribe<ProductModalMessage>(this, MessageReceived);
         }
 
@@ -63,17 +64,14 @@ namespace WPF.ViewModel
         private async Task<IEnumerable<BaseEntity>> GetProductListing() => await logic.GetAll();
 
         public ICommand addModalCommand { get; }
-        private void AddModal()
-        {
-            messenger.Send(new ProductMessage(null, false));
-
-            openModalCommand.Execute(-1);
-        }
+        private void AddModal() => OpenModal(new ProductMessage(null, false));
 
         public ICommand editModalCommand { get; }
-        private void EditModal(Product parameter)
+        private void EditModal(Product parameter) => OpenModal(new ProductMessage(parameter, true));
+
+        private void OpenModal(ProductMessage message)
         {
-            messenger.Send( new ProductMessage(parameter, true));
+            messenger.Send(message);
 
             openModalCommand.Execute(-1);
         }
@@ -113,6 +111,12 @@ namespace WPF.ViewModel
                 await Save(parameter, true);
         }
 
+        private void RefreshListing(object parameter)
+        {
+            if(parameter is Refresh.product)
+                listingViewModel.loadCommand.Execute(null);
+        }
+
         private async void MessageReceived(object parameter)
         {
             var element = (ProductModalMessage)parameter;
@@ -123,9 +127,13 @@ namespace WPF.ViewModel
             else
                 await Delete(element.entity.IdProduct);
 
+            NotifyChanges();
+        }
 
+        private void NotifyChanges()
+        {
+            messenger.Send(Refresh.product);
             messenger.Send(Refresh.stock);
-            await ((AsyncCommandBase)listingViewModel.loadCommand).ExecuteAsync(null);
         }
 
         private async Task Delete(int idProduct)

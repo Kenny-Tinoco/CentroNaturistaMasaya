@@ -69,7 +69,8 @@ namespace WPF.ViewsComponent.Menus {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Centro Naturista Masaya;component/viewscomponent/menus/navigationmenu.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/Centro Naturista Masaya;V1.0.0.0;component/viewscomponent/menus/navigationmenu.x" +
+                    "aml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\ViewsComponent\Menus\NavigationMenu.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

@@ -211,6 +211,11 @@ namespace DataAccess.DaoSqlServer
         protected override string nameTable => "Stock";
     }
 
+    public class StockKeepingDAOSQL : BaseDAOSQL<StockKeeping>, StockKeepingDAO
+    {
+        public StockKeepingDAOSQL(MasayaNaturistCenterDataBaseFactory dataBaseContext) : base(dataBaseContext) { }
+    }
+
     public class SupplyDAOSQL : BaseDAOSQL<Supply>, SupplyDAO
     {
         public SupplyDAOSQL(MasayaNaturistCenterDataBaseFactory dataBaseContext) : base(dataBaseContext) { }

@@ -62,7 +62,8 @@ namespace WPF.View.ProviderModule {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Centro Naturista Masaya;component/view/providermodule/providerpage.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/Centro Naturista Masaya;V1.0.0.0;component/view/providermodule/providerpage.xaml" +
+                    "", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\View\ProviderModule\ProviderPage.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

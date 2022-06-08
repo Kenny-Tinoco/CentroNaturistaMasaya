@@ -44,6 +44,9 @@ namespace Domain.DAO
     {
         Stock GetStock(int id);
     }
+    public interface StockKeepingDAO : BaseDAO<StockKeeping, object>
+    {
+    }
 
     public interface SellDAO : BaseDAO<Sell, object>
     {

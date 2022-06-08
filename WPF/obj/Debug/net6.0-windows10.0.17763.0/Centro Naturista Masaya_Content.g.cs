@@ -8,6 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resource/image/image-default.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resource/logo-cnm.ico")]
 
 

@@ -8,11 +8,5 @@ namespace WPF.View.SaleModule
         {
             InitializeComponent();
         }
-
-        private void DiscountsComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            applyDiscountCheckBox.IsChecked = false;
-            applyDiscountCheckBox.Command.Execute(applyDiscountCheckBox.IsChecked);
-        }
     }
 }

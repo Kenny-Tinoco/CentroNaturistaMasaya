@@ -9,7 +9,7 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using WPF.Command.CRUD;
+using WPF.Command.Generic;
 using WPF.Command.Navigation;
 using WPF.Services;
 using WPF.Stores;
@@ -40,6 +40,7 @@ namespace WPF.ViewModel
             editModalCommand = new RelayCommand(parameter => EditModal((Employee)parameter));
 
             messenger = _messenger;
+            messenger.Subscribe<Refresh>(this, RefreshListings);
             messenger.Subscribe<EmployeeModalMessage>(this, MessageReceived);
         }
 
@@ -63,17 +64,14 @@ namespace WPF.ViewModel
         private async Task<IEnumerable<BaseEntity>> GetEmployeeListing() => await logic.GetAll();
 
         public ICommand addModalCommand { get; }
-        public void AddModal()
-        {
-            messenger.Send(new EmployeeMessage(null, false));
-
-            openModalCommand.Execute(-1);
-        }
+        public void AddModal() => OpenModal(new EmployeeMessage(null, false));
 
         public ICommand editModalCommand { get; }
-        public void EditModal(Employee parameter)
+        public void EditModal(Employee parameter) => OpenModal(new EmployeeMessage(parameter, true));
+
+        private void OpenModal(EmployeeMessage message)
         {
-            messenger.Send(new EmployeeMessage(parameter, true));
+            messenger.Send(message);
 
             openModalCommand.Execute(-1);
         }
@@ -113,6 +111,12 @@ namespace WPF.ViewModel
                 await Save(parameter, true);
         }
 
+        private void RefreshListings(object parameter)
+        {
+            if(parameter is Refresh.employee)
+                listingViewModel.loadCommand.Execute(null);
+        }
+
         private async void MessageReceived(object parameter)
         {
             var element = (EmployeeModalMessage)parameter;
@@ -121,9 +125,17 @@ namespace WPF.ViewModel
             if (element.operation is Operation.create or Operation.update)
                 await Save(element.entity, isEdition, element.viewModel);
             else
+            {
                 await Delete(element.entity.IdEmployee);
+                messenger.Send<Refresh>(Refresh.sale);
+            }
 
-            await ((AsyncCommandBase)listingViewModel.loadCommand).ExecuteAsync(null);
+            NotifyChanged();
+        }
+
+        private void NotifyChanged()
+        {
+            messenger.Send<Refresh>(Refresh.employee);
         }
 
         private async Task Delete(int idEmployee)

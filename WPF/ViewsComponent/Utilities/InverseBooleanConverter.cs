@@ -18,6 +18,5 @@ namespace WPF.ViewsComponent.Utilities
         {
             throw new NotSupportedException();
         }
-
     }
 }

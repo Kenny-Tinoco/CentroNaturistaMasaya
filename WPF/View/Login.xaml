@@ -1,108 +1,112 @@
 ﻿<UserControl x:Class="WPF.View.Login"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:customControls="clr-namespace:WPF.ViewsComponent.CustomControls" 
-             xmlns:usercontrols="clr-namespace:WPF.ViewsComponent.UserControls"
-             mc:Ignorable="d">
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:customControls="clr-namespace:WPF.ViewsComponent.CustomControls"
+			 xmlns:usercontrols="clr-namespace:WPF.ViewsComponent.UserControls"
+			 mc:Ignorable="d">
 
-    <customControls:Popup
-        TitleBar="{Binding titleBar}"
-            IconBar="/Resource/Image/employee.png"
-            ExitCommand="{Binding exitLoginCommand}">
+	<customControls:Popup TitleBar="{Binding titleBar}"
+						  IconBar="/Resource/Image/employee.png"
+						  ExitCommand="{Binding exitLoginCommand}">
 
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="5"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="12"/>
-                <RowDefinition Height="5"/>
-            </Grid.RowDefinitions>
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="5" />
+				<RowDefinition Height="auto" />
+				<RowDefinition Height="12" />
+				<RowDefinition Height="5" />
+			</Grid.RowDefinitions>
 
-            <Grid Margin="10 0"
-                  Grid.Row="1"
-                  Width="280">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="10"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="10"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="20"/>
-                    <RowDefinition Height="auto"/>
-                </Grid.RowDefinitions>
+			<Grid Margin="10 0"
+				  Grid.Row="1"
+				  Width="280">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="auto" />
+					<RowDefinition Height="auto" />
+					<RowDefinition Height="10" />
+					<RowDefinition Height="auto" />
+					<RowDefinition Height="auto" />
+					<RowDefinition Height="10" />
+					<RowDefinition Height="auto" />
+					<RowDefinition Height="auto" />
+					<RowDefinition Height="20" />
+					<RowDefinition Height="auto" />
+				</Grid.RowDefinitions>
 
-                <TextBlock Text="Centro Naturista Masaya"
-                           HorizontalAlignment="Center"
-                           Grid.Row="0"
-                           FontWeight="SemiBold"
-                           Style="{DynamicResource TextBlockStyle}"/>
-                <TextBlock Text="Inicio de Sesión" 
-                           Grid.Row="1"
-                           HorizontalAlignment="Center"
-                           Style="{DynamicResource TextBlockStyle}"/>
-                
-                <TextBlock Text="Usuario" 
-                           Grid.Row="3"
-                           Margin="0 0 0 5"
-                           Style="{DynamicResource TextBlockStyle}"/>
+				<TextBlock Text="Centro Naturista Masaya"
+						   HorizontalAlignment="Center"
+						   Grid.Row="0"
+						   FontWeight="SemiBold"
+						   Style="{DynamicResource TextBlockStyle}" />
+				<TextBlock Text="Inicio de Sesión"
+						   Grid.Row="1"
+						   HorizontalAlignment="Center"
+						   Style="{DynamicResource TextBlockStyle}" />
 
-                <TextBox Text="{Binding userName, UpdateSourceTrigger=PropertyChanged}" 
-                         FontSize="17"
-                         FontWeight="Normal"
-                         Grid.Row="4"
-                         Style="{DynamicResource TextBoxStyle}"
-                         TextAlignment="Left"/>
+				<TextBlock Text="Usuario:"
+						   Grid.Row="3"
+						   Margin="0 0 0 5"
+						   Style="{DynamicResource TextBlockStyle}" />
 
-                <TextBlock Text="Contraseña:" 
-                           Grid.Row="6" 
-                           Margin="0 0 0 5"
-                           Style="{DynamicResource TextBlockStyle}"/>
+				<TextBox Text="{Binding userName, UpdateSourceTrigger=PropertyChanged}"
+						 FontSize="17"
+						 FontWeight="Normal"
+						 Grid.Row="4"
+						 Style="{DynamicResource TextBoxStyle}"
+						 TextAlignment="Left" />
 
-                <usercontrols:BindablePasswordBox 
-                    Password="{Binding password, UpdateSourceTrigger=PropertyChanged}"
-                         FontSize="17"
-                         FontWeight="Normal"
-                         Grid.Row="7"/>
+				<TextBlock Text="Contraseña:"
+						   Grid.Row="6"
+						   Margin="0 0 0 5"
+						   Style="{DynamicResource TextBlockStyle}" />
 
-                    <Button Content="Iniciar sesión"
-                            FontWeight="Normal"
-                            Grid.Row="9"
-                            IsDefault="True"
-                            HorizontalAlignment="Center"
-                            Command="{Binding loginCommand}"
-                            FontSize="15"/>
+				<usercontrols:BindablePasswordBox Grid.Row="7"
+												  Password="{Binding password, UpdateSourceTrigger=PropertyChanged}"
+												  FontSize="17"
+												  FontWeight="Normal" />
 
-            </Grid>
+				<Button Content="Iniciar sesión"
+						FontWeight="Normal"
+						Grid.Row="9"
+						IsDefault="True"
+						HorizontalAlignment="Center"
+						Command="{Binding loginCommand}"
+						FontSize="15" />
 
-            <TextBlock Grid.Row="2"
-                       Grid.RowSpan="3"
-                       Margin="10 0"
-                       Text="{Binding errorMessage}"
-                       Visibility="{Binding hasErrorMessage,Converter={StaticResource BooleanToVisibilityConverter}}"
-                       VerticalAlignment="Bottom"
-                       FontSize="12"
-                       Foreground="Blue"/>
-        </Grid>
+			</Grid>
 
-    </customControls:Popup>
+			<TextBlock Grid.Row="2"
+					   Grid.RowSpan="3"
+					   Margin="10 0"
+					   Text="{Binding errorMessage}"
+					   Visibility="{Binding hasErrorMessage,Converter={StaticResource BooleanToVisibilityConverter}}"
+					   VerticalAlignment="Bottom"
+					   FontSize="12"
+					   Foreground="Blue" />
+		</Grid>
 
-    <UserControl.Resources>
-        <Style x:Key="GroupBoxStyle"
-               TargetType="GroupBox">
-            <Setter Property="FontSize" Value="16.5"/>
-            <Setter Property="BorderBrush" Value="Black"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-        </Style>
-        <Style x:Key="TextBlockStyle"
-               TargetType="TextBlock">
-            <Setter Property="FontSize" Value="17"/>
-            <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="FontWeight" Value="Normal"/>
-        </Style>
-    </UserControl.Resources>
+	</customControls:Popup>
+
+	<UserControl.Resources>
+		<Style x:Key="GroupBoxStyle"
+			   TargetType="GroupBox">
+			<Setter Property="FontSize"
+					Value="16.5" />
+			<Setter Property="BorderBrush"
+					Value="Black" />
+			<Setter Property="FontWeight"
+					Value="SemiBold" />
+		</Style>
+		<Style x:Key="TextBlockStyle"
+			   TargetType="TextBlock">
+			<Setter Property="FontSize"
+					Value="17" />
+			<Setter Property="Foreground"
+					Value="Black" />
+			<Setter Property="FontWeight"
+					Value="Normal" />
+		</Style>
+	</UserControl.Resources>
 </UserControl>

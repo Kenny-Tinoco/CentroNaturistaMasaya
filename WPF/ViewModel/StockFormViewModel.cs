@@ -9,12 +9,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
-using WPF.Command.CRUD;
+using WPF.Command.Generic;
 using WPF.Command.Navigation;
 using WPF.Services;
 using WPF.Stores;
 using WPF.ViewsComponent.Utilities;
 using WPF.ViewModel.Base;
+using System.Threading.Tasks;
 
 namespace WPF.ViewModel
 {
@@ -27,8 +28,7 @@ namespace WPF.ViewModel
 
         private readonly StockLogic logic;
 
-        public IMessenger messenger;
-
+        private readonly IMessenger messenger;
 
         public StockFormViewModel(ILogic _logic, IMessenger _messenger, INavigationService backNavigation, INavigationService modalNavigation)
         {
@@ -87,7 +87,6 @@ namespace WPF.ViewModel
         private void ResetValuesToProperties()
         {
             price = 0;
-            quantity = 1;
             entryDate = DateTime.Now;
             expiration = DateTime.Now.PlusOneYear();
             status = true;
@@ -107,7 +106,6 @@ namespace WPF.ViewModel
             };
 
             price = parameter.Price;
-            quantity = parameter.Quantity;
             status = parameter.Status;
             image = parameter.Image;
             InsertDates(parameter);
@@ -145,11 +143,10 @@ namespace WPF.ViewModel
 
 
         public ICommand saveCommand => new RelayCommand(parameter => Save((bool)parameter));
-        private void Save(bool isEdtion)
+        private async void Save(bool isEdtion)
         {
-            RunSaveCommand(isEditable);
+            await RunSaveCommand(isEditable);
 
-            messenger.Send(Refresh.stock);
             ResetValuesToProperties();
 
             if (isEdtion)
@@ -177,19 +174,6 @@ namespace WPF.ViewModel
                     errorsViewModel.AddError(nameof(price), "Ingrese un precio positivo");
 
                 OnPropertyChanged(nameof(price));
-            }
-        }
-
-        public int quantity
-        {
-            get
-            {
-                return entity.Quantity;
-            }
-            set
-            {
-                entity.Quantity = value;
-                OnPropertyChanged(nameof(quantity));
             }
         }
 
@@ -272,7 +256,7 @@ namespace WPF.ViewModel
 
 
         public ICommand changeStatusCommand => new RelayCommand(o => ChangeStatus());
-        private void ChangeStatus()
+        private async void ChangeStatus()
         {
             bool flag = status;
 
@@ -288,8 +272,8 @@ namespace WPF.ViewModel
 
             if (flag != status && isEditable)
             {
-                RunSaveCommand(true);
-                messenger.Send(Refresh.stock);
+                await RunSaveCommand(true);
+                messenger.Send(Refresh.sale);
             }
         }
 
@@ -316,11 +300,14 @@ namespace WPF.ViewModel
         }
 
 
-        private void RunSaveCommand(bool isEdition)
+        private async Task RunSaveCommand(bool isEdition)
         {
             logic.entity = GetStock();
-            new SaveCommand(logic, this).Execute(isEdition);
+            await new SaveCommand(logic, this).ExecuteAsync(isEdition);
+
+            messenger.Send(Refresh.stock);
         }
+
         private Stock GetStock()
         {
             return new Stock()
@@ -329,7 +316,7 @@ namespace WPF.ViewModel
                 IdProduct = currentProduct.IdProduct,
                 IdPresentation = currentPresentation.IdPresentation,
                 Price = price,
-                Quantity = quantity,
+                Quantity = 0,
                 EntryDate = entryDate,
                 Expiration = expiration,
                 Status = status,

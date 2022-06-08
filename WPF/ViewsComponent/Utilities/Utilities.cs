@@ -1,8 +1,12 @@
-﻿using Microsoft.Win32;
+﻿using Domain.Entities;
+using Domain.Entities.Views;
+using Microsoft.Win32;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Windows;
-using System.Windows.Media.Imaging;
 
 namespace WPF.ViewsComponent.Utilities
 {
@@ -41,5 +45,14 @@ namespace WPF.ViewsComponent.Utilities
         public static string GetName(this bool status) => status ? "Activo" : "Inactivo";
 
         public static DateTime PlusOneYear(this DateTime element) => element.AddYears(1);
+
+        public static IEnumerable<SaleDetail> ToEnumerable(this ObservableCollection<SaleDetailView> listing) =>
+            listing.Select(item => new SaleDetail()
+            {
+                IdStock = item.IdStock,
+                Quantity = item.Quantity,
+                Price = item.Price,
+                Total = item.Total
+            });
     }
 }

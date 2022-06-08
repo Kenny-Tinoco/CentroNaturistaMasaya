@@ -3,6 +3,7 @@ using Domain.Entities;
 using Domain.Entities.Views;
 using Domain.Services;
 using Domain.Utilities;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess
@@ -27,9 +28,16 @@ namespace DataAccess
             return await GetCollection<SaleDetailView>("SaleDetailView", Views.All);
         }
 
-        public async Task<IEnumerable<SellView>> SellViewCatalog()
+        public async Task<IEnumerable<SellView>> SellViewCatalog(Periods _period, int _idEmployee)
         {
-            return await GetCollection<SellView>("SellView", Views.All);
+            using MasayaNaturistCenterDataBase context = _contextFactory.CreateDbContext();
+
+            var period = new SqlParameter("period",(int)_period);
+            var idEmployee = new SqlParameter("idEmployee", _idEmployee);
+
+            return await context.SellViews
+            .FromSqlRaw("execute dbo.sp_GetSaleViewService @period, @idEmployee", period, idEmployee)
+            .ToListAsync();
         }
 
         public async Task<IEnumerable<StockView>> StockViewCatalog(Views type)
@@ -54,7 +62,7 @@ namespace DataAccess
             using MasayaNaturistCenterDataBase context = _contextFactory.CreateDbContext();
             
             if (nameTable is null)
-                throw new ArgumentException(nameof(nameTable));
+                throw new(nameof(nameTable));
 
             IEnumerable<Entity> entities;
 
@@ -75,7 +83,6 @@ namespace DataAccess
                 .ToListAsync();
 
             }
-
 
             return entities;
         }

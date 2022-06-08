@@ -4,6 +4,7 @@ using Domain.Entities.Views;
 using Domain.Logic.Base;
 using Domain.Services;
 using Domain.Utilities;
+using System.Dynamic;
 
 namespace Domain.Logic
 {
@@ -37,20 +38,18 @@ namespace Domain.Logic
             return elements;
         }
 
-        public async Task<IEnumerable<StockView>> GetStockListing()
+        public async Task<IEnumerable<(string name, int idEmployee)>> GetEmployees()
         {
-            var list = await viewsCollections.StockViewCatalog(Views.OnlyActive); 
-            
-            List<StockView> elements = new();
+            var list = await daoFactory.employeeDAO.GetActives();
 
-            foreach (var item in list)
-                if (item.Quantity > 0)
-                    elements.Add(item);
+            List<(string, int)> result = new();
 
-            return elements;
+            result.Add(("Todos los empleados", -1));
+            foreach (var o in list)
+                result.Add((o.Name + " " + o.LastName, o.IdEmployee));
+
+            return result;
         }
-        
-        public async Task<IEnumerable<Presentation>> GetPresentationListing() => await daoFactory.presentationDAO.GetActives();
 
         public async Task<bool> VerifyStockQuantity(int quantityyOnResquest, int idStock)
         {
@@ -65,27 +64,9 @@ namespace Domain.Logic
             return true;
         }
 
-        public async Task CreateDetail(IEnumerable<SaleDetail> detail)
-        {
-            if (detail is null)
-                throw new ArgumentNullException(nameof(detail));
+        public async Task<int> GetLastedIdSell() => await daoFactory.sellDAO.GetLastedId();
 
-            try
-            {
-                await daoFactory.saleDetailDAO.Create(detail);
-            }
-            catch (Exception) 
-            {
-                throw new ArgumentException(nameof(CreateDetail));
-            }
-        }
-
-        public async Task<int> GetLastedIdSell()
-        {
-            return await daoFactory.sellDAO.GetLastedId();
-        }
-
-        public static bool SearchLogic(SellView element, string parameter) => 
+        public static bool SearchLogic(SellView element, string parameter) =>
             element.IdEmployee.ToString().Contains(parameter) ||
             element.Name.ToLower().StartsWith(parameter.ToLower());
     }

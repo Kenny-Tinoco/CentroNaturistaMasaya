@@ -1,4 +1,5 @@
 ﻿using Domain.Logic;
+using Domain.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MVVMGenericStructure.Services;
@@ -26,6 +27,8 @@ namespace WPF.HostBuilders
                 services.AddTransient<ProviderModalFormViewModel>(s => CreateProviderModalViewModel(s));
                 services.AddTransient<EmployeeModalFormViewModel>(s => CreateEmployeeModalViewModel(s));
                 services.AddTransient<SalesChargeModalViewModel>(s => CreateSaleChargeModalViewModel(s));
+                services.AddTransient<StockViewerViewModel>(s => CreateStockViewerViewModel(s));
+                services.AddTransient<StockKeepingViewModel>(s => CreateStockKeepingViewModel(s));
 
                 services.AddSingleton<ProductViewModel>(s => CreateProductViewModel(s));
                 services.AddSingleton<ProviderViewModel>(s => CreateProviderViewModel(s));
@@ -35,7 +38,7 @@ namespace WPF.HostBuilders
                 services.AddSingleton<HomeViewModel>(s => CreateHomeViewModel(s));
                 services.AddSingleton<LoginViewModel>(s => CreateLoginViewModel(s));
 
-                services.AddSingleton<INavigationService>(s => CreateLoginNavigationService(s));
+                services.AddSingleton(s => CreateLoginNavigationService(s));
 
                 services.AddTransient<TabControlMenuViewModel>(s => CreateTabControlMenuViewModel(s));
                 services.AddSingleton<ProductWindowsViewModel>(s => CreateProductWindowsViewModel(s));
@@ -47,6 +50,7 @@ namespace WPF.HostBuilders
 
             return host;
         }
+
         private static LoginViewModel CreateLoginViewModel(IServiceProvider servicesProvider)
         {
             return new LoginViewModel
@@ -70,7 +74,8 @@ namespace WPF.HostBuilders
             (
                 serviceProvider.GetRequiredService<LogicFactory>().stockLogic,
                 serviceProvider.GetRequiredService<IMessenger>(),
-                CreateStockFormNavigationService(serviceProvider)
+                CreateStockFormNavigationService(serviceProvider),
+                CreateStockKeepingNavigationService(serviceProvider)
             );
         }
         private static SaleViewModel CreateSaleViewModel(IServiceProvider serviceProvider)
@@ -128,15 +133,26 @@ namespace WPF.HostBuilders
                 CreateStockModalNavigationService(servicesProvider)
             );
         }
+        private static StockKeepingViewModel CreateStockKeepingViewModel(IServiceProvider servicesProvider)
+        {
+            return new StockKeepingViewModel
+            (
+                servicesProvider.GetRequiredService<IMessenger>(),
+                servicesProvider.GetRequiredService<LogicFactory>().stockKeepingLogic,
+                servicesProvider.GetRequiredService<CloseModalNavigationService>()
+            );
+        }
         private static ProductSaleViewModel CreateSellProductViewModel(IServiceProvider servicesProvider)
         {
             return new ProductSaleViewModel
             (
                 servicesProvider.GetRequiredService<LogicFactory>().saleLogic,
                 servicesProvider.GetRequiredService<IMessenger>(),
+                servicesProvider.GetRequiredService<IAccountStore>(),
+                servicesProvider.GetRequiredService<IBuyStockService>(),
+                servicesProvider.GetRequiredService<StockViewerViewModel>(),
                 CreateSaleNavigationService(servicesProvider),
-                CreateSalesChargeModalNavigationService(servicesProvider),
-                servicesProvider.GetRequiredService<IAccountStore>()
+                CreateSalesChargeModalNavigationService(servicesProvider)
             );
         }
         private static ProductWindowsViewModel CreateProductWindowsViewModel(IServiceProvider servicesProvider)
@@ -218,6 +234,15 @@ namespace WPF.HostBuilders
                 CreatePresentationModalNavigationService(serviceProvider)
             );
         }
+        private static StockViewerViewModel CreateStockViewerViewModel(IServiceProvider servicesProvider)
+        {
+            return new StockViewerViewModel
+                (
+                    servicesProvider.GetRequiredService<LogicFactory>().stockViewerLogic,
+                    servicesProvider.GetRequiredService<IMessenger>()
+                );
+        }
+
 
         private static INavigationService CreateLoginNavigationService(IServiceProvider serviceProvider)
         {
@@ -301,6 +326,14 @@ namespace WPF.HostBuilders
                 serviceProvider.GetRequiredService<NavigationStore>(),
                 () => serviceProvider.GetRequiredService<StockFormViewModel>(),
                 () => serviceProvider.GetRequiredService<TabControlMenuViewModel>()
+            );
+        }
+        private static INavigationService CreateStockKeepingNavigationService(IServiceProvider serviceProvider)
+        {
+            return new NavigationService<StockKeepingViewModel>
+            (
+                serviceProvider.GetRequiredService<ModalNavigationStore>(),
+                () => serviceProvider.GetRequiredService<StockKeepingViewModel>()
             );
         }
         private static INavigationService CreateSellProductNavigationService(IServiceProvider serviceProvider)

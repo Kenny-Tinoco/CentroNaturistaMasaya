@@ -159,3 +159,8 @@ C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\View\SaleModule\SalesChargeModal.baml
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\View\SaleModule\ProductSalePage.g.cs
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\View\SaleModule\ProductSalePage.baml
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\View\SaleModule\StockViewer.g.cs
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\View\SaleModule\StockViewer.baml
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\bin\Debug\net6.0-windows10.0.17763.0\Resource\Image\image-default.png
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\View\ProductModule\Modals\StockKeepingModal.g.cs
+C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\obj\Debug\net6.0-windows10.0.17763.0\View\ProductModule\Modals\StockKeepingModal.baml

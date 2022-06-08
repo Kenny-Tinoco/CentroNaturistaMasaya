@@ -2,12 +2,13 @@
 using Domain.Entities.Views;
 using Domain.Logic;
 using Domain.Logic.Base;
+using Domain.Utilities;
 using MVVMGenericStructure.Commands;
 using MVVMGenericStructure.Services;
 using MVVMGenericStructure.ViewModels;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Dynamic;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using WPF.Command.Navigation;
@@ -20,8 +21,6 @@ namespace WPF.ViewModel
     public class SaleViewModel : ViewModelBase
     {
         public ICommand openFormCommand { get; }
-
-        private readonly IMessenger messenger;
 
         private readonly SaleLogic logic;
 
@@ -36,8 +35,7 @@ namespace WPF.ViewModel
 
             openFormCommand = new NavigateCommand(formNavigation);
 
-            messenger = _messenger;
-            messenger.Subscribe<Refresh>(this, RefreshSalesChanges);
+            _messenger.Subscribe<Refresh>(this, RefreshListings);
             selectedItem = null;
         }
 
@@ -46,9 +44,24 @@ namespace WPF.ViewModel
         {
             SaleViewModel viewModel = new(parameter, messenger, navigationService);
 
-            viewModel.listingViewModel.loadCommand.Execute(null);
+            viewModel.Load();
 
             return viewModel;
+        }
+
+        public async void Load()
+        {
+            await LoadEmployees();
+            listingViewModel.loadCommand.Execute(null);
+        }
+
+        private async Task LoadEmployees()
+        {
+            employeeListing = new();
+            var list = await logic.GetEmployees();
+
+            foreach (var (name, idEmployee) in list)
+                employeeListing.Add(new { name = name, idEmployee = idEmployee });
         }
 
         private void SortSaleListing(ICollectionView listing)
@@ -58,19 +71,19 @@ namespace WPF.ViewModel
                 .Add(new SortDescription(nameof(Sell.IdSell), ListSortDirection.Descending));
         }
 
-        private async Task<IEnumerable<BaseEntity>> GetSaleListing() => 
-            await logic.viewsCollections.SellViewCatalog();
+        private async Task<IEnumerable<BaseEntity>> GetSaleListing() =>
+            await logic.viewsCollections.SellViewCatalog(periodSelected.period, employeeSelected.idEmployee);
 
-        private void RefreshSalesChanges(object parameter)
+        private async void RefreshListings(object parameter)
         {
-            if ((Refresh)parameter is not Refresh.sale)
-                return;
-
-            listingViewModel.loadCommand.Execute(null);
+            if (parameter is Refresh.sale)
+                listingViewModel.loadCommand.Execute(null);
+            else if (parameter is Refresh.employee)
+                await LoadEmployees();
         }
 
         private SellView _selectedItem;
-        public SellView selectedItem 
+        public SellView selectedItem
         {
             get => _selectedItem;
             set
@@ -103,9 +116,82 @@ namespace WPF.ViewModel
             }
         }
 
-        public ICommand closeDetails => new RelayCommand(o => 
-        { 
-            selectedItem = null; 
+        private List<dynamic> _employeeListing;
+        public List<dynamic> employeeListing
+        {
+            get => _employeeListing;
+            set
+            {
+                _employeeListing = value;
+                OnPropertyChanged(nameof(employeeListing));
+
+                OnPropertyChanged(nameof(employeeSelected));
+            }
+        }
+
+        private dynamic _employeeSelected;
+        public dynamic employeeSelected
+        {
+            get
+            {
+                if (_employeeSelected is null && employeeListing.Count != 0)
+                {
+                    _employeeSelected = new ExpandoObject();
+                    _employeeSelected = employeeListing[0];
+                }
+
+                return _employeeSelected;
+            }
+            set
+            {
+                _employeeSelected = value;
+                OnPropertyChanged(nameof(employeeSelected));
+
+                listingViewModel.loadCommand.Execute(null);
+            }
+        }
+
+        private List<Period> _periodListing;
+        public List<Period> periodListing
+        {
+            get
+            {
+                if (_periodListing is null)
+                    _periodListing = new List<Period>
+                    {
+                        new(Periods.today,"Hoy"),
+                        new(Periods.thisWeek, "Esta semana"),
+                        new(Periods.thisMonth, "Este mes"),
+                        new(Periods.allTime, "Todo el tiempo")
+                    };
+
+                return _periodListing;
+            }
+        }
+
+        private Period _periodSelected;
+        public Period periodSelected
+        {
+            get
+            {
+                if (_periodSelected is null)
+                    _periodSelected = periodListing[0];
+
+                return _periodSelected;
+            }
+            set
+            {
+                _periodSelected = value;
+                OnPropertyChanged(nameof(periodSelected));
+
+                listingViewModel.loadCommand.Execute(null);
+            }
+        }
+
+
+        public ICommand closeDetails => new RelayCommand(o =>
+        {
+            selectedItem = null;
         });
 
         private bool SaleViewFilter(object parameter, string text)
@@ -123,5 +209,17 @@ namespace WPF.ViewModel
 
             base.Dispose();
         }
+    }
+
+    public class Period
+    {
+        public Period(Periods period, string name)
+        {
+            this.name = name;
+            this.period = period;
+        }
+
+        public string name { get; }
+        public Periods period { get; }
     }
 }

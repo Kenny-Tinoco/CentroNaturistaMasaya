@@ -2,19 +2,17 @@
 using Domain.Entities.Views;
 using Domain.Logic;
 using Domain.Logic.Base;
+using Domain.Services;
 using Domain.Utilities;
 using MVVMGenericStructure.Commands;
 using MVVMGenericStructure.Services;
+using MVVMGenericStructure.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Data;
 using System.Windows.Input;
-using WPF.Command.CRUD;
+using WPF.Command;
 using WPF.Command.Navigation;
 using WPF.Services;
 using WPF.Stores;
@@ -25,150 +23,65 @@ namespace WPF.ViewModel
     public class ProductSaleViewModel : FormViewModel
     {
         public ICommand backCommand { get; }
+        private ICommand buyStockCommand { get; }
+        public ICommand salesChargeModalCommand { get; }
 
-        public ICommand openModalCommand { get; }
-
-        private readonly SaleLogic logic;
-
-        private readonly SearchBarViewModel searchViewModel;
+        public StockViewerViewModel stockViewer { get; }
 
         private readonly IMessenger messenger;
 
-        private readonly IAccountStore accountStore;
+        private readonly SaleLogic logic;
 
-        public ProductSaleViewModel(ILogic _logic, IMessenger _messenger, INavigationService backNavigation, INavigationService openModal, IAccountStore _accountStore)
+        public ProductSaleViewModel(
+            ILogic _logic,
+            IMessenger _messenger,
+            IAccountStore _accountStore,
+            IBuyStockService buyStockService,
+            ViewModelBase _stockViewer,
+            INavigationService backNavigation,
+            INavigationService modalNavigationService)
         {
             backCommand = new NavigateCommand(backNavigation);
-            openModalCommand = new NavigateCommand(openModal);
-            accountStore = _accountStore;
+            salesChargeModalCommand = new NavigateCommand(modalNavigationService);
+            buyStockCommand = new BuyStockCommand(this, buyStockService);
+            employee = _accountStore.currentAccount.EmployeeNavigation;
 
-            searchViewModel = new(StockViewFilter);
+            stockViewer = (StockViewerViewModel)_stockViewer;
 
             logic = (SaleLogic)_logic;
 
             messenger = _messenger;
-            messenger.Subscribe<SaveSale>(this, TheSaleEnds);
+            messenger.Subscribe<StockViewerMessage>(this, AddDetail);
 
+            detailListing = new();
             detailListing.CollectionChanged += DetailListing_Changed;
-
-            InitializeDiscounts();
-        }
-
-
-        private void TheSaleEnds(object parameter)
-        {
-            var message = (SaveSale)parameter;
-            if (message is SaveSale.save)
-                Save();
-        }
-
-        private void InitializeDiscounts()
-        {
-            discounts = new List<Discount>
-            {
-                new Discount(0.0, ""),
-                new Discount(0.05, "5%"),
-                new Discount(0.10, "10%"),
-                new Discount(0.15, "15%")
-            };
-        }
-
-        private void DetailListing_Changed(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            OnPropertyChanged(nameof(total));
-            OnPropertyChanged(nameof(canCreateSale));
-            OnPropertyChanged(nameof(discountInCordobas));
-        }
-
-        private void ResetValuesToProperties()
-        {
-            detailListing.Clear();
-            entity = null;
-            selectedDiscount = null;
-
-            OnPropertyChanged(nameof(total));
         }
 
         public ICommand finishSaleCommand => new RelayCommand(o =>
         {
-            messenger.Send(new SaleChargeModalMessage(total));
-            openModalCommand.Execute(null);
+            messenger.Send(new SaleChargeModalMessage(total, buyStockCommand));
+            salesChargeModalCommand.Execute(null);
         });
 
-        private async void Save()
+        public void Reset()
         {
-            await RunSaveCommand();
-
             messenger.Send(Refresh.sale);
             messenger.Send(Refresh.stock);
-            ResetValuesToProperties();
-            LoadTheProducts();
+            ResetProperties();
         }
 
-        private async Task RunSaveCommand()
+        private void ResetProperties()
         {
-            logic.entity = GetSale();
-            await new SaveCommand(logic, this).ExecuteAsync(false);
+            selectedDiscount = null;
+            detailListing.Clear();
+
+            OnPropertyChanged(nameof(total));
+            OnPropertyChanged(nameof(date));
         }
 
-        private Sell GetSale()
-        {
-            var element = new Sell()
-            {
-                IdEmployee = employee.IdEmployee,
-                Date = date,
-                Discount = _discount,
-                Total = entity.Total
-            };
+        public Employee employee { get; }
 
-            var details = GetDetail();
-
-            foreach (var _item in details)
-                element.SaleDetails.Add(_item);
-
-            return element;
-        }
-
-        private List<SaleDetail> GetDetail()
-        {
-            List<SaleDetail> list = new();
-
-            list.AddRange(detailListing.Select(item => new SaleDetail()
-            {
-                IdStock = item.IdStock,
-                Quantity = item.Quantity,
-                Price = item.Price,
-                Total = item.Total
-            }));
-
-            return list;
-        }
-
-        public string text
-        {
-            get => searchViewModel.text;
-            set => searchViewModel.text = value;
-        }
-
-        private bool StockViewFilter(object parameter, string text)
-        {
-            if (parameter is not StockView)
-                return false;
-
-            return StockLogic.SearchLogic((StockView)parameter, text);
-        }
-
-        private Sell _entity;
-        private Sell entity
-        {
-            get
-            {
-                if (_entity is null)
-                    _entity = new Sell();
-                return _entity;
-            }
-            set => _entity = value;
-        }
+        public DateTime date => DateTime.Now;
 
         private double _total;
         public double total
@@ -180,240 +93,72 @@ namespace WPF.ViewModel
                 foreach (var item in detailListing)
                     _total += item.Total;
 
-                entity.Total = (1 - _discount) * _total;
-
-                return entity.Total;
+                return discountApplies ? (1 - discount) * _total : _total;
             }
+        }
+
+
+        public ObservableCollection<SaleDetailView> detailListing { get; }
+
+        private bool _stockViewerIsVisible;
+        public bool stockViewerIsVisible
+        {
+            get => _stockViewerIsVisible;
             set
             {
-                entity.Total = value;
-                OnPropertyChanged(nameof(total));
+                _stockViewerIsVisible = value;
+                OnPropertyChanged(nameof(stockViewerIsVisible));
             }
         }
 
-        public DateTime date
+        private void AddDetail(object _parameter)
         {
-            get
-            {
-                entity.Date = DateTime.Now;
-                return entity.Date;
-            }
-            set
-            {
-                entity.Date = value;
-                OnPropertyChanged(nameof(date));
-            }
+            var parameter = ((StockViewerMessage)_parameter).element;
+
+            SaleDetailView result = GetIndexDetail(parameter.IdStock);
+
+            if (result is not null)
+                IncreaseQuantityOfDetail(parameter, result);
+            else
+                detailListing.Add(new SaleDetailView()
+                {
+                    IdStock = parameter.IdStock,
+                    ProductName = parameter.Name,
+                    ProductDescription = parameter.Description,
+                    Presentation = parameter.Presentation,
+                    Quantity = 1,
+                    Price = parameter.Price,
+                    Total = parameter.Price
+                });
         }
 
-        public Employee employee => accountStore.currentAccount.EmployeeNavigation;
-
-
-        public ICommand searchProductsInTheSelector => new RelayCommand(o => SearchProductsInTheSelector());
-
-        private void SearchProductsInTheSelector()
+        private void IncreaseQuantityOfDetail(StockView parameter, SaleDetailView element)
         {
-            productSelectorIsVisible = !productSelectorIsVisible;
-        }
-
-        private ObservableCollection<SaleDetailView> _detailListing;
-        public ObservableCollection<SaleDetailView> detailListing
-        {
-            get
-            {
-                if (_detailListing is null)
-                    _detailListing = new ObservableCollection<SaleDetailView>();
-
-                return _detailListing;
-            }
-        }
-
-        private bool _productSelectorIsVisible;
-        public bool productSelectorIsVisible
-        {
-            get => _productSelectorIsVisible;
-            set
-            {
-                _productSelectorIsVisible = value;
-                OnPropertyChanged(nameof(productSelectorIsVisible));
-            }
-        }
-
-        private StockView _stockSelected;
-        public StockView stockSelected
-        {
-            get => _stockSelected;
-            set
-            {
-                _stockSelected = value;
-                OnPropertyChanged(nameof(stockSelected));
-            }
-        }
-
-        private IEnumerable<StockView> _stockListing;
-        public IEnumerable<StockView> stockListing
-        {
-            get => _stockListing;
-            set
-            {
-                _stockListing = value;
-                OnPropertyChanged(nameof(stockListing));
-                OnPropertyChanged(nameof(hasStockListing));
-            }
-        }
-
-        private ICollectionView _listing;
-        private ICollectionView listing
-        {
-            get
-            {
-                if (_listing is null)
-                    _listing = CollectionViewSource.GetDefaultView(stockListing);
-
-                return _listing;
-            }
-        }
-        private void Sort()
-        {
-            listing.SortDescriptions
-                .Clear();
-
-            listing.SortDescriptions
-                .Add(new SortDescription(nameof(StockView.Name), ListSortDirection.Ascending));
-        }
-
-        private ObservableCollection<Presentation> _presentations;
-        public ObservableCollection<Presentation> presentations
-        {
-            get
-            {
-                if (_presentations is null)
-                    _presentations = new ObservableCollection<Presentation>();
-
-                return _presentations;
-            }
-            set
-            {
-                _presentations = value;
-                OnPropertyChanged(nameof(presentations));
-            }
-        }
-
-        private Presentation _presentationSelected;
-        public Presentation presentationSelected
-        {
-            get => _presentationSelected;
-            set
-            {
-                _presentationSelected = value;
-
-                if (_presentationSelected is not null)
-                    searchViewModel.text = _presentationSelected.Name;
-
-                OnPropertyChanged(nameof(presentationSelected));
-            }
-        }
-
-
-        private ICommand _addProductToDetail;
-        public ICommand addProductToDetail
-        {
-            get
-            {
-                if (_addProductToDetail is null)
-                    _addProductToDetail = new RelayCommand(parameter => AddProductToDetail((StockView)parameter));
-                return _addProductToDetail;
-            }
-        }
-
-        private void AddProductToDetail(StockView parameter)
-        {
-            if (parameter is null)
+            if (element.Quantity >= parameter.Quantity + 1)
                 return;
 
-            int index = GetIndexDetailOf(parameter.IdStock);
-
-            if (index != -1)
-            {
-                var item = detailListing[index];
-
-                if (item.Quantity >= parameter.Quantity + 1)
-                    return;
-
-                item.Quantity++;
-                item.Total = item.Quantity * item.Price;
-
-                detailListing.RemoveAt(index);
-                detailListing.Insert(index, item);
-
-                if (item.Quantity > parameter.Quantity)
-                    detailSelected = item;
-
-                return;
-            }
-
-            var element = new SaleDetailView()
-            {
-                IdStock = parameter.IdStock,
-                ProductName = parameter.Name,
-                ProductDescription = parameter.Description,
-                Presentation = parameter.Presentation,
-                Quantity = 1,
-                Price = parameter.Price
-            };
-
+            element.Quantity++;
             element.Total = element.Quantity * element.Price;
 
-            detailListing.Add(element);
+            UpdateDetail(element, detailListing.IndexOf(element));
+
+            if (element.Quantity > parameter.Quantity)
+                detailSelected = element;
         }
 
-        private int GetIndexDetailOf(int idStock)
-        {
-            SaleDetailView element = null;
+        private SaleDetailView GetIndexDetail(int idStock) =>
+            detailListing.Find(item => item.IdStock == idStock);
 
-            element = detailListing.Find(item => item.IdStock == idStock);
-            if (element is null)
-                return -1;
-
-            var i = detailListing.IndexOf(element);
-            return i;
-        }
-
-        public ICommand closeSelector => new RelayCommand(o => productSelectorIsVisible = false);
-
-
-        private ICommand _deleteDetail;
-        public ICommand deleteDetail
-        {
-            get
-            {
-                if (_deleteDetail is null)
-                    _deleteDetail = new RelayCommand(parameter => DeleteDetail((SaleDetailView)parameter));
-                return _deleteDetail;
-            }
-        }
-
-        private void DeleteDetail(SaleDetailView parameter)
+        public ICommand deleteDetail => new RelayCommand(parameter =>
         {
             if (parameter is null)
                 return;
 
-            detailListing.Remove(parameter);
+            detailListing.Remove((SaleDetailView)parameter);
             detailSelected = null;
-        }
+        });
 
-
-        private ICommand _editDetail;
-        public ICommand editDetail
-        {
-            get
-            {
-                if (_editDetail is null)
-                    _editDetail = new RelayCommand(parameter => EditDetail((SaleDetailView)parameter));
-                return _editDetail;
-            }
-        }
-
-        private void EditDetail(SaleDetailView parameter)
+        public ICommand editDetail => new RelayCommand(parameter =>
         {
             if (parameter is null)
                 return;
@@ -424,16 +169,21 @@ namespace WPF.ViewModel
                 OnPropertyChanged(nameof(canCreateSale));
             }
 
-            parameter.Quantity = quantity;
-            parameter.Total = parameter.Price * quantity;
+            var _parameter = (SaleDetailView)parameter;
 
-            var index = detailListing.IndexOf(parameter);
+            _parameter.Quantity = quantity;
+            _parameter.Total = _parameter.Price * quantity;
 
+            UpdateDetail(_parameter, detailListing.IndexOf(_parameter));
+
+            detailSelected = null;
+        });
+
+        private void UpdateDetail(SaleDetailView parameter, int index)
+        {
             detailListing.Remove(parameter);
             detailListing.Insert(index, parameter);
-            detailSelected = null;
         }
-
 
         private SaleDetailView _detailSelected;
         public SaleDetailView detailSelected
@@ -444,9 +194,7 @@ namespace WPF.ViewModel
                 _detailSelected = value;
 
                 if (_detailSelected is not null)
-                { 
                     quantity = _detailSelected.Quantity;
-                }
 
                 OnPropertyChanged(nameof(detailSelected));
                 OnPropertyChanged(nameof(detailsEditorIsVisible));
@@ -475,6 +223,7 @@ namespace WPF.ViewModel
                 OnPropertyChanged(nameof(quantity));
             }
         }
+
         private async void VerifyStockQuantity()
         {
             if (!await logic.VerifyStockQuantity(_quantity, detailSelected.IdStock))
@@ -491,110 +240,83 @@ namespace WPF.ViewModel
 
         public bool canCreateSale => !hasDetailErrors && (detailListing.Count != 0);
 
-        private bool _detailsEditorIsVisible;
-        public bool detailsEditorIsVisible
+        public bool detailsEditorIsVisible => _detailSelected is not null;
+
+        private ICollection<Discount> _discounts;
+        public ICollection<Discount> discounts
         {
             get
             {
-                _detailsEditorIsVisible = _detailSelected != null;
-                return _detailsEditorIsVisible;
-            }
-            set
-            {
-                _detailsEditorIsVisible = value;
-                OnPropertyChanged(nameof(detailsEditorIsVisible));
-            }
-        }
+                if (_discounts is null)
+                    _discounts = new List<Discount>
+                    {
+                        new(0.0, ""),
+                        new(0.05, "5%"),
+                        new(0.10, "10%"),
+                        new(0.15, "15%")
+                    };
 
-        public ICollection<Discount> discounts { get; private set; }
-
-        public ICommand loadTheProducts => new RelayCommand(o => LoadTheProducts());
-
-        private async void LoadTheProducts()
-        {
-            isLoading = true;
-            stockListing = null;
-            stockListing = await logic.GetStockListing();
-            Sort();
-
-            var presentationList = await logic.GetPresentationListing();
-
-            presentations.Clear();
-            foreach (var item in presentationList)
-                presentations.Add(item);
-
-            isLoading = false;
-
-            searchViewModel.listing = listing;
-        }
-
-        private bool _isLoading;
-        public bool isLoading
-        {
-            get => _isLoading;
-            set
-            {
-                _isLoading = value;
-                OnPropertyChanged(nameof(isLoading));
+                return _discounts;
             }
         }
-        public bool hasStockListing => stockListing != null;
 
-        public double discountInCordobas
-        {
-            get
-            {
-                double aux;
-                if (_discount == 0 && _discountAux != 0)
-                    aux = _discountAux * _total;
-                else
-                    aux = _discount * _total;
-
-                return aux;
-            }
-            private set { }
-        }
-
-        private Discount _selectedDiscoumt = new();
-        public Discount selectedDiscount
+        private Discount? _selectedDiscoumt = new();
+        public Discount? selectedDiscount
         {
             get => _selectedDiscoumt;
             set
             {
                 _selectedDiscoumt = value;
-                GetDiscount(_selectedDiscoumt);
                 OnPropertyChanged(nameof(selectedDiscount));
+
+                GetDiscount(_selectedDiscoumt);
+                discountApplies = false;
+
+                OnPropertyChanged(nameof(discountedAmount));
             }
         }
-        private void GetDiscount(Discount parameter)
+
+        private void GetDiscount(Discount? parameter)
         {
-            if (parameter is null)
-                return;
-
-            _discount = parameter.discount;
-            _discountAux = 0;
-            OnPropertyChanged(nameof(discountInCordobas));
-        }
-
-        private double _discount = 0;
-        private double _discountAux;
-
-        public ICommand applyDiscountCommand => new RelayCommand(parameter =>
-        {
-            var isChecked = (bool)parameter;
-
-            if (!isChecked)
-            {
-                _discountAux = _discount;
-                _discount = 0;
-            }
+            if (parameter is not null)
+                discount = ((Discount)parameter).discount;
             else
-                if (_discountAux != 0)
-                _discount = _discountAux;
+                discount = 0;
+        }
 
+        public double discount { get; private set; }
+        public double discountedAmount => discount * _total;
+
+        private bool _discountApplies;
+        public bool discountApplies
+        {
+            get => _discountApplies;
+            set
+            {
+                _discountApplies = value;
+                OnPropertyChanged(nameof(discountApplies));
+
+                OnPropertyChanged(nameof(total));
+            }
+        }
+
+        private void DetailListing_Changed(object sender, NotifyCollectionChangedEventArgs e)
+        {
             OnPropertyChanged(nameof(total));
-            if (_discount != 0)
-                OnPropertyChanged(nameof(discountInCordobas));
-        });
+            OnPropertyChanged(nameof(canCreateSale));
+            OnPropertyChanged(nameof(discountedAmount));
+        }
+    }
+
+    public struct Discount
+    {
+        public Discount(double discount, string name)
+        {
+            this.discount = discount;
+            this.name = name;
+        }
+
+        public double discount { get; }
+        public string name { get; }
     }
 }

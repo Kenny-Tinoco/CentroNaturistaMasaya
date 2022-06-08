@@ -1,196 +1,203 @@
 ﻿<Window x:Class="WPF.View.Startup"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:viewmodel="clr-namespace:WPF.ViewModel"
-        xmlns:componentsViewModels="clr-namespace:WPF.ViewModel.Components"
-        xmlns:viewsProductWindows="clr-namespace:WPF.View.ProductModule"
-        xmlns:viewsMenus="clr-namespace:WPF.ViewsComponent.Menus"
-        xmlns:viewsHomeWindows="clr-namespace:WPF.View.HomeModule"
-        xmlns:usercontrols="clr-namespace:WPF.ViewsComponent.UserControls" 
-        xmlns:custom="clr-namespace:WPF.ViewsComponent.CustomControls" 
-        xmlns:viewsProviderWindows="clr-namespace:WPF.View.ProviderModule"
-        xmlns:viewsEmployeeWindows="clr-namespace:WPF.View.EmployeeModule"
-        xmlns:viewsSaleWindows="clr-namespace:WPF.View.SaleModule"
-        xmlns:local="clr-namespace:WPF.View" 
-        mc:Ignorable="d"
-        WindowStyle="None"
-        ResizeMode="NoResize"
-        Height="700"
-        Width="1300">
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:viewmodel="clr-namespace:WPF.ViewModel"
+		xmlns:componentsViewModels="clr-namespace:WPF.ViewModel.Components"
+		xmlns:viewsProductModule="clr-namespace:WPF.View.ProductModule"
+		xmlns:viewsMenus="clr-namespace:WPF.ViewsComponent.Menus"
+		xmlns:viewsHomeWindows="clr-namespace:WPF.View.HomeModule"
+		xmlns:usercontrols="clr-namespace:WPF.ViewsComponent.UserControls"
+		xmlns:custom="clr-namespace:WPF.ViewsComponent.CustomControls"
+		xmlns:viewsProviderWindows="clr-namespace:WPF.View.ProviderModule"
+		xmlns:viewsEmployeeWindows="clr-namespace:WPF.View.EmployeeModule"
+		xmlns:viewsSaleWindows="clr-namespace:WPF.View.SaleModule"
+		xmlns:local="clr-namespace:WPF.View"
+		mc:Ignorable="d"
+		WindowStyle="None"
+		ResizeMode="NoResize"
+		Height="700"
+		Width="1300">
 
+	<Grid>
+		<Grid.Resources>
+			<DataTemplate DataType="{x:Type viewmodel:LoginViewModel}">
+				<local:Login />
+			</DataTemplate>
+			<DataTemplate DataType="{x:Type componentsViewModels:ProductWindowsViewModel}">
+				<viewsProductModule:ProductMainView />
+			</DataTemplate>
+			<DataTemplate DataType="{x:Type viewmodel:HomeViewModel}">
+				<viewsHomeWindows:HomeView />
+			</DataTemplate>
+			<DataTemplate DataType="{x:Type viewmodel:StockViewModel}">
+				<viewsProductModule:StockPage />
+			</DataTemplate>
+			<DataTemplate DataType="{x:Type viewmodel:StockFormViewModel}">
+				<viewsProductModule:StockForm />
+			</DataTemplate>
+			<DataTemplate DataType="{x:Type viewmodel:ProductSelectionModalViewModel}">
+				<viewsProductModule:ProductSelectionModal />
+			</DataTemplate>
+			<DataTemplate DataType="{x:Type viewmodel:ProductViewModel}">
+				<viewsProductModule:ProductPage />
+			</DataTemplate>
+			<DataTemplate DataType="{x:Type viewmodel:PresentationModalViewModel}">
+				<viewsProductModule:PresentationModal />
+			</DataTemplate>
+			<DataTemplate DataType="{x:Type viewmodel:ProductModalFormViewModel}">
+				<viewsProductModule:ProductModal />
+			</DataTemplate>
+			<DataTemplate DataType="{x:Type viewmodel:StockKeepingViewModel}">
+				<viewsProductModule:StockKeepingModal/>
+			</DataTemplate>
+			<DataTemplate DataType="{x:Type viewmodel:ProviderViewModel}">
+				<viewsProviderWindows:ProviderPage />
+			</DataTemplate>
+			<DataTemplate DataType="{x:Type viewmodel:ProviderModalFormViewModel}">
+				<viewsProviderWindows:ProviderModal />
+			</DataTemplate>
+			<DataTemplate DataType="{x:Type viewmodel:EmployeeViewModel}">
+				<viewsEmployeeWindows:EmployeePage />
+			</DataTemplate>
+			<DataTemplate DataType="{x:Type viewmodel:EmployeeModalFormViewModel}">
+				<viewsEmployeeWindows:EmployeeModal />
+			</DataTemplate>
+			<DataTemplate DataType="{x:Type viewmodel:SaleViewModel}">
+				<viewsSaleWindows:SalePage />
+			</DataTemplate>
+			<DataTemplate DataType="{x:Type viewmodel:ProductSaleViewModel}">
+				<viewsSaleWindows:ProductSalePage />
+			</DataTemplate>
+			<DataTemplate DataType="{x:Type viewmodel:SalesChargeModalViewModel}">
+				<viewsSaleWindows:SalesChargeModal />
+			</DataTemplate>
+		</Grid.Resources>
 
-    <Grid>
-        <Grid.Resources>
-            <DataTemplate DataType="{x:Type viewmodel:LoginViewModel}">
-                <local:Login/>
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type componentsViewModels:ProductWindowsViewModel}">
-                <viewsProductWindows:ProductMainView/>
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodel:HomeViewModel}">
-                <viewsHomeWindows:HomeView/>
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodel:StockViewModel}">
-                <viewsProductWindows:StockPage/>
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodel:StockFormViewModel}">
-                <viewsProductWindows:StockForm/>
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodel:ProductSelectionModalViewModel}">
-                <viewsProductWindows:ProductSelectionModal/>
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodel:ProductViewModel}">
-                <viewsProductWindows:ProductPage/>
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodel:PresentationModalViewModel}">
-                <viewsProductWindows:PresentationModal/>
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodel:ProductModalFormViewModel}">
-                <viewsProductWindows:ProductModal/>
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodel:ProviderViewModel}">
-                <viewsProviderWindows:ProviderPage/>
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodel:ProviderModalFormViewModel}">
-                <viewsProviderWindows:ProviderModal/>
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodel:EmployeeViewModel}">
-                <viewsEmployeeWindows:EmployeePage/>
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodel:EmployeeModalFormViewModel}">
-                <viewsEmployeeWindows:EmployeeModal/>
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodel:SaleViewModel}">
-                <viewsSaleWindows:SalePage/>
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodel:ProductSaleViewModel}">
-                <viewsSaleWindows:ProductSalePage/>
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodel:SalesChargeModalViewModel}">
-                <viewsSaleWindows:SalesChargeModal/>
-            </DataTemplate>
-        </Grid.Resources>
-        
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="auto" />
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
 
-        <Border
-            Grid.Row="0"
-            Grid.Column="1"
-            Grid.ColumnSpan="2"
-            Background="{DynamicResource colorPrimary}">
+		<Border Grid.Row="0"
+				Grid.Column="1"
+				Grid.ColumnSpan="2"
+				Background="{DynamicResource colorPrimary}">
 
-            <Grid Height="40"
-                  Margin="10 0 0 0">
+			<Grid Height="40"
+				  Margin="10 0 0 0">
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="auto" />
-                </Grid.ColumnDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="auto" />
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="auto" />
+				</Grid.ColumnDefinitions>
 
-                <CheckBox x:Name="cbToggleMenu" 
-                          Width="38"
-                          Height="30"
-                          Padding="2"
-                          Grid.Column="0"
-                          VerticalAlignment="Center"
-                          IsChecked="{Binding navigationMenuViewModel.isMenuOpen, Mode=TwoWay}">
-                    <CheckBox.Template>
-                        <ControlTemplate TargetType="CheckBox">
-                            <Border x:Name="border" BorderThickness="1" Background="Transparent">
-                                <Viewbox Width="29" Height="28">
-                                    <Path
-                                        Data="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"
-                                        Fill="White"
-                                        Stretch="Fill" />
-                                </Viewbox>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter Property="Background" TargetName="border" Value="black"/>
-                                    <Setter Property="BorderBrush" TargetName="border" Value="white"/>
-                                </Trigger>
-                                <Trigger Property="IsPressed" Value="true">
-                                    <Setter Property="Background" TargetName="border" Value="transparent"/>
-                                    <Setter Property="BorderBrush" TargetName="border" Value="white"/>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </CheckBox.Template>
-                </CheckBox>
+				<CheckBox x:Name="cbToggleMenu"
+						  Width="38"
+						  Height="30"
+						  Padding="2"
+						  Grid.Column="0"
+						  VerticalAlignment="Center"
+						  IsChecked="{Binding navigationMenuViewModel.isMenuOpen, Mode=TwoWay}">
+					<CheckBox.Template>
+						<ControlTemplate TargetType="CheckBox">
+							<Border x:Name="border"
+									BorderThickness="1"
+									Background="Transparent">
+								<Viewbox Width="29"
+										 Height="28">
+									<Path Data="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"
+										  Fill="White"
+										  Stretch="Fill" />
+								</Viewbox>
+							</Border>
+							<ControlTemplate.Triggers>
+								<Trigger Property="IsMouseOver"
+										 Value="true">
+									<Setter Property="Background"
+											TargetName="border"
+											Value="black" />
+									<Setter Property="BorderBrush"
+											TargetName="border"
+											Value="white" />
+								</Trigger>
+								<Trigger Property="IsPressed"
+										 Value="true">
+									<Setter Property="Background"
+											TargetName="border"
+											Value="transparent" />
+									<Setter Property="BorderBrush"
+											TargetName="border"
+											Value="white" />
+								</Trigger>
+							</ControlTemplate.Triggers>
+						</ControlTemplate>
+					</CheckBox.Template>
+				</CheckBox>
 
-                <TextBlock
-                    FontSize="18"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="3"
-                    Foreground="White"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Center"
-                    Text="Centro Naturista Masaya"/>
+				<TextBlock FontSize="18"
+						   Grid.Column="0"
+						   Grid.ColumnSpan="3"
+						   Foreground="White"
+						   VerticalAlignment="Center"
+						   HorizontalAlignment="Center"
+						   Text="Centro Naturista Masaya" />
 
-                <StackPanel
-                    Grid.Column="2"
-                    Margin="0 0 4 0"
-                    Orientation="Horizontal"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Right">
+				<StackPanel Grid.Column="2"
+							Margin="0 0 4 0"
+							Orientation="Horizontal"
+							VerticalAlignment="Center"
+							HorizontalAlignment="Right">
 
-                    <usercontrols:TitleBarButton
-                        Icon="/Resource/Image/minimize.png"
-                        ButtonCommand="{Binding stateBarCommand}"
-                        ButtonParameter="minimize"
-                        StyleButton="{StaticResource CustomButtonMinimizeStyle}"/>
+					<usercontrols:TitleBarButton Icon="/Resource/Image/minimize.png"
+												 ButtonCommand="{Binding stateBarCommand}"
+												 ButtonParameter="minimize"
+												 StyleButton="{StaticResource CustomButtonMinimizeStyle}" />
 
-                    <usercontrols:TitleBarButton
-                        Margin="4 0 0 0"
-                        Icon="/Resource/Image/exit.png"
-                        ButtonCommand="{Binding stateBarCommand}"
-                        ButtonParameter="exit"
-                        StyleButton="{StaticResource CustomButtonExitStyle}"/>
+					<usercontrols:TitleBarButton Margin="4 0 0 0"
+												 Icon="/Resource/Image/exit.png"
+												 ButtonCommand="{Binding stateBarCommand}"
+												 ButtonParameter="exit"
+												 StyleButton="{StaticResource CustomButtonExitStyle}" />
 
-                </StackPanel>
+				</StackPanel>
 
-            </Grid>
+			</Grid>
 
-        </Border>
+		</Border>
 
-        <Grid
-            Grid.Row="0"
-            Grid.RowSpan="2"
-            Grid.Column="0"
-            Background="{DynamicResource colorSecondary}">
+		<Grid Grid.Row="0"
+			  Grid.RowSpan="2"
+			  Grid.Column="0"
+			  Background="{DynamicResource colorSecondary}">
 
-            <viewsMenus:NavigationMenu DataContext="{Binding navigationMenuViewModel}"/>
+			<viewsMenus:NavigationMenu DataContext="{Binding navigationMenuViewModel}" />
 
-        </Grid>
+		</Grid>
 
-        <custom:Modal Panel.ZIndex="1"
-                      IsOpen="{Binding isOpen}"
-                      Grid.Column="0"
-                      Grid.ColumnSpan="2"
-                      Grid.Row="0"
-                      Grid.RowSpan="2">
+		<custom:Modal Panel.ZIndex="1"
+					  IsOpen="{Binding isOpen}"
+					  Grid.Column="0"
+					  Grid.ColumnSpan="2"
+					  Grid.Row="0"
+					  Grid.RowSpan="2">
 
-            <ContentControl Content="{Binding currentModalViewModel}"/>
+			<ContentControl Content="{Binding currentModalViewModel}" />
 
-        </custom:Modal>
+		</custom:Modal>
 
-        <Frame
-            Grid.Row="1"
-            Grid.RowSpan="2"
-            Grid.Column="1"
-            NavigationUIVisibility = "Hidden"
-            Background="{DynamicResource colorPrimary}"
-            Content="{Binding currentViewModel}"/>
+		<Frame Grid.Row="1"
+			   Grid.RowSpan="2"
+			   Grid.Column="1"
+			   NavigationUIVisibility="Hidden"
+			   Background="{DynamicResource colorPrimary}"
+			   Content="{Binding currentViewModel}" />
 
-    </Grid>
+	</Grid>
 </Window>

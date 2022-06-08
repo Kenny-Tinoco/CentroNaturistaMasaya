@@ -1,0 +1,142 @@
+﻿<UserControl x:Class="WPF.View.ProductModule.StockKeepingModal"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:custom="clr-namespace:WPF.ViewsComponent.CustomControls"
+			 xmlns:userControls="clr-namespace:WPF.ViewsComponent.UserControls"
+			 mc:Ignorable="d"
+			 d:DesignHeight="450"
+			 d:DesignWidth="800">
+	<custom:Popup TitleBar="{Binding titleBar}"
+				  IconBar="/Resource/Image/product.png"
+				  ExitCommand="{Binding exitCommand}">
+
+		<Grid Margin="5 0">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="5" />
+				<RowDefinition Height="auto" />
+				<RowDefinition Height="5" />
+			</Grid.RowDefinitions>
+
+			<Grid Grid.Row="1"
+				  Width="290"
+				  Height="250">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="auto" />
+					<RowDefinition Height="auto" />
+					<RowDefinition Height="auto" />
+					<RowDefinition Height="auto" />
+					<RowDefinition Height="*" />
+					<RowDefinition Height="auto" />
+				</Grid.RowDefinitions>
+
+				<DockPanel Grid.Row="0">
+					<TextBlock Style="{DynamicResource TextBlockStyle}">
+					<Run Text="Código:" />
+					<Run Text="{Binding idStock, Mode=OneWay,StringFormat=000}"
+						 FontWeight="SemiBold" />
+					</TextBlock>
+					<TextBlock Style="{DynamicResource TextBlockStyle}"
+							   HorizontalAlignment="Right">
+					<Run Text="Cantidad actual: " />
+					<Run Text="{Binding currentQuantity, Mode=OneWay}"
+						 FontWeight="SemiBold" />
+					</TextBlock>
+				</DockPanel>
+
+				<StackPanel Grid.Row="2"
+							Margin="0 10">
+					<TextBlock Text="Nueva cantidad: "
+							   Style="{DynamicResource TextBlockStyle}"
+							   VerticalAlignment="Center" />
+
+					<DockPanel HorizontalAlignment="Center">
+
+						<userControls:SpinBox value="{Binding quantity, Mode=TwoWay}"
+											  Width="70"
+											  VerticalAlignment="Center"
+											  Margin="0 0 40 0"
+											  Style="{DynamicResource ToolTipStyle}"/>
+
+						<StackPanel>
+							<RadioButton Content="Entrada"
+										 GroupName="concept"
+										 FontSize="16"
+										 VerticalContentAlignment="Center"
+										 IsChecked="{Binding concept}" />
+							<RadioButton Content="Salida"
+										 FontSize="16"
+										 VerticalContentAlignment="Center"
+										 GroupName="concept" />
+						</StackPanel>
+					</DockPanel>
+				</StackPanel>
+
+				<Grid Grid.Row="4">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="auto" />
+						<RowDefinition />
+					</Grid.RowDefinitions>
+					<TextBlock Grid.Row="0"
+							   Text="Concepto:"
+							   Style="{DynamicResource TextBlockStyle}"
+							   Margin="0 0 0 8" />
+
+					<ComboBox Grid.Row="0"
+							  HorizontalAlignment="Right"
+							  ItemsSource="{Binding descriptions}"
+							  FontSize="15"
+							  VerticalAlignment="Center"
+							  MaxWidth="160" 
+							  Text="{Binding selectedDescription, UpdateSourceTrigger=PropertyChanged}"/>
+
+					<TextBox Grid.Row="1"
+							 Text="{Binding description, UpdateSourceTrigger=PropertyChanged}"
+							 FontSize="17"
+							 Style="{DynamicResource TextBoxStyle}"
+							 FontWeight="Normal"
+							 VerticalContentAlignment="Top"
+							 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+							 ScrollViewer.VerticalScrollBarVisibility="Auto"
+							 TextWrapping="Wrap"
+							 TextAlignment="Justify" />
+				</Grid>
+
+				<Button Content="Guardar"
+						Grid.Row="5"
+						Margin="0 10 0 0"
+						HorizontalAlignment="Center"
+						FontWeight="Normal"
+						Command="{Binding updateQuantityComand}"
+						Style="{DynamicResource CustomButtonStyle}"
+						Foreground="White"
+						FontSize="15"
+						Width="75"
+						IsEnabled="{Binding canCreate}" />
+
+			</Grid>
+
+			<TextBlock Grid.Row="1"
+					   Grid.RowSpan="2"
+					   Margin="12 0 0 0"
+					   Text="{Binding statusMessage}"
+					   Visibility="{Binding hasStatusMessage,Converter={StaticResource BooleanToVisibilityConverter}}"
+					   VerticalAlignment="Bottom"
+					   FontSize="14"
+					   Foreground="Blue" />
+		</Grid>
+
+	</custom:Popup>
+	<UserControl.Resources>
+		<Style x:Key="TextBlockStyle"
+			   TargetType="TextBlock">
+			<Setter Property="FontSize"
+					Value="17" />
+			<Setter Property="Foreground"
+					Value="Black" />
+			<Setter Property="FontWeight"
+					Value="Normal" />
+		</Style>
+	</UserControl.Resources>
+</UserControl>

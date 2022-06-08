@@ -53,7 +53,7 @@ namespace WPF.View.HomeModule {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Centro Naturista Masaya;component/view/homemodule/homeview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/Centro Naturista Masaya;V1.0.0.0;component/view/homemodule/homeview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\View\HomeModule\HomeView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

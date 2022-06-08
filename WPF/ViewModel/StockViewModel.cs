@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using WPF.Command.CRUD;
+using WPF.Command.Generic;
 using WPF.Command.Navigation;
 using WPF.Services;
 using WPF.Stores;
@@ -33,13 +33,14 @@ namespace WPF.ViewModel
         public ListingViewModel listingViewModel { get; }
 
 
-        public StockViewModel(ILogic _logic, IMessenger _messenger, INavigationService formNavigationService)
+        public StockViewModel(ILogic _logic, IMessenger _messenger, INavigationService formNavigationService, INavigationService stockKeepingNavigationService)
         {
             logic = (StockLogic)_logic;
 
             listingViewModel = new ListingViewModel(GetStockViewListing, SortStockViewListing, StockViewFilter);
 
             openFormCommand = new NavigateCommand(formNavigationService);
+            openStockKeepingCommand = new NavigateCommand(stockKeepingNavigationService);
 
             messenger = _messenger;
             messenger.Subscribe<Refresh>(this, RefreshStockChanges);
@@ -48,9 +49,9 @@ namespace WPF.ViewModel
         }
 
 
-        public static StockViewModel LoadViewModel(ILogic _logic, IMessenger _messenger, INavigationService formNavigationService)
+        public static StockViewModel LoadViewModel(ILogic _logic, IMessenger _messenger, INavigationService formNavigationService, INavigationService stockKeepingNavigationService)
         {
-            StockViewModel viewModel = new(_logic, _messenger, formNavigationService);
+            StockViewModel viewModel = new(_logic, _messenger, formNavigationService, stockKeepingNavigationService);
 
             viewModel.listingViewModel.loadCommand.Execute(null);
 
@@ -69,6 +70,17 @@ namespace WPF.ViewModel
                 .Add(new SortDescription(nameof(StockView.EntryDate), ListSortDirection.Descending));
         }
 
+        private ICommand openStockKeepingCommand;
+        public ICommand stockKeepingCommand => new RelayCommand(parameter =>
+        {
+            if (parameter is null)
+                return;
+
+            var element = (StockView)parameter;
+            messenger.Send(new StockKeepingMessage((element.IdStock, element.Quantity)));
+
+            openStockKeepingCommand.Execute(null);
+        });
 
         private ICommand _editCommand;
         public ICommand editCommand
@@ -88,10 +100,7 @@ namespace WPF.ViewModel
             if (!hasChangeableState)
                 return;
 
-            var entity = logic.GetStock(idStock);
-            messenger.Send(new StockMessage(entity, true));
-
-            openFormCommand.Execute(-1);
+            OpenForm(new StockMessage(logic.GetStock(idStock), true));
         }
 
 
@@ -106,13 +115,15 @@ namespace WPF.ViewModel
                 return _addCommand;
             }
         }
-        private void Add()
+
+        private void Add() => OpenForm(new StockMessage(null, false));
+
+        private void OpenForm(StockMessage message)
         {
-            messenger.Send(new StockMessage(null, false));
+            messenger.Send(message);
 
             openFormCommand.Execute(-1);
         }
-
 
         private ICommand _deleteCommand;
         public ICommand deleteCommand
@@ -138,8 +149,7 @@ namespace WPF.ViewModel
                 return;
 
             await new DeleteCommand(logic).ExecuteAsync(idStock);
-
-            await ((AsyncCommandBase)listingViewModel.loadCommand).ExecuteAsync(null);
+            NotifyChanges();
         }
 
 
@@ -258,12 +268,18 @@ namespace WPF.ViewModel
             }
         }
 
-        private async void RefreshStockChanges(object parameter)
+        private void NotifyChanges()
+        {
+            messenger.Send(Refresh.stock);
+            messenger.Send(Refresh.sale);
+        }
+
+        private void RefreshStockChanges(object parameter)
         {
             if ((Refresh)parameter is not Refresh.stock)
                 return;
             
-            await ((AsyncCommandBase)listingViewModel.loadCommand).ExecuteAsync(null);
+            listingViewModel.loadCommand.Execute(null);
         }
 
         private bool StockViewFilter(object parameter, string text)

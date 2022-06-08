@@ -12,8 +12,8 @@
         public virtual ProviderDAO providerDAO { get; } = null!;
         public virtual ProviderPhoneDAO providerPhoneDAO { get; } = null!;
         public virtual StockDAO stockDAO { get; } = null!;
+        public virtual StockKeepingDAO stockKeepingDAO { get; } = null!;
         public virtual SellDAO sellDAO { get; } = null!;
-        public virtual SaleDetailDAO saleDetailDAO { get; } = null!;
         public virtual SupplyDAO supplyDAO { get; } = null!;
         public virtual SupplyDetailDAO supplyDetailDAO { get; } = null!;
     }

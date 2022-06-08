@@ -219,22 +219,17 @@
 
 
                             <Button Grid.Row="0"
-                                        HorizontalAlignment="Right"
-                                        Background="Transparent"
-                                            Content="X"
-                                        FontSize="15"
                                             Foreground="White"
-                                    BorderBrush="Transparent"
-                                        Width="20"
+                                        HorizontalAlignment="Right"
                                     VerticalAlignment="Top"
+                                    Style="{StaticResource XCloseStyle}"
                                         Command="{Binding closeDetails}"/>
                         </Grid>
                     </Border>
                 </Grid>
-                
-                <WrapPanel
-                    Margin="30 0"
-                    Grid.Row="1"
+                <WrapPanel Grid.Row="1"
+                    Margin="30 0">
+                <WrapPanel Margin="0 0 30 0"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Left"
                     DataContext="{Binding listingViewModel}"
@@ -244,6 +239,25 @@
                             FontSize="14"
                             Command="{Binding loadCommand}"/>
                 </WrapPanel>
+                <WrapPanel>
+
+                    <ComboBox
+                    FontSize="16"
+                    SelectedItem="{Binding periodSelected}"
+                    ItemsSource="{Binding periodListing}"
+                    DisplayMemberPath="name"
+                    VerticalAlignment="Center"/>
+                    <ComboBox
+                    FontSize="16"
+                    Margin="8 0 0 0"
+                    SelectedItem="{Binding employeeSelected}"
+                    DisplayMemberPath="name"
+                    VerticalAlignment="Center"
+                    ItemsSource="{Binding employeeListing}"/>
+                </WrapPanel>
+                    
+                </WrapPanel>
+                
                 <WrapPanel
                     Margin="30 0"
                     Grid.Row="1"
@@ -256,7 +270,7 @@
                     Text="{Binding listing.Count}"/>
                     <TextBlock 
                     Style="{DynamicResource textBlockListViewStyle}"
-                    Text=" elementos"/>
+                    Text=" ventas"/>
                 </WrapPanel>
             </Grid>
         </Grid>

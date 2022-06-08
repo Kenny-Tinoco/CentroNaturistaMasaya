@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
 C:\Users\Kenny Tinoco\Proyectos\Visual Studio\MasayaNaturistCenter\WPF\App.xaml
-351351442825
-11773708629
-911359138822
+37530892571
+21540621253
+941008316901
 242-1387782074
-Resource\Resource.xaml;Resource\Style\ControlStyles.xaml;Resource\Values\colors.xaml;Resource\Values\dimens.xaml;Resource\Values\strings.xaml;Themes\Generic.xaml;ViewsComponent\Menus\NavigationMenu.xaml;ViewsComponent\Menus\TabControlMenu.xaml;ViewsComponent\UserControls\BackButton.xaml;ViewsComponent\UserControls\BindablePasswordBox.xaml;ViewsComponent\UserControls\CustomButton.xaml;ViewsComponent\UserControls\HomeButton.xaml;ViewsComponent\UserControls\ListViewControl.xaml;ViewsComponent\UserControls\MenuButton.xaml;ViewsComponent\UserControls\PageTitle.xaml;ViewsComponent\UserControls\SearchBar.xaml;ViewsComponent\UserControls\SpinBox.xaml;ViewsComponent\UserControls\TitleBarButton.xaml;View\EmployeeModule\EmployeeModal.xaml;View\EmployeeModule\EmployeePage.xaml;View\HomeModule\HomeView.xaml;View\Login.xaml;View\ProductModule\Modals\PresentationModal.xaml;View\ProductModule\Modals\ProductModal.xaml;View\ProductModule\Modals\ProductSelectionModal.xaml;View\ProductModule\ProductMainView.xaml;View\ProductModule\ProductPage.xaml;View\ProductModule\StockForm.xaml;View\ProductModule\StockPage.xaml;View\ProviderModule\ProviderModal.xaml;View\ProviderModule\ProviderPage.xaml;View\SaleModule\ProductSalePage.xaml;View\SaleModule\SalePage.xaml;View\SaleModule\SalesChargeModal.xaml;View\Startup.xaml;
+Resource\Resource.xaml;Resource\Style\ControlStyles.xaml;Resource\Values\colors.xaml;Resource\Values\dimens.xaml;Resource\Values\strings.xaml;Themes\Generic.xaml;ViewsComponent\Menus\NavigationMenu.xaml;ViewsComponent\Menus\TabControlMenu.xaml;ViewsComponent\UserControls\BackButton.xaml;ViewsComponent\UserControls\BindablePasswordBox.xaml;ViewsComponent\UserControls\CustomButton.xaml;ViewsComponent\UserControls\HomeButton.xaml;ViewsComponent\UserControls\ListViewControl.xaml;ViewsComponent\UserControls\MenuButton.xaml;ViewsComponent\UserControls\PageTitle.xaml;ViewsComponent\UserControls\SearchBar.xaml;ViewsComponent\UserControls\SpinBox.xaml;ViewsComponent\UserControls\TitleBarButton.xaml;View\EmployeeModule\EmployeeModal.xaml;View\EmployeeModule\EmployeePage.xaml;View\HomeModule\HomeView.xaml;View\Login.xaml;View\ProductModule\Modals\PresentationModal.xaml;View\ProductModule\Modals\ProductModal.xaml;View\ProductModule\Modals\ProductSelectionModal.xaml;View\ProductModule\Modals\StockKeepingModal.xaml;View\ProductModule\ProductMainView.xaml;View\ProductModule\ProductPage.xaml;View\ProductModule\StockForm.xaml;View\ProductModule\StockPage.xaml;View\ProviderModule\ProviderModal.xaml;View\ProviderModule\ProviderPage.xaml;View\SaleModule\ProductSalePage.xaml;View\SaleModule\SalePage.xaml;View\SaleModule\SalesChargeModal.xaml;View\SaleModule\StockViewer.xaml;View\Startup.xaml;
 
 False
 

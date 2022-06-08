@@ -68,7 +68,8 @@ namespace WPF.ViewsComponent.UserControls {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Centro Naturista Masaya;component/viewscomponent/usercontrols/backbutton.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/Centro Naturista Masaya;V1.0.0.0;component/viewscomponent/usercontrols/backbutto" +
+                    "n.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\ViewsComponent\UserControls\BackButton.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

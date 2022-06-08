@@ -33,6 +33,11 @@ namespace WPF.HostBuilders
                 services.AddSingleton<IAuthenticationService, AuthenticationService>(s =>
                 {
                     return new AuthenticationService(s.GetRequiredService<DAOFactory>().accountDAO);
+                }); 
+                
+                services.AddSingleton<IBuyStockService, BuyStockService>(s =>
+                {
+                    return new BuyStockService(s.GetRequiredService<DAOFactory>().sellDAO);
                 });
 
                 services.AddSingleton<IAuthenticator, Authenticator>();

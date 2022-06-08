@@ -11,19 +11,21 @@ namespace WPF.ViewModel
     {
         public string titleBar { get; }
 
-        private readonly IMessenger messenger;
+        private ICommand buyStockCommand;
 
         public SalesChargeModalViewModel(IMessenger _messenger, INavigationService closeModal) : base(closeModal)
         {
-            messenger = _messenger;
-            messenger.Subscribe<SaleChargeModalMessage>(this, SaleMessageSent);
+            _messenger.Subscribe<SaleChargeModalMessage>(this, SaleMessageSent);
 
             titleBar = "Cobrar la venta";
         }
 
         private void SaleMessageSent(object parameter)
         {
-            total = ((SaleChargeModalMessage)parameter).total;
+            var _parameter = (SaleChargeModalMessage)parameter;
+
+            total = _parameter.total;
+            buyStockCommand = _parameter.buyStockCommand;
         }
 
         private double _total;
@@ -84,9 +86,7 @@ namespace WPF.ViewModel
 
         public ICommand saveSale => new RelayCommand(o =>
         {
-            ResetProperties();
-            messenger.Send(SaveSale.save);
-
+            buyStockCommand.Execute(null);
             exitCommand.Execute(null);
         });
 
@@ -100,5 +100,11 @@ namespace WPF.ViewModel
         {
             payment = (bool)parameter ? total : 0;
         });
+
+        public override void Dispose()
+        {
+            ResetProperties();
+            base.Dispose();
+        }
     }
 }

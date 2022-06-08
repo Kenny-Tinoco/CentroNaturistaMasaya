@@ -8,7 +8,9 @@ namespace Domain.Logic
     {
         private readonly DAOFactory _daoFactory;
         private StockLogic? _stockLogic;
+        private StockKeepingLogic? _stockKeepingLogic;
         private SaleLogic? _saleLogic;
+        private StockViewerLogic? _stockViewerLogic;
         private ProductLogic? _productLogic;
         private ProviderLogic? _providerLogic;
         private EmployeeLogic? _employeeLogic;
@@ -18,7 +20,7 @@ namespace Domain.Logic
         public IViewsCollections viewsCollections = null!;
         public LogicFactory(DAOFactory parameter, IViewsCollections _viewsCollections) : this(parameter)
         {
-            if(_viewsCollections != null)
+            if(_viewsCollections is not null)
                 viewsCollections = _viewsCollections;
         }
 
@@ -31,9 +33,30 @@ namespace Domain.Logic
         {
             get
             {
-                if (_stockLogic == null)
+                if (_stockLogic is null)
                     _stockLogic = new StockLogic(_daoFactory, viewsCollections);
                 return _stockLogic;
+            }
+        }
+
+        public StockKeepingLogic stockKeepingLogic
+        {
+            get
+            {
+                if (_stockKeepingLogic is null)
+                    _stockKeepingLogic = new StockKeepingLogic(_daoFactory);
+                return _stockKeepingLogic;
+            }
+        }
+
+
+        public StockViewerLogic stockViewerLogic
+        {
+            get
+            {
+                if (_stockViewerLogic is null)
+                    _stockViewerLogic = new StockViewerLogic(_daoFactory, viewsCollections);
+                return _stockViewerLogic;
             }
         }
 
@@ -41,7 +64,7 @@ namespace Domain.Logic
         {
             get
             {
-                if (_saleLogic == null)
+                if (_saleLogic is null)
                     _saleLogic = new SaleLogic(_daoFactory, viewsCollections);
                 return _saleLogic;
             }
@@ -51,7 +74,7 @@ namespace Domain.Logic
         {
             get
             {
-                if (_productLogic == null)
+                if (_productLogic is null)
                     _productLogic = new ProductLogic(_daoFactory);
                 return _productLogic;
             }
@@ -61,7 +84,7 @@ namespace Domain.Logic
         {
             get
             {
-                if (_providerPhoneLogic == null)
+                if (_providerPhoneLogic is null)
                     _providerPhoneLogic = new ProviderPhoneLogic(_daoFactory);
                 return _providerPhoneLogic;
             }
@@ -71,7 +94,7 @@ namespace Domain.Logic
         {
             get
             {
-                if (_presentationModalLogic == null)
+                if (_presentationModalLogic is null)
                     _presentationModalLogic = new PresentationLogic(_daoFactory);
                 return _presentationModalLogic;
             }
@@ -81,7 +104,7 @@ namespace Domain.Logic
         {
             get
             {
-                if (_providerLogic == null)
+                if (_providerLogic is null)
                     _providerLogic = new ProviderLogic(_daoFactory);
                 return _providerLogic;
             }
@@ -91,7 +114,7 @@ namespace Domain.Logic
         {
             get
             {
-                if (_employeeLogic == null)
+                if (_employeeLogic is null)
                     _employeeLogic = new EmployeeLogic(_daoFactory);
                 return _employeeLogic;
             }

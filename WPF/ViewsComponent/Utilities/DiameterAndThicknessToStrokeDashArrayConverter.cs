@@ -9,7 +9,7 @@ namespace WPF.ViewsComponent.Utilities
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if(values.Length < 2 ||
+            if (values.Length < 2 ||
                 !double.TryParse(values[0].ToString(), out double diameter) ||
                 !double.TryParse(values[1].ToString(), out double thickness))
             {

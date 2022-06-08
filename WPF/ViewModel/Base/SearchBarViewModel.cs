@@ -12,16 +12,15 @@ namespace WPF.ViewModel.Base
         {
         }
 
-        public SearchBarViewModel(ICollectionView _listing, FilterLogic _logic)
+        public SearchBarViewModel(ICollectionView _listing, FilterLogic _logic) : this(_logic)
         {
             listing = _listing;
-            Logic = _logic;
         }
 
-        public SearchBarViewModel(FilterLogic logic)
+        public SearchBarViewModel(FilterLogic _logic)
         {
-            if(logic is not null)
-                Logic = logic;
+            if(_logic is not null)
+                Logic = _logic;
         }
 
         public string text

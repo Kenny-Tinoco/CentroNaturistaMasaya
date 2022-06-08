@@ -6,7 +6,7 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
-using WPF.Command.CRUD;
+using WPF.Command.Generic;
 
 namespace WPF.ViewModel.Base
 {
@@ -14,25 +14,28 @@ namespace WPF.ViewModel.Base
     {
         public ICommand loadCommand { get; }
 
-        public GetListing getListing;
+        protected GetListing getListing;
         
-        public SortListing sortListing;
+        protected SortListing sortListing;
 
         private MessageViewModel _errorMessage { get; }
 
-        private SearchBarViewModel searchViewModel;
+        protected SearchBarViewModel searchViewModel;
 
-        public ListingViewModel(GetListing _getListing, SortListing _sortListing = null, FilterLogic _filter = null)
+        protected ListingViewModel()
+        {
+            _errorMessage = new MessageViewModel();
+
+            loadCommand = new LoadCommand(this);
+        }
+
+        public ListingViewModel(GetListing _getListing, SortListing _sortListing = null, FilterLogic _filter = null) : this()
         {
             getListing = _getListing;
 
             sortListing = _sortListing;
 
-            _errorMessage = new MessageViewModel();
-
             searchViewModel = new(_filter);
-
-            loadCommand = new LoadCommand(this);
         }
 
         public async Task Load()
@@ -52,6 +55,7 @@ namespace WPF.ViewModel.Base
             var resultListing = await getListing();
 
             listing = CollectionViewSource.GetDefaultView(resultListing);
+
             searchViewModel.listing = listing;
         }
 
@@ -68,7 +72,7 @@ namespace WPF.ViewModel.Base
         }
 
         private ICollectionView _listing;
-        public ICollectionView listing
+        public virtual ICollectionView listing
         {
             get
             {

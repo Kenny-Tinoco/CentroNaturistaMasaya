@@ -14,6 +14,6 @@
         public double Total { get; set; }
 
         public virtual Employee IdEmployeeNavigation { get; set; } = null!;
-        public virtual ICollection<SaleDetail> SaleDetails { get; set; }
+        public virtual IEnumerable<SaleDetail> SaleDetails { get; set; }
     }
 }

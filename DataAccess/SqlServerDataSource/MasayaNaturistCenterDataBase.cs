@@ -32,6 +32,7 @@ namespace DataAccess.SqlServerDataSource
         public virtual DbSet<Sell> Sells { get; set; } = null!;
         public virtual DbSet<SellView> SellViews { get; set; } = null!;
         public virtual DbSet<Stock> Stocks { get; set; } = null!;
+        public virtual DbSet<StockKeeping> StockKeepings { get; set; } = null!;
         public virtual DbSet<StockView> StockViews { get; set; } = null!;
         public virtual DbSet<Supply> Supplies { get; set; } = null!;
         public virtual DbSet<SupplyDetail> SupplyDetails { get; set; } = null!;
@@ -565,6 +566,30 @@ namespace DataAccess.SqlServerDataSource
                 entity.Property(e => e.Quantity).HasColumnName("quantity");
 
                 entity.Property(e => e.Status).HasColumnName("status");
+            });
+
+            modelBuilder.Entity<StockKeeping>(entity =>
+            {
+                entity.HasKey(e => e.IdStockKeeping)
+                    .HasName("PK__StockKee__5B547A51DF70EFAA");
+
+                entity.ToTable("StockKeeping");
+
+                entity.Property(e => e.IdStock).HasColumnName("idStock");
+
+                entity.Property(e => e.Date)
+                    .HasColumnType("datetime")
+                    .HasColumnName("date");
+
+                entity.Property(e => e.Description)
+                    .HasMaxLength(500)
+                    .IsUnicode(false)
+                    .HasColumnName("description");
+
+                entity.Property(e => e.Quantity).HasColumnName("quantity");
+
+                entity.Property(e => e.Concept).HasColumnName("concept");
+
             });
 
             modelBuilder.Entity<Supply>(entity =>

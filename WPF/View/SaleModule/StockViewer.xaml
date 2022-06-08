@@ -1,0 +1,346 @@
+﻿<UserControl x:Class="WPF.View.SaleModule.StockViewer"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:userControls="clr-namespace:WPF.ViewsComponent.UserControls"
+			 xmlns:custom="clr-namespace:WPF.ViewsComponent.CustomControls"
+			 mc:Ignorable="d"
+			 d:DesignHeight="450"
+			 d:DesignWidth="800">
+	<Border CornerRadius="8"
+			BorderBrush="Black"
+			BorderThickness="0.3"
+			Padding="20 0"
+			Background="{StaticResource colorBlancoFondo}"
+			Margin="0 0 10 0">
+		<Grid Width="500">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*" />
+				<RowDefinition />
+			</Grid.RowDefinitions>
+
+			<Grid Grid.Row="0">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="auto" />
+					<RowDefinition Height="auto" />
+					<RowDefinition Height="*" />
+				</Grid.RowDefinitions>
+
+				<TextBlock Grid.Row="0"
+						   Text="Visor de productos"
+						   FontSize="17"
+						   FontWeight="SemiBold"
+						   HorizontalAlignment="Center"
+						   Margin="0 0 0 30" />
+
+				<DockPanel Grid.Row="1">
+					<userControls:SearchBar Height="30"
+											Width="200"
+											Text="{Binding searchText, Mode=TwoWay}" />
+
+					<Button Content="Cargar"
+							FontSize="17"
+							Padding="5 0"
+							Visibility="{Binding hasListing, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+							Margin="10 0 0 0"
+							Command="{Binding loadCommand}" />
+
+					<ComboBox HorizontalAlignment="Right"
+							  DockPanel.Dock="Right"
+							  ItemsSource="{Binding presentationListing}"
+							  DisplayMemberPath="Name"
+							  FontSize="17"
+							  SelectedItem="{Binding presentationSelected}" />
+
+					<TextBlock Text="Ver por:"
+							   FontSize="17"
+							   Margin="10 0"
+							   DockPanel.Dock="Right"
+							   VerticalAlignment="Center"
+							   HorizontalAlignment="Right" />
+				</DockPanel>
+
+				<custom:LoadingSpinner Diameter="50"
+									   Grid.Row="2"
+									   IsLoading="{Binding isLoading}"
+									   Thickness="2"
+									   Color="Black" />
+				<DataGrid Grid.Row="2"
+						  x:Name="dataGridListing"
+						  ItemsSource="{Binding listing}"
+						  AutoGenerateColumns="False"
+						  FontSize="15"
+						  CanUserAddRows="False"
+						  CanUserDeleteRows="False"
+						  IsReadOnly="True"
+						  Background="White"
+						  Margin="0 5"
+						  IsSynchronizedWithCurrentItem="True"
+						  ColumnHeaderStyle="{DynamicResource DataGridGenericColumnHeader}"
+						  Visibility="{Binding hasListing, Converter={StaticResource BooleanToVisibilityConverter}}">
+					<DataGrid.InputBindings>
+						<MouseBinding MouseAction="LeftDoubleClick"
+									  Command="{Binding sendItemCommand}"
+									  CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+					</DataGrid.InputBindings>
+					<DataGrid.Columns>
+						<DataGridTextColumn Header="Cód."
+											Binding="{Binding IdStock}" />
+						<DataGridTextColumn Header="Producto"
+											Width="auto"
+											Binding="{Binding Name}" />
+						<DataGridTextColumn Header="Descripción"
+											Width="*"
+											Binding="{Binding Description}" />
+						<DataGridTextColumn Header="Presentación"
+											Width="auto"
+											Binding="{Binding Presentation}" />
+					</DataGrid.Columns>
+				</DataGrid>
+
+			</Grid>
+
+			<Grid Grid.Row="1"
+				  Visibility="{Binding hasListing, Converter={StaticResource BooleanToVisibilityConverter}}">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="auto" />
+				</Grid.ColumnDefinitions>
+
+				<ScrollViewer Grid.Column="0"
+							  VerticalScrollBarVisibility="Auto"
+							  DataContext="{Binding SelectedItem, ElementName=dataGridListing}">
+
+					<StackPanel>
+
+						<DockPanel>
+							<Grid VerticalAlignment="Center"
+								  Margin="0 0 10 0">
+								<Grid.RowDefinitions>
+									<RowDefinition Height="*" />
+									<RowDefinition Height="auto" />
+								</Grid.RowDefinitions>
+								<Border Grid.Row="0"
+										BorderBrush="Black"
+										BorderThickness="1"
+										Padding="5"
+										CornerRadius="6"
+										Width="150"
+										Height="150"
+										Background="White">
+									<Image Source="{Binding Image}" />
+								</Border>
+								<TextBlock Grid.Row="1"
+										   FontSize="17"
+										   HorizontalAlignment="Center">
+                                        <Run Text="Código:" />
+                                        <Run Text="{Binding IdStock}"
+											 FontWeight="SemiBold" />
+								</TextBlock>
+							</Grid>
+
+							<Grid>
+								<Grid.RowDefinitions>
+									<RowDefinition Height="auto" />
+									<RowDefinition Height="auto" />
+								</Grid.RowDefinitions>
+
+								<StackPanel Grid.Row="0"
+											Margin="0 5">
+									<TextBlock FontSize="17"
+											   Text="* Nombre" />
+									<TextBox IsReadOnly="True"
+											 Text="{Binding Name}"
+											 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+											 ScrollViewer.VerticalScrollBarVisibility="Auto"
+											 TextWrapping="Wrap"
+											 TextAlignment="Justify"
+											 Height="50"
+											 FontSize="17"
+											 FontWeight="SemiBold"
+											 Background="Transparent" />
+								</StackPanel>
+
+								<StackPanel Grid.Row="1"
+											Margin="0 5">
+									<TextBlock Text="* Descripción"
+											   FontSize="17" />
+									<TextBox IsReadOnly="True"
+											 Text="{Binding Description}"
+											 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+											 ScrollViewer.VerticalScrollBarVisibility="Auto"
+											 TextWrapping="Wrap"
+											 TextAlignment="Justify"
+											 Height="70"
+											 FontSize="17"
+											 FontWeight="SemiBold"
+											 Background="Transparent" />
+								</StackPanel>
+							</Grid>
+						</DockPanel>
+
+						<Grid Margin="0 10 0 0">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*" />
+								<ColumnDefinition Width="auto" />
+							</Grid.ColumnDefinitions>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="auto" />
+								<RowDefinition Height="5" />
+								<RowDefinition Height="auto" />
+								<RowDefinition Height="5" />
+								<RowDefinition Height="auto" />
+							</Grid.RowDefinitions>
+
+							<TextBlock Grid.Row="0"
+									   Grid.Column="1"
+									   FontSize="17"
+									   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+									   ScrollViewer.VerticalScrollBarVisibility="Auto"
+									   TextWrapping="Wrap"
+									   TextAlignment="Justify">
+                                        <Run Text="* Precio:" />
+                                        <Run Text="{Binding Price, StringFormat=0 córdobas}"
+											 FontWeight="SemiBold" />
+							</TextBlock>
+
+							<TextBlock Grid.Row="0"
+									   Margin="0 5"
+									   Grid.Column="0"
+									   HorizontalAlignment="Left"
+									   FontSize="17">
+                                        <Run Text="* En stock:" />
+                                        <Run Text="{Binding Quantity}"
+											 FontWeight="SemiBold" />
+							</TextBlock>
+
+							<TextBlock Grid.Row="2"
+									   FontSize="17">
+                                        <Run Text="* Presentación:" />
+                                        <Run Text="{Binding Presentation}"
+											 FontWeight="SemiBold" />
+							</TextBlock>
+
+							<TextBlock Grid.Row="5"
+									   Grid.ColumnSpan="2"
+									   FontSize="17">
+                                        <Run Text="* Vencimiento:" />
+                                        <Run Text="{Binding Expiration, StringFormat='dddd dd MMMM yyyy', ConverterCulture='es'}"
+											 FontWeight="SemiBold" />
+							</TextBlock>
+
+						</Grid>
+
+					</StackPanel>
+				</ScrollViewer>
+
+				<!--<userControls:TitleBarButton Grid.Column="1"
+                                                     Margin="20 10 0 0"
+                                                     VerticalAlignment="Top"
+                                    Icon="/Resource/Image/arrow-right-circle.png"
+                                StyleButton="{DynamicResource ButtonSelectStyle}"
+                                    ButtonCommand="{Binding addProductToDetail}"
+                                ButtonParameter="{Binding stockSelected}"/>-->
+			</Grid>
+		</Grid>
+	</Border>
+	<UserControl.Resources>
+
+		<Style x:Key="ButtonCloseStyle"
+			   TargetType="Button">
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="Button">
+
+						<Border x:Name="border"
+								BorderBrush="Transparent"
+								BorderThickness="0.6"
+								Background="Transparent"
+								Width="25"
+								Height="25"
+								CornerRadius="20">
+							<TextBlock Text="X"
+									   FontSize="14"
+									   Focusable="False"
+									   HorizontalAlignment="Center"
+									   Margin="1"
+									   VerticalAlignment="Center" />
+						</Border>
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsMouseOver"
+									 Value="true">
+								<Setter Property="Background"
+										TargetName="border"
+										Value="Red" />
+								<Setter Property="BorderBrush"
+										TargetName="border"
+										Value="Transparent" />
+								<Setter Property="Foreground"
+										Value="White" />
+							</Trigger>
+							<Trigger Property="IsPressed"
+									 Value="true">
+								<Setter Property="Background"
+										TargetName="border"
+										Value="Transparent" />
+								<Setter Property="BorderBrush"
+										TargetName="border"
+										Value="Black" />
+								<Setter Property="Foreground"
+										Value="Black" />
+							</Trigger>
+						</ControlTemplate.Triggers>
+
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<Style x:Key="ButtonSelectStyle"
+			   TargetType="Button">
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="Button">
+
+						<Border x:Name="border"
+								BorderBrush="Transparent"
+								BorderThickness="0.6"
+								Background="Transparent"
+								CornerRadius="90">
+							<ContentControl HorizontalAlignment="Center"
+											Margin="1"
+											VerticalAlignment="Center"
+											Content="{TemplateBinding Content}" />
+						</Border>
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsMouseOver"
+									 Value="true">
+								<Setter Property="Background"
+										TargetName="border"
+										Value="{DynamicResource colorSecondary}" />
+								<Setter Property="BorderBrush"
+										TargetName="border"
+										Value="Transparent" />
+								<Setter Property="Foreground"
+										Value="White" />
+							</Trigger>
+							<Trigger Property="IsPressed"
+									 Value="true">
+								<Setter Property="Background"
+										TargetName="border"
+										Value="Transparent" />
+								<Setter Property="BorderBrush"
+										TargetName="border"
+										Value="Black" />
+								<Setter Property="Foreground"
+										Value="Black" />
+							</Trigger>
+						</ControlTemplate.Triggers>
+
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+
+	</UserControl.Resources>
+</UserControl>

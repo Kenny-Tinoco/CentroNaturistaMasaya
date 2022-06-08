@@ -1,7 +1,10 @@
-﻿namespace Domain.Services
+﻿using Domain.Entities;
+
+namespace Domain.Services
 {
     public interface IBuyStockService
     {
-        Task BuyStock();
+        Task BuyStock(Employee employee, IEnumerable<SaleDetail> detial, double discount);
+        double GetTotal(IEnumerable<SaleDetail> detail, double discount);
     }
 }

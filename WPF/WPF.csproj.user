@@ -29,6 +29,9 @@
     <Compile Update="View\ProductModule\Modals\ProductModal.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="View\ProductModule\Modals\StockKeepingModal.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="View\ProductModule\ProductPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -51,6 +54,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="View\SaleModule\ProductSalePage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\SaleModule\StockViewer.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="View\Startup.xaml.cs">
@@ -115,6 +121,9 @@
     <Page Update="View\ProductModule\Modals\ProductModal.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="View\ProductModule\Modals\StockKeepingModal.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="View\ProductModule\ProductPage.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -158,6 +167,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\SaleModule\ProductSalePage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\SaleModule\StockViewer.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\Startup.xaml">
