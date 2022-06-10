@@ -1,36 +1,44 @@
-﻿using Domain.Services;
+﻿using Domain.Entities;
+using Domain.Services.TransactionServices;
 using MVVMGenericStructure.Commands;
 using System;
 using System.Threading.Tasks;
 using WPF.ViewModel;
-using WPF.ViewsComponent.Utilities;
+using WPF.ViewModel.Utilities;
 
 namespace WPF.Command
 {
     public class BuyStockCommand : AsyncCommandBase
     {
-        private readonly ProductSaleViewModel _saleViewModel;
-        private readonly IBuyStockService _buyStockServices;
+        private readonly BuyProductsViewModel _purchaseViewModel;
+        private readonly IBuyStockService _buyStockService;
 
-        public BuyStockCommand(ProductSaleViewModel saleViewModel, IBuyStockService buyStockServices)
+        public BuyStockCommand(BuyProductsViewModel purchaseViewModel, IBuyStockService buyStockService)
         {
-            _saleViewModel = saleViewModel;
-            _buyStockServices = buyStockServices;
+            _purchaseViewModel = purchaseViewModel;
+            _buyStockService = buyStockService;
         }
 
         public override async Task ExecuteAsync(object parameter)
         {
-            _saleViewModel.statusMessage = string.Empty;
+            _purchaseViewModel.statusMessage = string.Empty;
 
             try
             {
-                await _buyStockServices.BuyStock(_saleViewModel.employee, _saleViewModel.detailListing.ToEnumerable(), _saleViewModel.discount);
-                _saleViewModel.Reset();
-                _saleViewModel.statusMessage = "Venta existosa.";
+                await _buyStockService
+                    .BuyStock
+                    (
+                        _purchaseViewModel.providerSelected.idProvider, 
+                        _purchaseViewModel.detailListing.ToEnumerable<SupplyDetail>(), 
+                        _purchaseViewModel.discount
+                    );
+
+                _purchaseViewModel.Reset();
+                _purchaseViewModel.statusMessage = "Compra existosa.";
             }
             catch (Exception)
             {
-                _saleViewModel.statusMessage = "Falló la transacción.\n Intente de nuevo";
+                _purchaseViewModel.statusMessage = "Falló la compra.\n Intente de nuevo";
             }
         }
     }

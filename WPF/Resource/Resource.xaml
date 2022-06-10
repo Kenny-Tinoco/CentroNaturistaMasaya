@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:converters="clr-namespace:WPF.ViewsComponent.Utilities">
+                    xmlns:converters="clr-namespace:WPF.ViewsComponent.Converters">
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
     <converters:StatusValueConverter x:Key="StatusValueConverter"/>

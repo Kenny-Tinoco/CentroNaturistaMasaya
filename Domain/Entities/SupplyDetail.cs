@@ -1,15 +1,19 @@
 ﻿namespace Domain.Entities
 {
-    public partial class SupplyDetail : BaseEntity
+    public partial class SupplyDetail : TransactionDetail
     {
-        public int IdSupplyDetail { get; set; }
-        public int IdSupply { get; set; }
-        public int IdStock { get; set; }
-        public int Quantity { get; set; }
-        public double Price { get; set; }
-        public double Total { get; set; }
+        public int IdSupplyDetail
+        {
+            get => IdDetail;
+            set => IdDetail = value;
+        }
 
-        public virtual Stock IdStockNavigation { get; set; } = null!;
+        public int IdSupply 
+        { 
+            get => IdTransaction; 
+            set => IdTransaction = value; 
+        }
+
         public virtual Supply IdSupplyNavigation { get; set; } = null!;
     }
 }

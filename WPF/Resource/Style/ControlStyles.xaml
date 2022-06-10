@@ -323,12 +323,12 @@
 				Value="Black" />
 		<Setter Property="FontWeight"
 				Value="Normal" />
-		<Setter Property="Margin"
-				Value="5 0 0 1" />
 		<Setter Property="Width"
 				Value="auto" />
 		<Setter Property="VerticalAlignment"
 				Value="Center" />
+		<Setter Property="Language"
+				Value="es-ES" />
 		<Setter Property="CalendarStyle"
 				Value="{DynamicResource DatePickerCalendarStyle}" />
 	</Style>
@@ -344,6 +344,8 @@
 	</Style>
 
 	<Style TargetType="{x:Type DatePickerTextBox}">
+		<Setter Property="IsReadOnly"
+				Value="True" />
 		<Setter Property="Control.Template">
 			<Setter.Value>
 				<ControlTemplate>

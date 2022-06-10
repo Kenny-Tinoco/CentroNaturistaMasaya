@@ -58,6 +58,7 @@
     <None Remove="Resource\Image\save-black.png" />
     <None Remove="Resource\Image\save.png" />
     <None Remove="Resource\Image\search.png" />
+    <None Remove="View\PurchaseModule\PurchasePage.xaml~RF11644734.TMP" />
   </ItemGroup>
 
   <ItemGroup>

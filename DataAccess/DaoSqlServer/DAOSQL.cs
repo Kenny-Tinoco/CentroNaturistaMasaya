@@ -164,7 +164,7 @@ namespace DataAccess.DaoSqlServer
         }
     }
 
-    public class SellDAOSQL : BaseDAOSQL<Sell>, SellDAO
+    public class SellDAOSQL : BaseDAOSQL<Sale>, SellDAO
     {
         public SellDAOSQL(MasayaNaturistCenterDataBaseFactory dataBaseContext) : base(dataBaseContext) 
         {

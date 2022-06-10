@@ -18,8 +18,12 @@ namespace Domain.Logic
         }
 
         public async Task<IEnumerable<StockView>> GetStockListing() =>
-            (await viewsCollections.StockViewCatalog(Views.OnlyActive))
+            (await GetAllStockList())
             .Where(item => item.Quantity > 0);
+
+        public async Task<IEnumerable<StockView>> GetAllStockList() =>
+            await viewsCollections.StockViewCatalog(Views.OnlyActive);
+
 
         public async Task<IEnumerable<Presentation>> GetPresentationListing() =>
             await daoFactory.presentationDAO.GetActives();

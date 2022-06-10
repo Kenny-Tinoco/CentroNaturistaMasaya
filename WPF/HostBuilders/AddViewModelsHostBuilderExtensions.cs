@@ -1,5 +1,5 @@
 ﻿using Domain.Logic;
-using Domain.Services;
+using Domain.Services.TransactionServices;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MVVMGenericStructure.Services;
@@ -22,6 +22,7 @@ namespace WPF.HostBuilders
                 services.AddTransient<ProductSelectionModalViewModel>(s => CreateStockModalViewModel(s));
                 services.AddTransient<StockFormViewModel>(s => CreateStockFormViewModel(s));
                 services.AddSingleton<ProductSaleViewModel>(s => CreateSellProductViewModel(s));
+                services.AddSingleton<BuyProductsViewModel>(s => CreateBuyProductsViewModel(s));
                 services.AddTransient<PresentationModalViewModel>(s => CreatePresentationModalViewModel(s));
                 services.AddTransient<ProductModalFormViewModel>(s => CreateProductModalViewModel(s));
                 services.AddTransient<ProviderModalFormViewModel>(s => CreateProviderModalViewModel(s));
@@ -35,6 +36,7 @@ namespace WPF.HostBuilders
                 services.AddSingleton<EmployeeViewModel>(s => CreateEmployeeViewModel(s));
                 services.AddSingleton<StockViewModel>(s => CreateStockViewModel(s));
                 services.AddSingleton<SaleViewModel>(s => CreateSaleViewModel(s));
+                services.AddSingleton<PurchaseViewModel>(s => CreatePurchaseViewModel(s));
                 services.AddSingleton<HomeViewModel>(s => CreateHomeViewModel(s));
                 services.AddSingleton<LoginViewModel>(s => CreateLoginViewModel(s));
 
@@ -65,7 +67,8 @@ namespace WPF.HostBuilders
             return new HomeViewModel
             (
                 CreateStockFormNavigationService(serviceProvider),
-                CreateSellProductNavigationService(serviceProvider)
+                CreateSellProductNavigationService(serviceProvider),
+                CreateBuyProductsNavigationService(serviceProvider)
             );
         }
         private static StockViewModel CreateStockViewModel(IServiceProvider serviceProvider)
@@ -149,7 +152,7 @@ namespace WPF.HostBuilders
                 servicesProvider.GetRequiredService<LogicFactory>().saleLogic,
                 servicesProvider.GetRequiredService<IMessenger>(),
                 servicesProvider.GetRequiredService<IAccountStore>(),
-                servicesProvider.GetRequiredService<IBuyStockService>(),
+                servicesProvider.GetRequiredService<ISellStockService>(),
                 servicesProvider.GetRequiredService<StockViewerViewModel>(),
                 CreateSaleNavigationService(servicesProvider),
                 CreateSalesChargeModalNavigationService(servicesProvider)
@@ -221,6 +224,7 @@ namespace WPF.HostBuilders
                 CreateHomeNavigationService(serviceProvider),
                 CreateProductWindowsNavigationService(serviceProvider),
                 CreateSaleNavigationService(serviceProvider),
+                CreatePurchaseNavigationService(serviceProvider),
                 CreateProviderNavigationService(serviceProvider),
                 CreateEmployeeNavigationService(serviceProvider)
             );
@@ -241,6 +245,26 @@ namespace WPF.HostBuilders
                     servicesProvider.GetRequiredService<LogicFactory>().stockViewerLogic,
                     servicesProvider.GetRequiredService<IMessenger>()
                 );
+        }
+        private static BuyProductsViewModel CreateBuyProductsViewModel(IServiceProvider servicesProvider)
+        {
+            return new BuyProductsViewModel
+            (
+                servicesProvider.GetRequiredService<LogicFactory>().purchaseLogic,
+                servicesProvider.GetRequiredService<IMessenger>(),
+                servicesProvider.GetRequiredService<IBuyStockService>(),
+                servicesProvider.GetRequiredService<StockViewerViewModel>(),
+                CreatePurchaseNavigationService(servicesProvider)
+            );
+        }
+        private static PurchaseViewModel CreatePurchaseViewModel(IServiceProvider servicesProvider)
+        {
+            return PurchaseViewModel.LoadViewModel
+            (
+                servicesProvider.GetRequiredService<LogicFactory>().purchaseLogic,
+                servicesProvider.GetRequiredService<IMessenger>(),
+                CreateBuyProductsNavigationService(servicesProvider)
+            );
         }
 
 
@@ -342,6 +366,22 @@ namespace WPF.HostBuilders
             (
                 serviceProvider.GetRequiredService<NavigationStore>(),
                 () => serviceProvider.GetRequiredService<ProductSaleViewModel>()
+            );
+        }
+        private static INavigationService CreateBuyProductsNavigationService(IServiceProvider serviceProvider)
+        {
+            return new NavigationService<BuyProductsViewModel>
+            (
+                serviceProvider.GetRequiredService<NavigationStore>(),
+                () => serviceProvider.GetRequiredService<BuyProductsViewModel>()
+            );
+        }
+        private static INavigationService CreatePurchaseNavigationService(IServiceProvider serviceProvider)
+        {
+            return new NavigationService<PurchaseViewModel>
+            (
+                serviceProvider.GetRequiredService<NavigationStore>(),
+                () => serviceProvider.GetRequiredService<PurchaseViewModel>()
             );
         }
         private static INavigationService CreatePresentationModalNavigationService(IServiceProvider serviceProvider)

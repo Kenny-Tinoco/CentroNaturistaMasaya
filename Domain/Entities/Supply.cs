@@ -1,18 +1,25 @@
 ﻿namespace Domain.Entities
 {
-    public partial class Supply : BaseEntity
+    public partial class Supply : Transaction
     {
         public Supply()
         {
             SupplyDetails = new HashSet<SupplyDetail>();
         }
 
-        public int IdSupply { get; set; }
-        public int IdProvider { get; set; }
-        public DateTime Date { get; set; }
-        public double Total { get; set; }
+        public int IdSupply
+        {
+            get => IdTransaction;
+            set => IdTransaction = value;
+        }
+
+        public int IdProvider 
+        { 
+            get => IdElement; 
+            set => IdElement = value; 
+        }
 
         public virtual Provider IdProviderNavigation { get; set; } = null!;
-        public virtual ICollection<SupplyDetail> SupplyDetails { get; set; }
+        public virtual IEnumerable<SupplyDetail> SupplyDetails { get; set; }
     }
 }

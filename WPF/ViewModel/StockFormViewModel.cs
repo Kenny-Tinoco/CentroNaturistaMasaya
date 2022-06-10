@@ -7,15 +7,15 @@ using MVVMGenericStructure.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using WPF.Command.Generic;
 using WPF.Command.Navigation;
 using WPF.Services;
 using WPF.Stores;
-using WPF.ViewsComponent.Utilities;
 using WPF.ViewModel.Base;
-using System.Threading.Tasks;
+using WPF.ViewModel.Utilities;
 
 namespace WPF.ViewModel
 {
@@ -102,7 +102,8 @@ namespace WPF.ViewModel
             {
                 IdStock = parameter.IdStock,
                 IdProduct = parameter.IdProduct,
-                IdPresentation = parameter.IdPresentation
+                IdPresentation = parameter.IdPresentation,
+                Quantity = parameter.Quantity
             };
 
             price = parameter.Price;
@@ -291,7 +292,7 @@ namespace WPF.ViewModel
         }
         private void GetImage()
         {
-            var imageSelected = Utilities.GetImage();
+            var imageSelected = Utilities.Utilities.GetImage();
 
             if (imageSelected is not null)
                 image = imageSelected;
@@ -316,7 +317,7 @@ namespace WPF.ViewModel
                 IdProduct = currentProduct.IdProduct,
                 IdPresentation = currentPresentation.IdPresentation,
                 Price = price,
-                Quantity = 0,
+                Quantity = isEditable ? entity.Quantity : 0,
                 EntryDate = entryDate,
                 Expiration = expiration,
                 Status = status,

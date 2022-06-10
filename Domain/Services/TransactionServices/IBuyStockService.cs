@@ -1,10 +1,9 @@
 ﻿using Domain.Entities;
 
-namespace Domain.Services
+namespace Domain.Services.TransactionServices
 {
     public interface IBuyStockService
     {
-        Task BuyStock(Employee employee, IEnumerable<SaleDetail> detial, double discount);
-        double GetTotal(IEnumerable<SaleDetail> detail, double discount);
+        Task BuyStock(int idProvider, IEnumerable<SupplyDetail> listingDetail, double disocunt);
     }
 }

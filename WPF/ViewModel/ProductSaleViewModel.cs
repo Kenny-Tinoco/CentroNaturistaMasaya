@@ -2,7 +2,7 @@
 using Domain.Entities.Views;
 using Domain.Logic;
 using Domain.Logic.Base;
-using Domain.Services;
+using Domain.Services.TransactionServices;
 using Domain.Utilities;
 using MVVMGenericStructure.Commands;
 using MVVMGenericStructure.Services;
@@ -17,13 +17,14 @@ using WPF.Command.Navigation;
 using WPF.Services;
 using WPF.Stores;
 using WPF.ViewModel.Base;
+using WPF.ViewModel.Utilities;
 
 namespace WPF.ViewModel
 {
     public class ProductSaleViewModel : FormViewModel
     {
         public ICommand backCommand { get; }
-        private ICommand buyStockCommand { get; }
+        private ICommand sellStockCommand { get; }
         public ICommand salesChargeModalCommand { get; }
 
         public StockViewerViewModel stockViewer { get; }
@@ -36,14 +37,14 @@ namespace WPF.ViewModel
             ILogic _logic,
             IMessenger _messenger,
             IAccountStore _accountStore,
-            IBuyStockService buyStockService,
+            ISellStockService sellStockService,
             ViewModelBase _stockViewer,
             INavigationService backNavigation,
             INavigationService modalNavigationService)
         {
             backCommand = new NavigateCommand(backNavigation);
             salesChargeModalCommand = new NavigateCommand(modalNavigationService);
-            buyStockCommand = new BuyStockCommand(this, buyStockService);
+            sellStockCommand = new SellStockCommand(this, sellStockService);
             employee = _accountStore.currentAccount.EmployeeNavigation;
 
             stockViewer = (StockViewerViewModel)_stockViewer;
@@ -59,7 +60,7 @@ namespace WPF.ViewModel
 
         public ICommand finishSaleCommand => new RelayCommand(o =>
         {
-            messenger.Send(new SaleChargeModalMessage(total, buyStockCommand));
+            messenger.Send(new SaleChargeModalMessage(total, sellStockCommand));
             salesChargeModalCommand.Execute(null);
         });
 
@@ -97,8 +98,7 @@ namespace WPF.ViewModel
             }
         }
 
-
-        public ObservableCollection<SaleDetailView> detailListing { get; }
+        public ObservableCollection<TransactionDetailView> detailListing { get; }
 
         private bool _stockViewerIsVisible;
         public bool stockViewerIsVisible
@@ -108,31 +108,37 @@ namespace WPF.ViewModel
             {
                 _stockViewerIsVisible = value;
                 OnPropertyChanged(nameof(stockViewerIsVisible));
+
+                if (_stockViewerIsVisible)
+                    messenger.Send(TransactionType.sale);
             }
         }
 
         private void AddDetail(object _parameter)
         {
-            var parameter = ((StockViewerMessage)_parameter).element;
+            var parameter = (StockViewerMessage)_parameter;
+            
+            if (parameter.transaction is not TransactionType.sale)
+                return;
 
-            SaleDetailView result = GetIndexDetail(parameter.IdStock);
+            TransactionDetailView result = GetIndexDetail(parameter.element.IdStock);
 
             if (result is not null)
-                IncreaseQuantityOfDetail(parameter, result);
+                IncreaseQuantityOfDetail(parameter.element, result);
             else
                 detailListing.Add(new SaleDetailView()
                 {
-                    IdStock = parameter.IdStock,
-                    ProductName = parameter.Name,
-                    ProductDescription = parameter.Description,
-                    Presentation = parameter.Presentation,
+                    IdStock = parameter.element.IdStock,
+                    ProductName = parameter.element.Name,
+                    ProductDescription = parameter.element.Description,
+                    Presentation = parameter.element.Presentation,
                     Quantity = 1,
-                    Price = parameter.Price,
-                    Total = parameter.Price
+                    Price = parameter.element.Price,
+                    Total = parameter.element.Price
                 });
         }
 
-        private void IncreaseQuantityOfDetail(StockView parameter, SaleDetailView element)
+        private void IncreaseQuantityOfDetail(StockView parameter, TransactionDetailView element)
         {
             if (element.Quantity >= parameter.Quantity + 1)
                 return;
@@ -143,10 +149,10 @@ namespace WPF.ViewModel
             UpdateDetail(element, detailListing.IndexOf(element));
 
             if (element.Quantity > parameter.Quantity)
-                detailSelected = element;
+                detailSelected = (SaleDetailView)element;
         }
 
-        private SaleDetailView GetIndexDetail(int idStock) =>
+        private TransactionDetailView GetIndexDetail(int idStock) =>
             detailListing.Find(item => item.IdStock == idStock);
 
         public ICommand deleteDetail => new RelayCommand(parameter =>
@@ -179,7 +185,7 @@ namespace WPF.ViewModel
             detailSelected = null;
         });
 
-        private void UpdateDetail(SaleDetailView parameter, int index)
+        private void UpdateDetail(TransactionDetailView parameter, int index)
         {
             detailListing.Remove(parameter);
             detailListing.Insert(index, parameter);
@@ -260,8 +266,8 @@ namespace WPF.ViewModel
             }
         }
 
-        private Discount? _selectedDiscoumt = new();
-        public Discount? selectedDiscount
+        private Discount _selectedDiscoumt = new();
+        public Discount selectedDiscount
         {
             get => _selectedDiscoumt;
             set
@@ -276,13 +282,8 @@ namespace WPF.ViewModel
             }
         }
 
-        private void GetDiscount(Discount? parameter)
-        {
-            if (parameter is not null)
-                discount = ((Discount)parameter).discount;
-            else
-                discount = 0;
-        }
+        private void GetDiscount(Discount parameter) =>
+            discount = parameter is not null ? parameter.discount : 0;
 
         public double discount { get; private set; }
         public double discountedAmount => discount * _total;
@@ -306,17 +307,11 @@ namespace WPF.ViewModel
             OnPropertyChanged(nameof(canCreateSale));
             OnPropertyChanged(nameof(discountedAmount));
         }
-    }
 
-    public struct Discount
-    {
-        public Discount(double discount, string name)
+        public override void Dispose()
         {
-            this.discount = discount;
-            this.name = name;
+            stockViewerIsVisible = false;
+            base.Dispose();
         }
-
-        public double discount { get; }
-        public string name { get; }
     }
 }

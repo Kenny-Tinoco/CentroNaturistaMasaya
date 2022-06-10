@@ -48,7 +48,7 @@ namespace Domain.DAO
     {
     }
 
-    public interface SellDAO : BaseDAO<Sell, object>
+    public interface SellDAO : BaseDAO<Sale, object>
     {
         Task<int> GetLastedId();
     }

@@ -1,15 +1,14 @@
 ﻿using DataAccess;
 using DataAccess.DaoSqlServer;
-using DataAccess.SqlServerDataSource;
 using Domain.DAO;
 using Domain.Logic;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System;
-using MVVMGenericStructure.Services;
-using WPF.Services;
 using Domain.Services;
 using Domain.Services.Implementation;
+using Domain.Services.TransactionServices;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using MVVMGenericStructure.Services;
+using WPF.Services;
 
 namespace WPF.HostBuilders
 {
@@ -19,7 +18,7 @@ namespace WPF.HostBuilders
         {
             host.ConfigureServices(services =>
             {
-              
+
                 services.AddSingleton<CloseModalNavigationService>();
 
                 services.AddSingleton<IMessenger, Messenger>();
@@ -33,11 +32,16 @@ namespace WPF.HostBuilders
                 services.AddSingleton<IAuthenticationService, AuthenticationService>(s =>
                 {
                     return new AuthenticationService(s.GetRequiredService<DAOFactory>().accountDAO);
-                }); 
-                
+                });
+
+                services.AddSingleton<ISellStockService, SellStockService>(s =>
+                {
+                    return new SellStockService(s.GetRequiredService<DAOFactory>().sellDAO);
+                });
+
                 services.AddSingleton<IBuyStockService, BuyStockService>(s =>
                 {
-                    return new BuyStockService(s.GetRequiredService<DAOFactory>().sellDAO);
+                    return new BuyStockService(s.GetRequiredService<DAOFactory>().supplyDAO);
                 });
 
                 services.AddSingleton<IAuthenticator, Authenticator>();

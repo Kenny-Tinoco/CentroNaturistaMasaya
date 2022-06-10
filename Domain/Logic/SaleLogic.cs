@@ -3,16 +3,14 @@ using Domain.Entities;
 using Domain.Entities.Views;
 using Domain.Logic.Base;
 using Domain.Services;
-using Domain.Utilities;
-using System.Dynamic;
 
 namespace Domain.Logic
 {
-    public class SaleLogic : BaseLogic<Sell>
+    public class SaleLogic : BaseLogic<Sale>
     {
         private readonly DAOFactory daoFactory = null!;
         public IViewsCollections viewsCollections = null!;
-        
+
         public SaleLogic(DAOFactory parameter, IViewsCollections _viewsCollections) : this(parameter)
         {
             viewsCollections = _viewsCollections;
@@ -20,7 +18,7 @@ namespace Domain.Logic
 
         public SaleLogic(DAOFactory parameter) : base(parameter.sellDAO)
         {
-            entity = new Sell();
+            entity = new Sale();
             daoFactory = parameter;
         }
 
@@ -32,7 +30,7 @@ namespace Domain.Logic
             List<SaleDetailView> elements = new();
 
             foreach (var item in list)
-                if (item.IdSell == idSell)
+                if (item.IdSale == idSell)
                     elements.Add(item);
 
             return elements;
@@ -66,7 +64,7 @@ namespace Domain.Logic
 
         public async Task<int> GetLastedIdSell() => await daoFactory.sellDAO.GetLastedId();
 
-        public static bool SearchLogic(SellView element, string parameter) =>
+        public static bool SearchLogic(SaleView element, string parameter) =>
             element.IdEmployee.ToString().Contains(parameter) ||
             element.Name.ToLower().StartsWith(parameter.ToLower());
     }

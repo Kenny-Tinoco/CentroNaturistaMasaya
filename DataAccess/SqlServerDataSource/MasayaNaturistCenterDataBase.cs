@@ -29,8 +29,8 @@ namespace DataAccess.SqlServerDataSource
         public virtual DbSet<Role> Roles { get; set; } = null!;
         public virtual DbSet<SaleDetail> SaleDetails { get; set; } = null!;
         public virtual DbSet<SaleDetailView> SaleDetailViews { get; set; } = null!;
-        public virtual DbSet<Sell> Sells { get; set; } = null!;
-        public virtual DbSet<SellView> SellViews { get; set; } = null!;
+        public virtual DbSet<Sale> Sales { get; set; } = null!;
+        public virtual DbSet<SaleView> SaleViews { get; set; } = null!;
         public virtual DbSet<Stock> Stocks { get; set; } = null!;
         public virtual DbSet<StockKeeping> StockKeepings { get; set; } = null!;
         public virtual DbSet<StockView> StockViews { get; set; } = null!;
@@ -376,7 +376,7 @@ namespace DataAccess.SqlServerDataSource
 
                 entity.Property(e => e.IdSaleDetail).HasColumnName("idSaleDetail");
 
-                entity.Property(e => e.IdSell).HasColumnName("idSell");
+                entity.Property(e => e.IdSale).HasColumnName("idSell");
 
                 entity.Property(e => e.IdStock).HasColumnName("idStock");
 
@@ -388,16 +388,9 @@ namespace DataAccess.SqlServerDataSource
 
                 entity.HasOne(d => d.IdSellNavigation)
                     .WithMany(p => p.SaleDetails)
-                    .HasForeignKey(d => d.IdSell)
+                    .HasForeignKey(d => d.IdSale)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__SaleDetai__idSel__412EB0B6");
-
-                entity.HasOne(d => d.IdStockNavigation)
-                    .WithMany(p => p.SaleDetails)
-                    .HasForeignKey(d => d.IdStock)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__SaleDetai__idSto__4222D4EF");
-
             });
 
             modelBuilder.Entity<SaleDetailView>(entity =>
@@ -408,7 +401,7 @@ namespace DataAccess.SqlServerDataSource
 
                 entity.Property(e => e.IdSaleDetail).HasColumnName("idSaleDetail");
 
-                entity.Property(e => e.IdSell).HasColumnName("idSell");
+                entity.Property(e => e.IdSale).HasColumnName("idSell");
                 entity.Property(e => e.IdStock).HasColumnName("idStock");
 
                 entity.Property(e => e.Presentation)
@@ -433,14 +426,14 @@ namespace DataAccess.SqlServerDataSource
                 entity.Property(e => e.Total).HasColumnName("total");
             });
 
-            modelBuilder.Entity<Sell>(entity =>
+            modelBuilder.Entity<Sale>(entity =>
             {
-                entity.HasKey(e => e.IdSell)
+                entity.HasKey(e => e.IdSale)
                 .HasName("PK__Sell__C5AEA0D398F35ACB");
 
                 entity.ToTable("Sell");
 
-                entity.Property(e => e.IdSell).HasColumnName("idSell");
+                entity.Property(e => e.IdSale).HasColumnName("idSell");
 
                 entity.Property(e => e.Date)
                     .HasColumnType("datetime")
@@ -457,7 +450,7 @@ namespace DataAccess.SqlServerDataSource
                     .HasConstraintName("FK__Sell__idEmployee__30F848ED");
             });
 
-            modelBuilder.Entity<SellView>(entity =>
+            modelBuilder.Entity<SaleView>(entity =>
             {
                 entity.HasNoKey();
 
@@ -469,7 +462,7 @@ namespace DataAccess.SqlServerDataSource
 
                 entity.Property(e => e.IdEmployee).HasColumnName("idEmployee");
 
-                entity.Property(e => e.IdSell).HasColumnName("idSell");
+                entity.Property(e => e.IdSale).HasColumnName("idSell");
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(101)
@@ -609,6 +602,8 @@ namespace DataAccess.SqlServerDataSource
 
                 entity.Property(e => e.Total).HasColumnName("total");
 
+                entity.Property(e => e.Discount).HasColumnName("discount");
+
                 entity.HasOne(d => d.IdProviderNavigation)
                     .WithMany(p => p.Supplies)
                     .HasForeignKey(d => d.IdProvider)
@@ -650,6 +645,7 @@ namespace DataAccess.SqlServerDataSource
                 entity.ToView("SupplyDetailView");
 
                 entity.Property(e => e.IdStock).HasColumnName("idStock");
+                entity.Property(e => e.IdSupply).HasColumnName("idSupply");
 
                 entity.Property(e => e.IdSupplyDetail).HasColumnName("idSupplyDetail");
 
@@ -689,12 +685,13 @@ namespace DataAccess.SqlServerDataSource
 
                 entity.Property(e => e.IdSupply).HasColumnName("idSupply");
 
-                entity.Property(e => e.ProviderName)
+                entity.Property(e => e.Name)
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("providerName");
 
                 entity.Property(e => e.Total).HasColumnName("total");
+                entity.Property(e => e.Discount).HasColumnName("discount");
             });
 
             OnModelCreatingPartial(modelBuilder);

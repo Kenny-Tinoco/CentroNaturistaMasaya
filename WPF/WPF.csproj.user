@@ -47,6 +47,12 @@
     <Compile Update="View\ProductModule\StockPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="View\PurchaseModule\BuyProductPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\PurchaseModule\PurchasePage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="View\SaleModule\SalePage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -158,6 +164,12 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\ProviderModule\ProviderPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\PurchaseModule\BuyProductPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\PurchaseModule\PurchasePage.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\SaleModule\SalePage.xaml">

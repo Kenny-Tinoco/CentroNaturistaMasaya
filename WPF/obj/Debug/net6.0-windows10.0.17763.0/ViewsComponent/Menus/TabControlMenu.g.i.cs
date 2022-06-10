@@ -61,8 +61,7 @@ namespace WPF.ViewsComponent.Menus {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Centro Naturista Masaya;V1.0.0.0;component/viewscomponent/menus/tabcontrolmenu.x" +
-                    "aml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/Centro Naturista Masaya;component/viewscomponent/menus/tabcontrolmenu.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\ViewsComponent\Menus\TabControlMenu.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

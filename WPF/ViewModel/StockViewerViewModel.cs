@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Domain.Entities.Views;
 using Domain.Logic;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -17,6 +18,7 @@ namespace WPF.ViewModel
     {
         private readonly StockViewerLogic logic;
         private readonly IMessenger messenger;
+        private TransactionType transaction = TransactionType.transactionNull;
 
         public StockViewerViewModel(StockViewerLogic _logic, IMessenger _messenger) : base()
         {
@@ -28,6 +30,7 @@ namespace WPF.ViewModel
 
             messenger = _messenger;
             messenger.Subscribe<Refresh>(this, RefreshListing);
+            messenger.Subscribe<TransactionType>(this, TransactionMessage);
         }
 
         public static StockViewerViewModel LoadViewModel(StockViewerLogic _logic, IMessenger _messenger)
@@ -41,10 +44,10 @@ namespace WPF.ViewModel
 
         public ICommand sendItemCommand => new RelayCommand(parameter =>
         {
-            if (parameter is null)
+            if (parameter is null || transaction is TransactionType.transactionNull)
                 return;
 
-            messenger.Send(new StockViewerMessage((StockView)parameter));
+            messenger.Send(new StockViewerMessage((StockView)parameter, transaction));
         });
 
         public bool hasListing => listing is not null;
@@ -117,7 +120,9 @@ namespace WPF.ViewModel
         private async Task<IEnumerable<BaseEntity>> GetListings()
         {
             await GetPresentationListing();
-            return await logic.GetStockListing();
+            return (transaction is TransactionType.purchase) ? 
+                await logic.GetAllStockList() : 
+                await logic.GetStockListing();
         }
 
         private async Task GetPresentationListing()
@@ -129,13 +134,24 @@ namespace WPF.ViewModel
                 presentationListing.Add(item);
         }
 
+        private void TransactionMessage(object parameter)
+        {
+            if (transaction != (TransactionType)parameter)
+            {
+                transaction = (TransactionType)parameter;
+                OnPropertyChanged(nameof(priceMessage));
+            }
+        }
+
         private void RefreshListing(object parameter)
         {
-            if (((Refresh)parameter) is not Refresh.stock)
+            if (parameter is not Refresh.stock)
                 return;
 
             loadCommand.Execute(null);
         }
+
+        public string priceMessage => (transaction is TransactionType.purchase) ? "* Precio de venta:" : "* Precio:";
 
         public override void Dispose()
         {

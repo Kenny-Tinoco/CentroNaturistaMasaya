@@ -25,6 +25,7 @@ namespace WPF.ViewModel.Components
         public ICommand navigateHomeCommand { get; }
         public ICommand navigateProductCommand { get; }
         public ICommand navigateSaleCommand { get; }
+        public ICommand navigatePurchaseCommand { get; }
         public ICommand navigateProviderCommand { get; }
         public ICommand navigateEmployeeCommand { get; }
 
@@ -34,6 +35,7 @@ namespace WPF.ViewModel.Components
                 INavigationService navigateHomeCommand,
                 INavigationService navigateProductCommand,
                 INavigationService navigateSaleCommand,
+                INavigationService navigatePurchaseCommand,
                 INavigationService navigateProviderCommand,
                 INavigationService navigateEmployeeCommand
             )
@@ -43,6 +45,7 @@ namespace WPF.ViewModel.Components
             this.navigateHomeCommand = new NavigateCommand(navigateHomeCommand);
             this.navigateProductCommand = new NavigateCommand(navigateProductCommand);
             this.navigateSaleCommand = new NavigateCommand(navigateSaleCommand);
+            this.navigatePurchaseCommand = new NavigateCommand(navigatePurchaseCommand);
             this.navigateProviderCommand = new NavigateCommand(navigateProviderCommand);
             this.navigateEmployeeCommand = new NavigateCommand(navigateEmployeeCommand);
         }

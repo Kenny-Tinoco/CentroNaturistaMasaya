@@ -16,6 +16,7 @@ namespace Domain.Logic
         private EmployeeLogic? _employeeLogic;
         private ProviderPhoneLogic? _providerPhoneLogic;
         private PresentationLogic? _presentationModalLogic;
+        private PurchaseLogic? _purchaseLogic;
 
         public IViewsCollections viewsCollections = null!;
         public LogicFactory(DAOFactory parameter, IViewsCollections _viewsCollections) : this(parameter)
@@ -117,6 +118,16 @@ namespace Domain.Logic
                 if (_employeeLogic is null)
                     _employeeLogic = new EmployeeLogic(_daoFactory);
                 return _employeeLogic;
+            }
+        }
+
+        public PurchaseLogic purchaseLogic
+        {
+            get
+            {
+                if (_purchaseLogic is null)
+                    _purchaseLogic = new PurchaseLogic(_daoFactory, viewsCollections);
+                return _purchaseLogic;
             }
         }
     }

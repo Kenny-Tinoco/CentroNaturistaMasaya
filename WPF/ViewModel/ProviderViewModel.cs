@@ -40,9 +40,9 @@ namespace WPF.ViewModel
             editModalCommand = new RelayCommand(parameter => EditModal((Provider)parameter));
 
             messenger = _messenger;
+            messenger.Subscribe<Refresh>(this, RefreshListing);
             messenger.Subscribe<ProviderModalMessage>(this, MessageReceived);
         }
-
 
         public static ProviderViewModel LoadViewModel(ILogic parameter, IMessenger messenger, INavigationService navigationService)
         {
@@ -113,6 +113,14 @@ namespace WPF.ViewModel
                 await Save(parameter, true);
         }
 
+        private void RefreshListing(object parameter)
+        {
+            if (parameter is not Refresh.provider)
+                return;
+
+            listingViewModel.loadCommand.Execute(null);
+        }
+
         private async void MessageReceived(object parameter)
         {
             var element = (ProviderModalMessage)parameter;
@@ -123,7 +131,7 @@ namespace WPF.ViewModel
             else
                 await Delete(element.entity.IdProvider);
 
-            await ((AsyncCommandBase)listingViewModel.loadCommand).ExecuteAsync(null);
+            messenger.Send(Refresh.provider);
         }
 
         private async Task Delete(int idProvider)

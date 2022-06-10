@@ -6,7 +6,7 @@
         {
             Accounts = new HashSet<Account>();
             Consults = new HashSet<Consult>();
-            Sells = new HashSet<Sell>();
+            Sells = new HashSet<Sale>();
         }
 
         public int IdEmployee { get; set; }
@@ -17,6 +17,6 @@
 
         public virtual ICollection<Account> Accounts { get; set; }
         public virtual ICollection<Consult> Consults { get; set; }
-        public virtual ICollection<Sell> Sells { get; set; }
+        public virtual ICollection<Sale> Sells { get; set; }
     }
 }

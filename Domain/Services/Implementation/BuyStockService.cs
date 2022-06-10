@@ -1,41 +1,33 @@
 ﻿using Domain.DAO;
 using Domain.Entities;
+using Domain.Services.TransactionServices;
+using Domain.Utilities;
 
 namespace Domain.Services.Implementation
 {
     public class BuyStockService : IBuyStockService
     {
-        private readonly SellDAO sellDAO;
+        private readonly SupplyDAO supplyDAO;
 
-        public BuyStockService(SellDAO _sellDAO)
+        public BuyStockService(SupplyDAO supplyDAO)
         {
-            sellDAO = _sellDAO;
+            this.supplyDAO = supplyDAO;
         }
 
-        public async Task BuyStock(Employee employee, IEnumerable<SaleDetail> detial, double discount)
+        public async Task BuyStock(int idProvider, IEnumerable<SupplyDetail> detail, double discount)
         {
-            Sell element = new()
+            Supply element = new()
             {
-                IdEmployee = employee.IdEmployee,
+                IdProvider = idProvider,
                 Date = DateTime.Now,
                 Discount = discount
             };
 
-            element.Total = GetTotal(detial, discount);
+            element.Total = detail.GetTotal(discount);
 
-            element.SaleDetails = detial.ToList();
+            element.SupplyDetails = detail.ToList();
 
-            await sellDAO.Create(element);
-        }
-
-        public double GetTotal(IEnumerable<SaleDetail> detail, double discount)
-        {
-            double total = 0;
-
-            foreach (var item in detail)
-                total += item.Total;
-
-            return total *= (1 - discount);
+            await supplyDAO.Create(element);
         }
     }
 }

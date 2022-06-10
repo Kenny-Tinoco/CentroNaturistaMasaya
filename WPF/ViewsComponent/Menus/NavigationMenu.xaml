@@ -104,8 +104,11 @@
                         </custom:HamburgerMenuItem>
                         <custom:HamburgerMenuItem Command="{Binding navigateSaleCommand}">
                             <TextBlock Text="Venta"/>
-                        </custom:HamburgerMenuItem>
-                        <custom:HamburgerMenuItem Command="{Binding navigateProductCommand}">
+						</custom:HamburgerMenuItem>
+						<custom:HamburgerMenuItem Command="{Binding navigatePurchaseCommand}">
+							<TextBlock Text="Compra" />
+						</custom:HamburgerMenuItem>
+						<custom:HamburgerMenuItem Command="{Binding navigateProductCommand}">
                             <TextBlock Text="Producto"/>
                         </custom:HamburgerMenuItem>
                         <custom:HamburgerMenuItem Command="{Binding navigateProviderCommand}">

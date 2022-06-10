@@ -3,16 +3,17 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-		xmlns:viewmodel="clr-namespace:WPF.ViewModel"
-		xmlns:componentsViewModels="clr-namespace:WPF.ViewModel.Components"
-		xmlns:viewsProductModule="clr-namespace:WPF.View.ProductModule"
-		xmlns:viewsMenus="clr-namespace:WPF.ViewsComponent.Menus"
-		xmlns:viewsHomeWindows="clr-namespace:WPF.View.HomeModule"
-		xmlns:usercontrols="clr-namespace:WPF.ViewsComponent.UserControls"
 		xmlns:custom="clr-namespace:WPF.ViewsComponent.CustomControls"
-		xmlns:viewsProviderWindows="clr-namespace:WPF.View.ProviderModule"
-		xmlns:viewsEmployeeWindows="clr-namespace:WPF.View.EmployeeModule"
-		xmlns:viewsSaleWindows="clr-namespace:WPF.View.SaleModule"
+		xmlns:usercontrols="clr-namespace:WPF.ViewsComponent.UserControls"
+		xmlns:viewmodel="clr-namespace:WPF.ViewModel"
+		xmlns:componentsViewModel="clr-namespace:WPF.ViewModel.Components"
+		xmlns:viewsMenus="clr-namespace:WPF.ViewsComponent.Menus"
+		xmlns:viewsHomeModule="clr-namespace:WPF.View.HomeModule"
+		xmlns:viewsProductModule="clr-namespace:WPF.View.ProductModule"
+		xmlns:viewsProviderModule="clr-namespace:WPF.View.ProviderModule"
+		xmlns:viewsPurchaseModule="clr-namespace:WPF.View.PurchaseModule"
+		xmlns:viewsEmployeeModule="clr-namespace:WPF.View.EmployeeModule"
+		xmlns:viewsSaleModule="clr-namespace:WPF.View.SaleModule"
 		xmlns:local="clr-namespace:WPF.View"
 		mc:Ignorable="d"
 		WindowStyle="None"
@@ -25,11 +26,11 @@
 			<DataTemplate DataType="{x:Type viewmodel:LoginViewModel}">
 				<local:Login />
 			</DataTemplate>
-			<DataTemplate DataType="{x:Type componentsViewModels:ProductWindowsViewModel}">
+			<DataTemplate DataType="{x:Type componentsViewModel:ProductWindowsViewModel}">
 				<viewsProductModule:ProductMainView />
 			</DataTemplate>
 			<DataTemplate DataType="{x:Type viewmodel:HomeViewModel}">
-				<viewsHomeWindows:HomeView />
+				<viewsHomeModule:HomeView />
 			</DataTemplate>
 			<DataTemplate DataType="{x:Type viewmodel:StockViewModel}">
 				<viewsProductModule:StockPage />
@@ -53,25 +54,31 @@
 				<viewsProductModule:StockKeepingModal/>
 			</DataTemplate>
 			<DataTemplate DataType="{x:Type viewmodel:ProviderViewModel}">
-				<viewsProviderWindows:ProviderPage />
+				<viewsProviderModule:ProviderPage />
 			</DataTemplate>
 			<DataTemplate DataType="{x:Type viewmodel:ProviderModalFormViewModel}">
-				<viewsProviderWindows:ProviderModal />
+				<viewsProviderModule:ProviderModal />
 			</DataTemplate>
 			<DataTemplate DataType="{x:Type viewmodel:EmployeeViewModel}">
-				<viewsEmployeeWindows:EmployeePage />
+				<viewsEmployeeModule:EmployeePage />
 			</DataTemplate>
 			<DataTemplate DataType="{x:Type viewmodel:EmployeeModalFormViewModel}">
-				<viewsEmployeeWindows:EmployeeModal />
+				<viewsEmployeeModule:EmployeeModal />
 			</DataTemplate>
 			<DataTemplate DataType="{x:Type viewmodel:SaleViewModel}">
-				<viewsSaleWindows:SalePage />
+				<viewsSaleModule:SalePage />
 			</DataTemplate>
 			<DataTemplate DataType="{x:Type viewmodel:ProductSaleViewModel}">
-				<viewsSaleWindows:ProductSalePage />
+				<viewsSaleModule:ProductSalePage />
 			</DataTemplate>
 			<DataTemplate DataType="{x:Type viewmodel:SalesChargeModalViewModel}">
-				<viewsSaleWindows:SalesChargeModal />
+				<viewsSaleModule:SalesChargeModal />
+			</DataTemplate>
+			<DataTemplate DataType="{x:Type viewmodel:PurchaseViewModel}">
+				<viewsPurchaseModule:PurchasePage />
+			</DataTemplate>
+			<DataTemplate DataType="{x:Type viewmodel:BuyProductsViewModel}">
+				<viewsPurchaseModule:BuyProductPage />
 			</DataTemplate>
 		</Grid.Resources>
 
