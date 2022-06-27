@@ -39,7 +39,7 @@ namespace WPF.ViewsComponent.Menus {
     /// <summary>
     /// TabControlBarMenu
     /// </summary>
-    public partial class TabControlBarMenu : System.Windows.Controls.UserControl, System.Windows.Markup.IComponentConnector {
+    public partial class ProductModuleTabControlBarMenu : System.Windows.Controls.UserControl, System.Windows.Markup.IComponentConnector {
         
         
         #line 136 "..\..\..\..\..\ViewsComponent\Menus\TabControlMenu.xaml"

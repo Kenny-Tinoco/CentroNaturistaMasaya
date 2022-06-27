@@ -18,7 +18,7 @@ namespace DataAccess.DaoSqlServer
         private ProviderPhoneDAO _providerPhoneDAO = null!;
         private StockDAO _stockDAO = null!;
         private StockKeepingDAO _stockKeepingDAO = null!;
-        private SellDAO _sellDAO = null!;
+        private SaleDAO _sellDAO = null!;
         private SupplyDAO _supplyDAO = null!;
         private SupplyDetailDAO _supplyDetailDAO = null!;
 
@@ -148,12 +148,12 @@ namespace DataAccess.DaoSqlServer
             }
         }
 
-        public override SellDAO sellDAO
+        public override SaleDAO sellDAO
         {
             get
             {
                 if (_sellDAO == null)
-                    _sellDAO = new SellDAOSQL(_contextFactory);
+                    _sellDAO = new SaleDAOSQL(_contextFactory);
 
                 return _sellDAO;
             }

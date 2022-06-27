@@ -3,80 +3,85 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:userControls="clr-namespace:WPF.ViewsComponent.UserControls"
 			 xmlns:custom="clr-namespace:WPF.ViewsComponent.CustomControls">
-	<Grid Height="400"
-		  Width="800">
-		<custom:Popup TitleBar="{Binding titleBar}"
-					  IconBar="/Resource/Image/product.png"
-					  ExitCommand="{Binding exitCommand}">
 
-			<Grid>
-				<Grid.RowDefinitions>
-					<RowDefinition Height="auto" />
-					<RowDefinition Height="10" />
-					<RowDefinition Height="*" />
-				</Grid.RowDefinitions>
+	<custom:Popup TitleBar="{Binding titleBar}"
+				  IconBar="/Resource/Image/product.png"
+				  ExitCommand="{Binding exitCommand}"
+				  Height="400"
+				  Width="800">
 
-				<Grid Grid.Row="0">
-					<userControls:SearchBar Height="30"
-											Width="250"
-											Text="{Binding text, Mode=TwoWay}"
-											Margin="0 0 20 0" />
-				</Grid>
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="auto" />
+				<RowDefinition Height="10" />
+				<RowDefinition Height="*" />
+			</Grid.RowDefinitions>
 
-				<Grid Grid.Row="2">
-					<Grid.RowDefinitions>
-						<RowDefinition Height="*" />
-						<RowDefinition Height="auto" />
-					</Grid.RowDefinitions>
-
-					<DataGrid ItemsSource="{Binding listing}"
-							  Style="{DynamicResource ElementsDataGrid}"
-							  Grid.Row="0"
-							  Margin="30 10">
-
-						<DataGrid.Resources>
-							<DataTemplate x:Key="optionsCell">
-								<StackPanel HorizontalAlignment="Center"
-											Orientation="Horizontal">
-									<Button Content="Ir"
-											Command="{Binding Path=DataContext.goCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
-											CommandParameter="{Binding}"
-											Style="{DynamicResource ButtonStyle}"
-											Background="#2196F3" />
-								</StackPanel>
-							</DataTemplate>
-						</DataGrid.Resources>
-						<DataGrid.Columns>
-							<DataGridTextColumn Header="Cód."
-												Width="auto"
-												Binding="{Binding IdProduct}" />
-							<DataGridTextColumn Header="Nombre"
-												Width="180"
-												Binding="{Binding Name}" />
-							<DataGridTextColumn Header="Descripción"
-												Width="*"
-												Binding="{Binding Description}" />
-							<DataGridTemplateColumn Header="Opciones"
-													Width="auto"
-													CellTemplate="{StaticResource optionsCell}" />
-						</DataGrid.Columns>
-					</DataGrid>
-
-					<WrapPanel Margin="30 0"
-							   Grid.Row="1"
-							   VerticalAlignment="Center"
-							   HorizontalAlignment="Right">
-						<TextBlock FontSize="15"
-								   Text="{Binding listing.Count}" />
-						<TextBlock FontSize="15"
-								   Text=" elementos" />
-					</WrapPanel>
-				</Grid>
-
+			<Grid Grid.Row="0">
+				<userControls:SearchBar Height="30"
+										Width="250"
+										Text="{Binding text, Mode=TwoWay}"
+										Margin="0 0 20 0" />
 			</Grid>
 
-		</custom:Popup>
-	</Grid>
+			<Grid Grid.Row="2">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*" />
+					<RowDefinition Height="auto" />
+				</Grid.RowDefinitions>
+
+				<DataGrid ItemsSource="{Binding listing}"
+						  Style="{DynamicResource ElementsDataGrid}"
+						  Grid.Row="0"
+						  Margin="30 10">
+
+					<DataGrid.Resources>
+						<DataTemplate x:Key="optionsCell">
+							<StackPanel HorizontalAlignment="Center"
+										Orientation="Horizontal">
+								<Button Content="Ir"
+										Command="{Binding Path=DataContext.goCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+										CommandParameter="{Binding}"
+										Style="{DynamicResource ButtonStyle}"
+										Background="#2196F3" />
+							</StackPanel>
+						</DataTemplate>
+					</DataGrid.Resources>
+						<DataGrid.InputBindings>
+							<MouseBinding MouseAction="LeftDoubleClick"
+										  Command="{Binding goCommand}"
+										  CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+						</DataGrid.InputBindings>
+					<DataGrid.Columns>
+						<DataGridTextColumn Header="Cód."
+											Width="auto"
+											Binding="{Binding IdProduct}" />
+						<DataGridTextColumn Header="Nombre"
+											Width="180"
+											Binding="{Binding Name}" />
+						<DataGridTextColumn Header="Descripción"
+											Width="*"
+											Binding="{Binding Description}" />
+						<DataGridTemplateColumn Header="Opciones"
+												Width="auto"
+												CellTemplate="{StaticResource optionsCell}" />
+					</DataGrid.Columns>
+				</DataGrid>
+
+				<WrapPanel Margin="30 0"
+						   Grid.Row="1"
+						   VerticalAlignment="Center"
+						   HorizontalAlignment="Right">
+					<TextBlock FontSize="15"
+							   Text="{Binding listing.Count}" />
+					<TextBlock FontSize="15"
+							   Text=" elementos" />
+				</WrapPanel>
+			</Grid>
+
+		</Grid>
+
+	</custom:Popup>
 	<UserControl.Resources>
 		<Style x:Key="ButtonStyle"
 			   TargetType="Button">

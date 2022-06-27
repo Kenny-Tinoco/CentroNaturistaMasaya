@@ -108,13 +108,13 @@
 						<custom:HamburgerMenuItem Command="{Binding navigatePurchaseCommand}">
 							<TextBlock Text="Compra" />
 						</custom:HamburgerMenuItem>
+						<custom:HamburgerMenuItem Command="{Binding navigateConsultationCommand}">
+							<TextBlock Text="Consulta" />
+						</custom:HamburgerMenuItem>
 						<custom:HamburgerMenuItem Command="{Binding navigateProductCommand}">
-                            <TextBlock Text="Producto"/>
-                        </custom:HamburgerMenuItem>
-                        <custom:HamburgerMenuItem Command="{Binding navigateProviderCommand}">
-                            <TextBlock Text="Proveedor" />
-                        </custom:HamburgerMenuItem>
-                        <custom:HamburgerMenuItem Command="{Binding navigateEmployeeCommand}">
+							<TextBlock Text="Producto" />
+						</custom:HamburgerMenuItem>
+						<custom:HamburgerMenuItem Command="{Binding navigateEmployeeCommand}">
                             <TextBlock Text="Empleado" />
                         </custom:HamburgerMenuItem>
                     </StackPanel>

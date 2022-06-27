@@ -30,6 +30,7 @@ namespace WPF.ViewModel
         public PresentationModalViewModel(ILogic _logic, IMessenger _messenger, INavigationService closeModal) : base(closeModal)
         {
             messenger = _messenger;
+            messenger.Subscribe<Refresh>(this, RefreshListing);
 
             logic = (PresentationLogic)_logic;
 
@@ -79,24 +80,30 @@ namespace WPF.ViewModel
         private async Task Save(bool isEdition)
         {
             await Save(GetEntity(), isEdition);
-            RefreshCatalogues(isEdition);
+            NotifyChanges(isEdition);
         }
 
         private async Task Save(Presentation parameter, bool isEdition)
         {
             logic.entity = parameter;
-            
+
             await new SaveCommand(logic).ExecuteAsync(isEdition);
 
-            await ((AsyncCommandBase)listingViewModel.loadCommand).ExecuteAsync(null);
+            RefreshListing(Refresh.presentation);
         }
 
-        private void RefreshCatalogues(bool isEdition)
+        private void NotifyChanges(bool isEdition)
         {
             messenger.Send(Refresh.presentation);
 
             if (isEdition)
                 messenger.Send(Refresh.stock);
+        }
+
+        private void RefreshListing(object parameter)
+        {
+            if(parameter is Refresh.presentation) 
+                listingViewModel.loadCommand.Execute(null);
         }
 
         private Presentation GetEntity()
@@ -185,9 +192,9 @@ namespace WPF.ViewModel
 
             Reset();
 
-            await ((AsyncCommandBase)listingViewModel.loadCommand).ExecuteAsync(null);
+            RefreshListing(Refresh.presentation);
 
-            RefreshCatalogues(true);
+            NotifyChanges(true);
         }
 
 
@@ -225,7 +232,7 @@ namespace WPF.ViewModel
             if (flag != parameter.Status)
             {
                 await Save(parameter, true);
-                RefreshCatalogues(true);
+                NotifyChanges(true);
             }
         }
 

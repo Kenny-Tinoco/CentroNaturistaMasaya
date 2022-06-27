@@ -4,8 +4,6 @@ using Domain.Logic;
 using Domain.Logic.Base;
 using Domain.Services.TransactionServices;
 using Domain.Utilities;
-using MVVMGenericStructure.Commands;
-using MVVMGenericStructure.Services;
 using MVVMGenericStructure.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -24,9 +22,12 @@ namespace WPF.ViewModel
 {
     public class BuyProductsViewModel : FormViewModel
     {
-        public ICommand backCommand { get; }
-        public ICommand buyStockCommand { get; }
-        public ICommand salesChargeModalCommand { get; }
+        public ICommand buyStockCommand => new RelayCommand(o =>
+        {
+            buyStocksCommand.Execute(null);
+        });
+
+        public ICommand buyStocksCommand { get; }
 
         public StockViewerViewModel stockViewer { get; }
 
@@ -38,11 +39,9 @@ namespace WPF.ViewModel
             ILogic _logic,
             IMessenger _messenger,
             IBuyStockService sellStockService,
-            ViewModelBase _stockViewer,
-            INavigationService backNavigation)
+            ViewModelBase _stockViewer)
         {
-            backCommand = new NavigateCommand(backNavigation);
-            buyStockCommand = new BuyStockCommand(this, sellStockService);
+            buyStocksCommand = new BuyStockCommand(this, sellStockService);
 
             stockViewer = (StockViewerViewModel)_stockViewer;
 
@@ -61,10 +60,12 @@ namespace WPF.ViewModel
 
         public void Reset()
         {
+            ResetProperties();
             messenger.Send(Refresh.purchase);
             messenger.Send(Refresh.stock);
-            ResetProperties();
         }
+
+        public ICommand resetCommand => new RelayCommand(o => ResetProperties());
 
         private void ResetProperties()
         {
@@ -137,6 +138,7 @@ namespace WPF.ViewModel
             if (result is not null)
                 IncreaseQuantityOfDetail(result);
             else
+            {
                 detailListing.Add(new SupplyDetailView()
                 {
                     IdStock = parameter.element.IdStock,
@@ -147,6 +149,9 @@ namespace WPF.ViewModel
                     Price = 0,
                     Total = 0
                 });
+
+                detailSelected = (SupplyDetailView)GetIndexDetail(parameter.element.IdStock);
+            }
         }
 
         private void IncreaseQuantityOfDetail(TransactionDetailView element)
@@ -383,6 +388,7 @@ namespace WPF.ViewModel
         public override void Dispose()
         {
             stockViewerIsVisible = false;
+            statusMessage = string.Empty;
             base.Dispose();
         }
     }

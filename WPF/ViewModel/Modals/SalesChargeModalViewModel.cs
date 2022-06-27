@@ -1,4 +1,5 @@
 ﻿using MVVMGenericStructure.Services;
+using System;
 using System.Windows.Input;
 using WPF.Command.Navigation;
 using WPF.Services;
@@ -76,7 +77,7 @@ namespace WPF.ViewModel
                 if (_change < 0)
                 {
                     _change *= -1;
-                    errorsViewModel.AddError(nameof(change), "Dinero insuficiente \n Faltan " + _change + " córdobas.");
+                    errorsViewModel.AddError(nameof(change), "Dinero insuficiente \nFaltan " + Math.Round(_change,2) + " córdobas.");
                 }
 
                 return _change;

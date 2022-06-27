@@ -213,6 +213,7 @@
 									   FontSize="17">
                                         <Run Text="* En stock:" />
                                         <Run Text="{Binding Quantity}"
+											 Foreground="{Binding Quantity, Converter={StaticResource QuantityColorConverter}}"
 											 FontWeight="SemiBold" />
 							</TextBlock>
 

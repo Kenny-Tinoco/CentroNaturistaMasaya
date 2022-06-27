@@ -1,0 +1,212 @@
+﻿<Page x:Class="WPF.View.PurchaseModule.ProviderPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:userControls="clr-namespace:WPF.ViewsComponent.UserControls" 
+      xmlns:custom="clr-namespace:WPF.ViewsComponent.CustomControls"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="ProviderPage">
+    <Border 
+            Margin="6"
+            CornerRadius="6"
+            BorderBrush="Black"
+            Background="{DynamicResource colorBlancoFondo}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="15"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="15"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="8"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition/>
+                <RowDefinition Height="8"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel
+            Grid.Row="1"
+            HorizontalAlignment="Left"
+            Margin="30,30,0,15"
+            Style="{DynamicResource StackPanelStyle}">
+                <userControls:CustomButton
+                Title="Agregar proveedor"
+                buttonCommand="{Binding addModalCommand}"
+                ImageSource="/Resource/Image/plus.png"/>
+            </StackPanel>
+
+            <StackPanel
+            Grid.Row="1"
+            HorizontalAlignment="Right"
+            Margin="0,0,30,15"
+            Style="{DynamicResource StackPanelStyle}">
+                <StackPanel Orientation="Horizontal">
+                    <userControls:SearchBar
+                    Height="30"
+                    Width="250"
+                        DataContext="{Binding listingViewModel}"
+                    Text="{Binding text, Mode=TwoWay}"
+                    Margin="0 0 20 0"
+                    />
+                </StackPanel>
+            </StackPanel>
+
+            <TextBlock
+            Grid.Row="2"
+            Grid.Column="1"
+            FontWeight="SemiBold"
+            TextAlignment="Center"
+            VerticalAlignment="Bottom"
+            Text="{DynamicResource ProviderWindowTitle}"
+            FontSize="{DynamicResource ElementsDataGridTitleFontSize}"/>
+
+            <Grid 
+            Grid.Row="3"
+            Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0"
+                       HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        DataContext="{Binding listingViewModel}">
+                    <custom:LoadingSpinner  
+                    Diameter="100"
+                    IsLoading="{Binding isLoading}"
+                    Thickness="5"
+                    Color="Black"/>
+                    <TextBlock Text="{Binding errorMessage}" 
+                       Foreground="DarkRed"
+                       FontSize="18"
+                       Visibility="{Binding hasErrorMessage, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                </StackPanel>
+
+                <DataGrid
+                x:Name="elementDataGrid"
+                ItemsSource="{Binding listingViewModel.listing}"
+                Visibility="{Binding listingViewModel.isListingVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Style="{DynamicResource ElementsDataGrid}"
+                Margin="30 10"
+                Grid.Column="0"
+                >
+                    <DataGrid.Resources>
+                        <DataTemplate x:Key="comboBoxCell">
+                            <StackPanel
+                            HorizontalAlignment="Center"
+                            Orientation="Horizontal">
+                                <ComboBox ItemsSource="{Binding ProviderPhones}"
+                                          DisplayMemberPath="Phone"
+                                          SelectedIndex="0"
+                                    Margin="0 0 5 0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                        <DataTemplate x:Key="optionsCell">
+                            <WrapPanel
+                            HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                                <Button Content="Editar"
+                                    Command="{Binding Path=DataContext.editModalCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                    CommandParameter="{Binding}" 
+                                    Style="{DynamicResource ButtonStyle}"
+                                    Background="#2196F3"
+                                    Margin="0 0 5 0"/>
+                                <RibbonCheckBox Command="{Binding Path=DataContext.changeStatusCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                            CommandParameter="{Binding}"
+                                            Style="{DynamicResource StatusCheckBoxDataGridStyle}"/>
+                            </WrapPanel>
+                        </DataTemplate>
+                    </DataGrid.Resources>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Cód." Width="auto" Binding="{Binding IdProvider}" />
+                        <DataGridTextColumn Header="Nombre" Width="220" Binding="{Binding Name}"/>
+                        <DataGridTextColumn Header="Dirección" Width="*" Binding="{Binding Address}"/>
+                        <DataGridTextColumn Header="RUC" Width="auto" Binding="{Binding Ruc}"/>
+                        <DataGridTemplateColumn Header="Telefono" Width="auto" MinWidth="160"  CellTemplate="{StaticResource comboBoxCell}"/>
+                        <DataGridTemplateColumn Header="Opciones" Width="160" MinWidth="155" CellTemplate="{StaticResource optionsCell}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <WrapPanel
+                    Margin="30 0"
+                    Grid.Row="1"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Left"
+                    DataContext="{Binding listingViewModel}"
+                    Visibility="{Binding hasErrorMessage, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Button Content="Recargar"
+                            Padding="10 0"
+                            FontSize="14"
+                            Command="{Binding loadCommand}"/>
+                </WrapPanel>
+                <WrapPanel
+                    Margin="30 0"
+                    Grid.Row="1"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Right"
+                    DataContext="{Binding listingViewModel}"
+                Visibility="{Binding isListingVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <TextBlock 
+                    Style="{DynamicResource textBlockListViewStyle}"
+                    Text="{Binding listing.Count}"/>
+                    <TextBlock 
+                    Style="{DynamicResource textBlockListViewStyle}"
+                    Text=" elementos"/>
+                </WrapPanel>
+            </Grid>
+        </Grid>
+    </Border>
+    <Page.Resources>
+        <Style TargetType="TextBlock" x:Key="textBlockListViewStyle">
+            <Setter Property="FontSize" Value="17"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+        <Style x:Key="StackPanelStyle"
+               TargetType="StackPanel">
+            <Setter Property="Grid.Row" Value="2"/>
+            <Setter Property="Grid.Column" Value="1"/>
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Orientation" Value="Horizontal"/>
+        </Style>
+        <Style x:Key="ButtonStyle"
+               TargetType="Button">
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+
+                        <Border x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="4"
+                            Padding="8 0 8 0"
+                            BorderBrush="white"
+                            BorderThickness="0.6"
+                            SnapsToDevicePixels="true">
+                            <ContentControl Content="{TemplateBinding Content}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="white"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="black"/>
+                                <Setter Property="Foreground" Value="Black"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="White"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="Black"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+</Page>

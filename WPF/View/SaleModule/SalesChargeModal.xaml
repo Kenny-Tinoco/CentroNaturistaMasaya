@@ -52,7 +52,7 @@
                             CornerRadius="3"
                             BorderThickness="0.6"
                             Padding="1 0">
-                        <TextBox Text="{Binding payment, UpdateSourceTrigger=PropertyChanged}" 
+                        <TextBox Text="{Binding payment, UpdateSourceTrigger=PropertyChanged, StringFormat=0.00}" 
                                  FontSize="17"
                                  Foreground="Black"
                                  Style="{DynamicResource TextBoxStyle}"

@@ -9,9 +9,7 @@
 	  d:DesignHeight="450"
 	  d:DesignWidth="800"
 	  Title="SellProductPage">
-	<Border  Margin="6"
-			 CornerRadius="6"
-			 BorderBrush="Black"
+	<Border  CornerRadius="6"
 			 Background="White"
 			 Padding="10">
 		<Grid>
@@ -244,9 +242,8 @@
 										Background="White"
 										Padding="4 0">
 									<TextBlock FontSize="24"
-											   TextAlignment="Right">
-                                <Run Text="{Binding total, Mode=OneWay, StringFormat=0.00}" />
-									</TextBlock>
+											   TextAlignment="Right"
+											   Text="{Binding total, Mode=OneWay, StringFormat=0.00}" />
 								</Border>
 							</StackPanel>
 

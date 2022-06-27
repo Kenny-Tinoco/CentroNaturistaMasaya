@@ -7,9 +7,9 @@ namespace Domain.Services.Implementation
 {
     public class SellStockService : ISellStockService
     {
-        private readonly SellDAO sellDAO;
+        private readonly SaleDAO sellDAO;
 
-        public SellStockService(SellDAO _sellDAO)
+        public SellStockService(SaleDAO _sellDAO)
         {
             sellDAO = _sellDAO;
         }

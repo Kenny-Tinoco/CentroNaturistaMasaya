@@ -26,6 +26,7 @@ namespace Domain.DAO
 
     public interface PresentationDAO : BaseDAO<Presentation, object>
     {
+        Task<IEnumerable<Presentation>> GetAllPresentations();
     }
 
     public interface ProductDAO : BaseDAO<Product, object>
@@ -48,7 +49,7 @@ namespace Domain.DAO
     {
     }
 
-    public interface SellDAO : BaseDAO<Sale, object>
+    public interface SaleDAO : BaseDAO<Sale, object>
     {
         Task<int> GetLastedId();
     }

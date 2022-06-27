@@ -38,18 +38,18 @@ namespace WPF.ViewModel
             logic = (StockLogic)_logic;
 
             messenger = _messenger;
-            messenger.Subscribe<Refresh>(this, RefreshPresentation);
+            messenger.Subscribe<Refresh>(this, RefreshListing);
             messenger.Subscribe<Product>(this, ProductMessageSent);
             messenger.Subscribe<StockMessage>(this, StockMessageSent);
         }
 
 
-        private async void RefreshPresentation(object parameter)
+        private async void RefreshListing(object parameter)
         {
-            if ((Refresh)parameter is not Refresh.presentation)
-                return;
-
-            presentations = await logic.GetPresentationListing();
+            if (parameter is Refresh.presentation)
+                presentations = await logic.GetPresentationListing();
+            else if (parameter is Refresh.product)
+                messenger.Send(await logic.GetProductListing());
         }
 
         private void ProductMessageSent(object parameter)
@@ -66,12 +66,10 @@ namespace WPF.ViewModel
             Load(message.entity);
         }
 
-        public async void Load(Stock element)
+        public void Load(Stock element)
         {
-            presentations = await logic.GetPresentationListing();
-            var catalogue = await logic.GetProductListing();
-
-            messenger.Send(catalogue);
+            RefreshListing(Refresh.presentation);
+            RefreshListing(Refresh.product);
 
             InitializeProperties(element);
         }
@@ -93,7 +91,6 @@ namespace WPF.ViewModel
             entity.Image = null;
 
             currentProduct = null;
-            currentPresentation = presentations.Find(item => item.IdPresentation == 11);
         }
 
         private void SetValuesToProperties(Stock parameter)
@@ -112,6 +109,10 @@ namespace WPF.ViewModel
             InsertDates(parameter);
 
             currentProduct = parameter.ProductNavigation;
+
+            if (presentations is null)
+                RefreshListing(Refresh.presentation);
+
             currentPresentation = presentations.Find(item => item.IdPresentation == parameter.IdPresentation);
         }
 
@@ -274,7 +275,7 @@ namespace WPF.ViewModel
             if (flag != status && isEditable)
             {
                 await RunSaveCommand(true);
-                messenger.Send(Refresh.sale);
+                NotifyChanges();
             }
         }
 
@@ -307,6 +308,13 @@ namespace WPF.ViewModel
             await new SaveCommand(logic, this).ExecuteAsync(isEdition);
 
             messenger.Send(Refresh.stock);
+        }
+
+        private void NotifyChanges()
+        {
+            messenger.Send(Refresh.sale);
+            if (!isEditable)
+                messenger.Send(Refresh.product);
         }
 
         private Stock GetStock()
@@ -393,6 +401,9 @@ namespace WPF.ViewModel
             {
                 _presentations = value;
                 OnPropertyChanged(nameof(presentations));
+
+                if(currentPresentation is null)
+                    currentPresentation = presentations.Find(item => item.IdPresentation == 11);
             }
         }
 

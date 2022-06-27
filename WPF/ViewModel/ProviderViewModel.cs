@@ -110,7 +110,10 @@ namespace WPF.ViewModel
                 parameter.Status = true;
 
             if (flag != parameter.Status)
+            {
                 await Save(parameter, true);
+                messenger.Send(Refresh.provider);
+            }
         }
 
         private void RefreshListing(object parameter)

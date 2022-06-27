@@ -33,7 +33,7 @@
 									   ImageSource="/Resource/Image/plus.png" />
 			<userControls:CustomButton Title="Dar mantenimiento"
 									   buttonCommand="{Binding stockKeepingCommand}"
-									   ImageSource="/Resource/Image/record.png" 
+									   ImageSource="/Resource/Image/record.png"
 									   buttonParameter="{Binding SelectedItem, ElementName=elementDataGrid}" />
 		</StackPanel>
 
@@ -125,12 +125,24 @@
 					<DataGridTextColumn Header="Presentación"
 										Width="120"
 										Binding="{Binding Presentation}" />
-					<DataGridTextColumn Header="Cantidad"
-										Width="auto"
-										Binding="{Binding Quantity}" />
+
+					<DataGridTemplateColumn Header="Cantidad"
+											SortMemberPath="Quantity"
+											CanUserSort="True">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding Quantity}"
+										   FontWeight="SemiBold"
+										   Width="auto"
+										   Margin="10 0 0 0"
+										   Foreground="{Binding Quantity, Converter={StaticResource QuantityColorConverter}}" />
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+
 					<DataGridTextColumn Header="Precio"
 										Width="auto"
-										Binding="{Binding Price}" />
+										Binding="{Binding Price}"/>
 					<DataGridTextColumn Header="Estado"
 										Width="auto"
 										Binding="{Binding Status, Converter={StaticResource StatusValueConverter}}"

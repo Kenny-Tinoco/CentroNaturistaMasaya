@@ -134,6 +134,7 @@ namespace WPF.ViewModel
         private void NotifyChanges()
         {
             messenger.Send(Refresh.stock);
+            messenger.Send(Refresh.product);
         }
 
         private StockKeeping GetEntity()

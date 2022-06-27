@@ -28,26 +28,15 @@
 				<RowDefinition Height="8" />
 			</Grid.RowDefinitions>
 
-			<StackPanel Grid.Row="1"
+			<StackPanel Grid.Row="2"
 						HorizontalAlignment="Left"
-						Margin="30,30,0,15"
+						Margin="30,0,0,0"
 						Style="{DynamicResource StackPanelStyle}">
-				<userControls:CustomButton Title="Comprar productos"
-										   buttonCommand="{Binding openFormCommand}"
-										   ImageSource="/Resource/Image/plus.png" />
-			</StackPanel>
+				<userControls:SearchBar Height="30"
+										Width="250"
+										DataContext="{Binding listingViewModel}"
+										Text="{Binding text, Mode=TwoWay}" />
 
-			<StackPanel Grid.Row="1"
-						HorizontalAlignment="Right"
-						Margin="0,0,30,15"
-						Style="{DynamicResource StackPanelStyle}">
-				<StackPanel Orientation="Horizontal">
-					<userControls:SearchBar Height="30"
-											Width="250"
-											DataContext="{Binding listingViewModel}"
-											Text="{Binding text, Mode=TwoWay}"
-											Margin="0 0 20 0" />
-				</StackPanel>
 			</StackPanel>
 
 			<TextBlock Grid.Row="2"
@@ -103,7 +92,7 @@
 												Binding="{Binding Name}" />
 							<DataGridTextColumn Header="Egreso"
 												Width="auto"
-												Binding="{Binding Total}" />
+												Binding="{Binding Total,StringFormat=0.00}" />
 							<DataGridTextColumn Header="Hora"
 												Width="auto"
 												Binding="{Binding Date, StringFormat='h:mm tt', ConverterCulture='es'}" />
@@ -185,7 +174,7 @@
 										   FontSize="17">
 
                                 <Run Text="* Total:" />
-                                <Run Text="{Binding Total}"
+                                <Run Text="{Binding Total,StringFormat=0.00}"
 									 FontWeight="SemiBold" />
                                 <Run Text="córdobas"
 									 FontWeight="SemiBold" />
@@ -227,7 +216,7 @@
 														Binding="{Binding Total}" />
 									<DataGridTextColumn Header="Cód."
 														Binding="{Binding IdStock, StringFormat=000}"
-														FontWeight="SemiBold"/>
+														FontWeight="SemiBold" />
 									<DataGridTextColumn Header="Producto"
 														Width="auto"
 														Binding="{Binding ProductName}" />
@@ -289,7 +278,7 @@
 					<TextBlock Style="{DynamicResource textBlockListViewStyle}"
 							   Text="{Binding listing.Count}" />
 					<TextBlock Style="{DynamicResource textBlockListViewStyle}"
-							   Text=" ventas" />
+							   Text=" compras" />
 				</WrapPanel>
 			</Grid>
 		</Grid>

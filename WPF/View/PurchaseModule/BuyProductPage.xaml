@@ -8,290 +8,276 @@
 	  d:DesignHeight="450"
 	  d:DesignWidth="800"
 	  Title="BuyProductPage">
-	
-	<Border  Margin="6"
-			 CornerRadius="6"
-			 BorderBrush="Black"
-			 Background="White"
-			 Padding="10">
-		<Grid>
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="auto" />
-				<ColumnDefinition Width="*" />
-			</Grid.ColumnDefinitions>
-			<Grid.RowDefinitions>
-				<RowDefinition Height="auto" />
-				<RowDefinition Height="*" />
-			</Grid.RowDefinitions>
 
-			<TextBlock Grid.Row="0"
-					   Grid.Column="0"
-					   Grid.ColumnSpan="2"
-					   Text="Compra de productos"
-					   FontSize="20"
-					   HorizontalAlignment="Center"
-					   FontWeight="SemiBold"
-					   Margin="0 10" />
+	<Grid Margin="8">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="auto" />
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
 
-			<Grid Grid.Row="1"
-				  Visibility="{Binding stockViewerIsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+		<Grid Grid.Row="1"
+			  Visibility="{Binding stockViewerIsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
 
-				<saleModule:StockViewer DataContext="{Binding stockViewer}" />
-				<CheckBox Grid.Row="0"
-						  HorizontalAlignment="Left"
-						  VerticalAlignment="Top"
-						  Margin="3"
-						  Style="{DynamicResource XCloseStyle}"
-						  IsChecked="{Binding stockViewerIsVisible}" />
-			</Grid>
+			<saleModule:StockViewer DataContext="{Binding stockViewer}" />
+			<CheckBox Grid.Row="0"
+					  HorizontalAlignment="Left"
+					  VerticalAlignment="Top"
+					  Margin="3"
+					  Style="{DynamicResource XCloseStyle}"
+					  IsChecked="{Binding stockViewerIsVisible}" />
+		</Grid>
 
-			<Border Grid.Row="1"
-					Grid.Column="1"
-					CornerRadius="8"
-					BorderBrush="Black"
-					BorderThickness="0.3"
-					Background="{StaticResource colorBlancoFondo}"
-					Padding="20">
-				<Grid>
+		<Border Grid.Row="1"
+				Grid.Column="1"
+				CornerRadius="8"
+				BorderBrush="Black"
+				BorderThickness="0.3"
+				Background="{StaticResource colorBlancoFondo}"
+				Padding="20">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="auto" />
+					<RowDefinition Height="*" />
+				</Grid.RowDefinitions>
+
+				<TextBlock Grid.Row="0"
+						   Text="Compra de productos"
+						   FontSize="20"
+						   HorizontalAlignment="Center"
+						   VerticalAlignment="Center"
+						   FontWeight="SemiBold"
+						   Margin="0 -100 0 0" />
+
+				<Grid Grid.Row="0"
+					  Margin="0 10 0 30">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="auto" />
+					</Grid.ColumnDefinitions>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="auto" />
-						<RowDefinition Height="*" />
+						<RowDefinition Height="auto" />
+						<RowDefinition Height="auto" />
 					</Grid.RowDefinitions>
 
-					<Grid Grid.Row="0"
-						  Margin="0 10 0 30">
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="*" />
-							<ColumnDefinition Width="auto" />
-						</Grid.ColumnDefinitions>
+					<TextBlock Grid.Row="1"
+							   FontSize="17"
+							   Text="Proveedor"
+							   FontWeight="DemiBold" />
+
+					<ComboBox Grid.Row="2"
+							  MaxWidth="300"
+							  Width="auto"
+							  FontSize="17"
+							  HorizontalAlignment="Left"
+							  DisplayMemberPath="name"
+							  ItemsSource="{Binding providerListing}"
+							  SelectedItem="{Binding providerSelected}"
+							  Style="{DynamicResource ToolTipStyle}" />
+
+					<TextBlock Grid.Row="1"
+							   Grid.Column="1"
+							   FontSize="17"
+							   Text="Fecha"
+							   FontWeight="DemiBold" />
+					<DatePicker Grid.Row="2"
+								Grid.Column="1"
+								Style="{DynamicResource DatePickerStyle}"
+								Width="auto"
+								SelectedDate="{Binding date, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True, ValidatesOnDataErrors=True}" />
+
+				</Grid>
+				<Grid Grid.Row="1">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="auto" />
+					</Grid.ColumnDefinitions>
+
+					<Grid Grid.Column="0">
 						<Grid.RowDefinitions>
 							<RowDefinition Height="auto" />
+							<RowDefinition Height="*" />
 							<RowDefinition Height="auto" />
 							<RowDefinition Height="auto" />
 						</Grid.RowDefinitions>
 
-						<TextBlock Grid.Row="1"
-								   FontSize="17"
-								   Text="Proveedor"
-								   FontWeight="DemiBold" />
-
-						<ComboBox Grid.Row="2"
-								  MaxWidth="300"
-								  Width="auto"
+						<CheckBox Grid.Row="0"
+								  Content="Ver visor"
+								  VerticalContentAlignment="Center"
 								  FontSize="17"
 								  HorizontalAlignment="Left"
-								  DisplayMemberPath="name"
-								  ItemsSource="{Binding providerListing}"
-								  SelectedItem="{Binding providerSelected}"
-								  Style="{DynamicResource ToolTipStyle}"/>
+								  IsChecked="{Binding stockViewerIsVisible}" />
 
-						<TextBlock Grid.Row="1"
-								   Grid.Column="1"
-								   FontSize="17"
-								   Text="Fecha"
-								   FontWeight="DemiBold" />
-						<DatePicker Grid.Row="2"
-									Grid.Column="1"
-									Style="{DynamicResource DatePickerStyle}"
-									Width="auto"
-									SelectedDate="{Binding date, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True, ValidatesOnDataErrors=True}" />
+						<DataGrid Grid.Row="1"
+								  Margin="0 5"
+								  ItemsSource="{Binding detailListing}"
+								  AutoGenerateColumns="False"
+								  FontSize="15"
+								  CanUserAddRows="False"
+								  CanUserDeleteRows="False"
+								  IsReadOnly="True"
+								  Background="White"
+								  SelectedItem="{Binding detailSelected}"
+								  ColumnHeaderStyle="{DynamicResource DataGridGenericColumnHeader}">
+							<DataGrid.Columns>
+								<DataGridTextColumn Header="Cant."
+													Width="48"
+													Binding="{Binding Quantity}" />
+								<DataGridTextColumn Header="Precio/Compra"
+													Width="60"
+													Binding="{Binding Price}" />
+								<DataGridTextColumn Header="Subtotal"
+													Width="65"
+													Binding="{Binding Total}" />
+								<DataGridTextColumn Header="Cód."
+													Binding="{Binding IdStock, StringFormat=000}"
+													FontWeight="SemiBold" />
+								<DataGridTextColumn Header="Producto"
+													Width="auto"
+													Binding="{Binding ProductName}" />
+								<DataGridTextColumn Header="Presentación"
+													Width="auto"
+													Binding="{Binding Presentation}" />
+								<DataGridTextColumn Header="Descripción"
+													Width="400"
+													Binding="{Binding ProductDescription}" />
+							</DataGrid.Columns>
+						</DataGrid>
 
-					</Grid>
-					<Grid Grid.Row="1">
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="*" />
-							<ColumnDefinition Width="auto" />
-						</Grid.ColumnDefinitions>
+						<Border  Grid.Row="2"
+								 BorderThickness="0.4"
+								 Margin="0 0 0 12"
+								 CornerRadius="4"
+								 BorderBrush="Black"
+								 Padding="2 0 2 2"
+								 Visibility="{Binding detailsEditorIsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+							<ScrollViewer HorizontalScrollBarVisibility="Auto"
+										  VerticalScrollBarVisibility="Disabled"
+										  Padding="0 5">
+								<WrapPanel>
 
-						<Grid Grid.Column="0">
-							<Grid.RowDefinitions>
-								<RowDefinition Height="auto" />
-								<RowDefinition Height="*" />
-								<RowDefinition Height="auto" />
-								<RowDefinition Height="auto" />
-							</Grid.RowDefinitions>
-
-							<CheckBox Grid.Row="0"
-									  Content="Ver visor"
-									  VerticalContentAlignment="Center"
-									  FontSize="17"
-									  HorizontalAlignment="Left"
-									  IsChecked="{Binding stockViewerIsVisible}" />
-
-							<DataGrid Grid.Row="1"
-									  Margin="0 5"
-									  ItemsSource="{Binding detailListing}"
-									  AutoGenerateColumns="False"
-									  FontSize="15"
-									  CanUserAddRows="False"
-									  CanUserDeleteRows="False"
-									  IsReadOnly="True"
-									  Background="White"
-									  SelectedItem="{Binding detailSelected}"
-									  ColumnHeaderStyle="{DynamicResource DataGridGenericColumnHeader}">
-								<DataGrid.Columns>
-									<DataGridTextColumn Header="Cant."
-														Width="48"
-														Binding="{Binding Quantity}" />
-									<DataGridTextColumn Header="Precio/Compra"
-														Width="60"
-														Binding="{Binding Price}" />
-									<DataGridTextColumn Header="Subtotal"
-														Width="65"
-														Binding="{Binding Total}" />
-									<DataGridTextColumn Header="Cód."
-														Binding="{Binding IdStock, StringFormat=000}" 
-														FontWeight="SemiBold"/>
-									<DataGridTextColumn Header="Producto"
-														Width="auto"
-														Binding="{Binding ProductName}" />
-									<DataGridTextColumn Header="Presentación"
-														Width="auto"
-														Binding="{Binding Presentation}" />
-									<DataGridTextColumn Header="Descripción"
-														Width="400"
-														Binding="{Binding ProductDescription}" />
-								</DataGrid.Columns>
-							</DataGrid>
-
-							<Border  Grid.Row="2"
-									 BorderThickness="0.4"
-									 Margin="0 0 0 12" 
-									 CornerRadius="4"
-									 BorderBrush="Black"
-									 Padding="2 0 2 2"
-									 Visibility="{Binding detailsEditorIsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-								<ScrollViewer HorizontalScrollBarVisibility="Auto"
-											  VerticalScrollBarVisibility="Disabled"
-											  Padding="0 5">
-									<WrapPanel>
-
-										<TextBlock FontSize="17"
-												   VerticalAlignment="Center">
+									<TextBlock FontSize="17"
+											   VerticalAlignment="Center">
                                             <Run Text="Cód:" />
                                             <Run Text="{Binding detailSelected.IdStock,StringFormat=000}"
 												 FontWeight="SemiBold" />
-										</TextBlock>
-
-										<TextBlock Text="Cantidad: "
-												   FontSize="17"
-												   VerticalAlignment="Center"
-												   Margin="15 0 0 0" />
-										<TextBox Width="40"
-												 FontSize="17"
-												 Style="{StaticResource ToolTipStyle}"
-												 Text="{Binding quantity, UpdateSourceTrigger=PropertyChanged, StringFormat=0}"
-												 HorizontalContentAlignment="Center"
-												 VerticalAlignment="Center" />
-
-										<TextBlock Text="Precio/Compra: "
-												   FontSize="17"
-												   VerticalAlignment="Center"
-												   Margin="25 0 0 0" />
-										<TextBox Width="40"
-												 FontSize="17"
-												 VerticalAlignment="Center"
-												 Style="{StaticResource ToolTipStyle}"
-												 Text="{Binding price, UpdateSourceTrigger=PropertyChanged, StringFormat=0}"
-												 HorizontalContentAlignment="Center" />
-
-										<Button Content="Guardar"
-												CommandParameter="{Binding detailSelected}"
-												Command="{Binding editDetail}"
-												FontSize="15"
-												IsEnabled="{Binding canCreate}"
-												Margin="25 0 0 0"
-												Padding="5 0" />
-										<Button Content="Eliminar"
-												Padding="5 0"
-												Margin="10 0"
-												Command="{Binding deleteDetail}"
-												CommandParameter="{Binding detailSelected}"
-												FontSize="15" />
-									</WrapPanel>
-								</ScrollViewer>
-							</Border>
-
-							<WrapPanel Grid.Row="3">
-								<TextBlock Text="Descuento: "
-										   FontSize="17"
-										   VerticalAlignment="Center" />
-								<ComboBox ItemsSource="{Binding discounts}"
-										  DisplayMemberPath="name"
-										  FontSize="17"
-										  SelectedItem="{Binding selectedDiscount}" />
-								<TextBlock Text="{Binding discountedAmount, StringFormat=0.00 córdobas}"
-										   FontSize="17"
-										   IsEnabled="False"
-										   VerticalAlignment="Center"
-										   Margin="20 0 10 0" />
-								<CheckBox Content="Aplicar"
-										  VerticalContentAlignment="Center"
-										  IsChecked="{Binding discountApplies}"
-										  FontSize="17"
-										  VerticalAlignment="Center" />
-							</WrapPanel>
-
-						</Grid>
-
-						<Grid Grid.Column="1"
-							  Margin="20 20 0 0">
-							<Grid.RowDefinitions>
-								<RowDefinition Height="auto" />
-								<RowDefinition Height="auto" />
-								<RowDefinition Height="auto" />
-								<RowDefinition Height="auto" />
-								<RowDefinition Height="*" />
-							</Grid.RowDefinitions>
-
-							<StackPanel Grid.Row="0">
-								<TextBlock FontSize="18">
-                                <Run Text="Total a pagar" />
-								</TextBlock>
-								<Border BorderBrush="Black"
-										BorderThickness="1"
-										Background="White"
-										Padding="4 0">
-									<TextBlock FontSize="24"
-											   TextAlignment="Right">
-                                <Run Text="{Binding total, Mode=OneWay, StringFormat=0.00}" />
 									</TextBlock>
-								</Border>
-							</StackPanel>
 
-							<Button Grid.Row="1"
-									Margin="0 10"
-									Content="Finalizar"
-									IsEnabled="{Binding canCreateSale}"
-									Command="{Binding buyStockCommand}"
-									FontSize="15" />
-							<TextBlock Grid.Row="3"
-									   Text="{Binding statusMessage}"
-									   Visibility="{Binding hasStatusMessage, Converter={StaticResource BooleanToVisibilityConverter}}"
-									   Margin="0 10 0 10"
-									   HorizontalAlignment="Right"
+									<TextBlock Text="Cantidad: "
+											   FontSize="17"
+											   VerticalAlignment="Center"
+											   Margin="15 0 0 0" />
+									<TextBox Width="40"
+											 FontSize="17"
+											 Style="{StaticResource ToolTipStyle}"
+											 Text="{Binding quantity, UpdateSourceTrigger=PropertyChanged, StringFormat=0}"
+											 HorizontalContentAlignment="Center"
+											 VerticalAlignment="Center" />
+
+									<TextBlock Text="Precio/Compra: "
+											   FontSize="17"
+											   VerticalAlignment="Center"
+											   Margin="25 0 0 0" />
+									<TextBox Width="40"
+											 FontSize="17"
+											 VerticalAlignment="Center"
+											 Style="{StaticResource ToolTipStyle}"
+											 Text="{Binding price, UpdateSourceTrigger=PropertyChanged, StringFormat=0}"
+											 HorizontalContentAlignment="Center" />
+
+									<Button Content="Guardar"
+											CommandParameter="{Binding detailSelected}"
+											Command="{Binding editDetail}"
+											FontSize="15"
+											IsEnabled="{Binding canCreate}"
+											Margin="25 0 0 0"
+											Padding="5 0" />
+									<Button Content="Eliminar"
+											Padding="5 0"
+											Margin="10 0"
+											Command="{Binding deleteDetail}"
+											CommandParameter="{Binding detailSelected}"
+											FontSize="15" />
+								</WrapPanel>
+							</ScrollViewer>
+						</Border>
+
+						<WrapPanel Grid.Row="3">
+							<TextBlock Text="Descuento: "
+									   FontSize="17"
+									   VerticalAlignment="Center" />
+							<ComboBox ItemsSource="{Binding discounts}"
+									  DisplayMemberPath="name"
+									  FontSize="17"
+									  SelectedItem="{Binding selectedDiscount}" />
+							<TextBlock Text="{Binding discountedAmount, StringFormat=0.00 córdobas}"
+									   FontSize="17"
+									   IsEnabled="False"
 									   VerticalAlignment="Center"
-									   FontSize="14"
-									   Foreground="Blue" />
-							<Button Grid.Row="4"
-									Content="Cancelar"
-									Command="{Binding backCommand}"
-									VerticalAlignment="Bottom"
-									FontSize="15" />
-						</Grid>
+									   Margin="20 0 10 0" />
+							<CheckBox Content="Aplicar"
+									  VerticalContentAlignment="Center"
+									  IsChecked="{Binding discountApplies}"
+									  FontSize="17"
+									  VerticalAlignment="Center" />
+						</WrapPanel>
 
 					</Grid>
 
-					<Button Grid.Row="0"
-							HorizontalAlignment="Left"
-							VerticalAlignment="Top"
-							Style="{DynamicResource XCloseStyle}"
-							Margin="-18 -18"
-							Command="{Binding backCommand }" />
+					<Grid Grid.Column="1"
+						  Margin="20 20 0 0">
+						<Grid.RowDefinitions>
+							<RowDefinition Height="auto" />
+							<RowDefinition Height="auto" />
+							<RowDefinition Height="auto" />
+							<RowDefinition Height="auto" />
+							<RowDefinition Height="*" />
+						</Grid.RowDefinitions>
+
+						<StackPanel Grid.Row="0">
+							<TextBlock FontSize="18">
+                                <Run Text="Total a pagar" />
+							</TextBlock>
+							<Border BorderBrush="Black"
+									BorderThickness="1"
+									Background="White"
+									Padding="4 0">
+								<TextBlock FontSize="24"
+										   TextAlignment="Right">
+                                <Run Text="{Binding total, Mode=OneWay, StringFormat=0.00}" />
+								</TextBlock>
+							</Border>
+						</StackPanel>
+
+						<Button Grid.Row="1"
+								Margin="0 10"
+								Content="Finalizar"
+								IsEnabled="{Binding canCreateSale}"
+								Command="{Binding buyStockCommand}"
+								FontSize="15" />
+						<TextBlock Grid.Row="3"
+								   Text="{Binding statusMessage}"
+								   Visibility="{Binding hasStatusMessage, Converter={StaticResource BooleanToVisibilityConverter}}"
+								   Margin="0 10 0 10"
+								   HorizontalAlignment="Right"
+								   VerticalAlignment="Center"
+								   FontSize="14"
+								   Foreground="Blue" />
+						<Button Grid.Row="4"
+								Content="Cancelar"
+								Command="{Binding resetCommand}"
+								VerticalAlignment="Bottom"
+								FontSize="15" />
+					</Grid>
+
 				</Grid>
-			</Border>
-		</Grid>
-	</Border>
+			</Grid>
+		</Border>
+	</Grid>
 	<Page.Resources>
 		<Style x:Key="GroupBoxStyle"
 			   TargetType="GroupBox">

@@ -311,6 +311,7 @@ namespace WPF.ViewModel
         public override void Dispose()
         {
             stockViewerIsVisible = false;
+            statusMessage = string.Empty;
             base.Dispose();
         }
     }

@@ -3,6 +3,7 @@ using Domain.DAO;
 using Domain.Entities;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace DataAccess.DaoSqlServer
 {
@@ -92,6 +93,19 @@ namespace DataAccess.DaoSqlServer
         public PresentationDAOSQL(MasayaNaturistCenterDataBaseFactory dataBaseContext) : base(dataBaseContext) { }
 
         protected override string nameTable => "Presentation";
+
+        public override async Task<IEnumerable<Presentation>> GetAll()
+        {
+            return (await GetAllPresentations()).Where(item => item.IdPresentation != 11);
+        }
+
+        public async Task<IEnumerable<Presentation>> GetAllPresentations()
+        {
+            using MasayaNaturistCenterDataBase context = _contextFactory.CreateDbContext();
+            IEnumerable<Presentation> entities = await context.Set<Presentation>().ToListAsync();
+
+            return entities;
+        }
     }
 
     public class ProductDAOSQL : BaseDAOSQL<Product>, ProductDAO
@@ -164,9 +178,9 @@ namespace DataAccess.DaoSqlServer
         }
     }
 
-    public class SellDAOSQL : BaseDAOSQL<Sale>, SellDAO
+    public class SaleDAOSQL : BaseDAOSQL<Sale>, SaleDAO
     {
-        public SellDAOSQL(MasayaNaturistCenterDataBaseFactory dataBaseContext) : base(dataBaseContext) 
+        public SaleDAOSQL(MasayaNaturistCenterDataBaseFactory dataBaseContext) : base(dataBaseContext) 
         {
         }
 

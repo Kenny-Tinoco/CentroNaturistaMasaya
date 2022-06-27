@@ -1,0 +1,111 @@
+﻿<UserControl x:Class="WPF.ViewsComponent.Menus.ConsultationModuleTabControlBarMenu"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:custom="clr-namespace:WPF.ViewsComponent.CustomControls"
+			 mc:Ignorable="d"
+			 d:DesignHeight="450"
+			 d:DesignWidth="800">
+	<UserControl.Resources>
+
+		<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
+		<Style TargetType="custom:HamburgerMenuItem">
+			<Setter Property="Padding"
+					Value="20 10" />
+			<Setter Property="FontSize"
+					Value="{DynamicResource CustomButtonFontSize}" />
+			<Setter Property="Foreground"
+					Value="Black" />
+			<Setter Property="Background"
+					Value="{DynamicResource colorBlancoFondo}" />
+			<Setter Property="CornerRadius"
+					Value="6" />
+			<Style.Triggers>
+
+				<MultiTrigger>
+					<MultiTrigger.Conditions>
+						<Condition  Property="IsMouseOver"
+									Value="True" />
+						<Condition  Property="IsChecked"
+									Value="False" />
+					</MultiTrigger.Conditions>
+					<Setter Property="Foreground"
+							Value="White" />
+					<MultiTrigger.EnterActions>
+						<BeginStoryboard>
+							<Storyboard>
+								<ColorAnimation Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
+												To="#0c6e82"
+												Duration="0:0:0.1" />
+							</Storyboard>
+						</BeginStoryboard>
+					</MultiTrigger.EnterActions>
+					<MultiTrigger.ExitActions>
+						<BeginStoryboard>
+							<Storyboard>
+								<ColorAnimation Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
+												To="#E1E2E1"
+												Duration="0:0:0.1" />
+							</Storyboard>
+						</BeginStoryboard>
+					</MultiTrigger.ExitActions>
+				</MultiTrigger>
+
+				<MultiTrigger>
+					<MultiTrigger.Conditions>
+						<Condition  Property="IsMouseOver"
+									Value="True" />
+						<Condition  Property="IsChecked"
+									Value="True" />
+					</MultiTrigger.Conditions>
+					<MultiTrigger.EnterActions>
+						<BeginStoryboard>
+							<Storyboard>
+								<ColorAnimation Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
+												To="#132c33"
+												Duration="0:0:0.1" />
+							</Storyboard>
+						</BeginStoryboard>
+					</MultiTrigger.EnterActions>
+				</MultiTrigger>
+
+				<Trigger Property="IsChecked"
+						 Value="True">
+					<Setter Property="Foreground"
+							Value="White" />
+					<Setter Property="Background"
+							Value="#132c33" />
+				</Trigger>
+
+				<Trigger Property="IsChecked"
+						 Value="False">
+					<Setter Property="Background"
+							Value="#E1E2E1" />
+				</Trigger>
+
+			</Style.Triggers>
+		</Style>
+	</UserControl.Resources>
+
+	<Grid>
+
+		<StackPanel x:Name="stackPanel"
+					Orientation="Horizontal">
+
+			<custom:HamburgerMenuItem Command="{Binding navigatePatientConsultation}"
+									  IsChecked="True">
+				<TextBlock Text="Atender consulta" />
+			</custom:HamburgerMenuItem>
+			<custom:HamburgerMenuItem Command="{Binding navigateConsultationPage}"
+									  Margin="10 0 10 0">
+				<TextBlock Text="Registros de Consultas" />
+			</custom:HamburgerMenuItem>
+			<custom:HamburgerMenuItem Command="{Binding navigatePatientPage}">
+				<TextBlock Text="Pacientes" />
+			</custom:HamburgerMenuItem>
+		</StackPanel>
+
+	</Grid>
+</UserControl>

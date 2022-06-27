@@ -1,0 +1,169 @@
+﻿<UserControl x:Class="WPF.ViewsComponent.Menus.ProductModuleTabControlBarMenu"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:custom="clr-namespace:WPF.ViewsComponent.CustomControls"
+			 mc:Ignorable="d">
+
+	<UserControl.Resources>
+
+		<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
+		<Style TargetType="custom:HamburgerMenuItem">
+			<Setter Property="Padding"
+					Value="20 10" />
+			<Setter Property="FontSize"
+					Value="{DynamicResource CustomButtonFontSize}" />
+			<Setter Property="Foreground"
+					Value="Black" />
+			<Setter Property="Background"
+					Value="{DynamicResource colorBlancoFondo}" />
+			<Setter Property="CornerRadius"
+					Value="6" />
+			<Style.Triggers>
+
+				<MultiTrigger>
+					<MultiTrigger.Conditions>
+						<Condition  Property="IsMouseOver"
+									Value="True" />
+						<Condition  Property="IsChecked"
+									Value="False" />
+					</MultiTrigger.Conditions>
+					<Setter Property="Foreground"
+							Value="White" />
+					<MultiTrigger.EnterActions>
+						<BeginStoryboard>
+							<Storyboard>
+								<ColorAnimation Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
+												To="#0c6e82"
+												Duration="0:0:0.1" />
+							</Storyboard>
+						</BeginStoryboard>
+					</MultiTrigger.EnterActions>
+					<MultiTrigger.ExitActions>
+						<BeginStoryboard>
+							<Storyboard>
+								<ColorAnimation Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
+												To="#E1E2E1"
+												Duration="0:0:0.1" />
+							</Storyboard>
+						</BeginStoryboard>
+					</MultiTrigger.ExitActions>
+				</MultiTrigger>
+
+				<MultiTrigger>
+					<MultiTrigger.Conditions>
+						<Condition  Property="IsMouseOver"
+									Value="True" />
+						<Condition  Property="IsChecked"
+									Value="True" />
+					</MultiTrigger.Conditions>
+					<MultiTrigger.EnterActions>
+						<BeginStoryboard>
+							<Storyboard>
+								<ColorAnimation Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
+												To="#132c33"
+												Duration="0:0:0.1" />
+							</Storyboard>
+						</BeginStoryboard>
+					</MultiTrigger.EnterActions>
+				</MultiTrigger>
+
+				<Trigger Property="IsChecked"
+						 Value="True">
+					<Setter Property="Foreground"
+							Value="White" />
+					<Setter Property="Background"
+							Value="#132c33" />
+				</Trigger>
+
+				<Trigger Property="IsChecked"
+						 Value="False">
+					<Setter Property="Background"
+							Value="#E1E2E1" />
+				</Trigger>
+
+			</Style.Triggers>
+		</Style>
+
+		<Style x:Key="HamburgerMenuItemModal"
+			   TargetType="RibbonButton">
+			<Setter Property="Padding"
+					Value="20 10" />
+			<Setter Property="FontSize"
+					Value="{DynamicResource CustomButtonFontSize}" />
+			<Setter Property="Foreground"
+					Value="Black" />
+			<Setter Property="Background"
+					Value="{DynamicResource colorBlancoFondo}" />
+			<Setter Property="CornerRadius"
+					Value="6" />
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type RibbonButton}">
+						<Border Padding="{TemplateBinding Padding}"
+								Background="{TemplateBinding Background}"
+								BorderBrush="{TemplateBinding BorderBrush}"
+								BorderThickness="{TemplateBinding BorderThickness}"
+								CornerRadius="{TemplateBinding CornerRadius}">
+							<ContentControl Content="{TemplateBinding Content}" />
+						</Border>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+			<Style.Triggers>
+
+				<MultiTrigger>
+					<MultiTrigger.Conditions>
+						<Condition  Property="IsMouseOver"
+									Value="True" />
+					</MultiTrigger.Conditions>
+					<Setter Property="Foreground"
+							Value="White" />
+					<MultiTrigger.EnterActions>
+						<BeginStoryboard>
+							<Storyboard>
+								<ColorAnimation Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
+												To="#0c6e82"
+												Duration="0:0:0.1" />
+							</Storyboard>
+						</BeginStoryboard>
+					</MultiTrigger.EnterActions>
+					<MultiTrigger.ExitActions>
+						<BeginStoryboard>
+							<Storyboard>
+								<ColorAnimation Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
+												To="#E1E2E1"
+												Duration="0:0:0.1" />
+							</Storyboard>
+						</BeginStoryboard>
+					</MultiTrigger.ExitActions>
+				</MultiTrigger>
+
+			</Style.Triggers>
+		</Style>
+
+	</UserControl.Resources>
+
+	<Grid>
+
+		<StackPanel x:Name="stackPanel"
+					Orientation="Horizontal">
+
+			<custom:HamburgerMenuItem Command="{Binding navigateStockPage}"
+									  IsChecked="True">
+				<TextBlock Text="Existencia" />
+			</custom:HamburgerMenuItem>
+			<custom:HamburgerMenuItem Command="{Binding navigateProductPage}"
+									  Margin="10 0 10 0">
+				<TextBlock Text="Datos de Producto" />
+			</custom:HamburgerMenuItem>
+			<RibbonButton Command="{Binding navigatePresentationModal}"
+						  Style="{DynamicResource HamburgerMenuItemModal}">
+				<TextBlock Text="Presentaciones" />
+			</RibbonButton>
+		</StackPanel>
+
+	</Grid>
+</UserControl>

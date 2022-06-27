@@ -9,7 +9,7 @@
 	  d:DesignHeight="450"
 	  d:DesignWidth="800"
 	  Title="SalePage">
-	<Border Margin="6"
+	<Border 
 			CornerRadius="6"
 			BorderBrush="Black"
 			Background="{DynamicResource colorBlancoFondo}">
@@ -102,7 +102,7 @@
 												Binding="{Binding Name}" />
 							<DataGridTextColumn Header="Ingreso"
 												Width="auto"
-												Binding="{Binding Total}" />
+												Binding="{Binding Total,StringFormat=0.00}" />
 							<DataGridTextColumn Header="Hora"
 												Width="auto"
 												Binding="{Binding Date, StringFormat='h:mm tt', ConverterCulture='es'}" />
@@ -183,7 +183,7 @@
 										   FontSize="17">
 
                                 <Run Text="* Total:" />
-                                <Run Text="{Binding Total}"
+                                <Run Text="{Binding Total,StringFormat=0.00}"
 									 FontWeight="SemiBold" />
                                 <Run Text="córdobas"
 									 FontWeight="SemiBold" />
@@ -224,7 +224,7 @@
 														Width="65"
 														Binding="{Binding Total}" />
 									<DataGridTextColumn Header="Cód."
-														Binding="{Binding IdStock}" />
+														Binding="{Binding IdStock, StringFormat=000}" />
 									<DataGridTextColumn Header="Producto"
 														Width="auto"
 														Binding="{Binding ProductName}" />

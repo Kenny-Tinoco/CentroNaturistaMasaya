@@ -3,12 +3,9 @@ using Domain.Entities.Views;
 using Domain.Logic;
 using Domain.Logic.Base;
 using Domain.Utilities;
-using MVVMGenericStructure.Commands;
-using MVVMGenericStructure.Services;
 using MVVMGenericStructure.ViewModels;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Dynamic;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using WPF.Command.Navigation;
@@ -21,29 +18,25 @@ namespace WPF.ViewModel
 {
     public class PurchaseViewModel : ViewModelBase
     {
-        public ICommand openFormCommand { get; }
-
         private readonly PurchaseLogic logic;
 
         public ListingViewModel listingViewModel { get; }
 
 
-        public PurchaseViewModel(ILogic _logic, IMessenger _messenger, INavigationService formNavigation)
+        public PurchaseViewModel(ILogic _logic, IMessenger _messenger)
         {
             logic = (PurchaseLogic)_logic;
 
             listingViewModel = new ListingViewModel(GetPurchaseListing, SortPurchaseListing, PurchaseViewFilter);
-
-            openFormCommand = new NavigateCommand(formNavigation);
 
             _messenger.Subscribe<Refresh>(this, RefreshListings);
             selectedItem = null;
         }
 
 
-        public static PurchaseViewModel LoadViewModel(ILogic parameter, IMessenger messenger, INavigationService navigationService)
+        public static PurchaseViewModel LoadViewModel(ILogic parameter, IMessenger messenger)
         {
-            PurchaseViewModel viewModel = new(parameter, messenger, navigationService);
+            PurchaseViewModel viewModel = new(parameter, messenger);
 
             viewModel.Load();
 
@@ -76,7 +69,7 @@ namespace WPF.ViewModel
         private async Task<IEnumerable<BaseEntity>> GetPurchaseListing() =>
             await logic.viewsCollections.SupplyViewCatalog
             (
-                periodSelected is null ? Periods.ThisMonth : periodSelected.period, 
+                periodSelected is null ? Periods.ThisMonth : periodSelected.period,
                 (int)(providerSelected is null ? -1 : providerSelected.idProvider)
             );
 

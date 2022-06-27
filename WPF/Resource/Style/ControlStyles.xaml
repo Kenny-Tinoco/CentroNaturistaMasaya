@@ -331,6 +331,38 @@
 				Value="es-ES" />
 		<Setter Property="CalendarStyle"
 				Value="{DynamicResource DatePickerCalendarStyle}" />
+		<Setter Property="Validation.ErrorTemplate">
+			<Setter.Value>
+				<ControlTemplate>
+					<DockPanel LastChildFill="true">
+						<AdornedElementPlaceholder Name="customAdorner"
+												   VerticalAlignment="Center">
+							<Border BorderBrush="#2196F3"
+									BorderThickness="1" />
+						</AdornedElementPlaceholder>
+						<Border Background="#2196F3"
+								DockPanel.Dock="Right"
+								Width="18"
+								Height="18"
+								HorizontalAlignment="Right"
+								CornerRadius="10">
+							<Border.ToolTip>
+								<ToolTip>
+									<TextBlock Text="{Binding ErrorContent}"
+											   FontSize="16"
+											   Foreground="Black" />
+								</ToolTip>
+							</Border.ToolTip>
+							<TextBlock Text="!"
+									   VerticalAlignment="center"
+									   HorizontalAlignment="center"
+									   FontWeight="Bold"
+									   Foreground="white" />
+						</Border>
+					</DockPanel>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
 	</Style>
 
 	<Style TargetType="{x:Type Control}"

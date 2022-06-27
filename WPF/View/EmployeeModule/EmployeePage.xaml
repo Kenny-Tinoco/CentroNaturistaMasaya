@@ -8,7 +8,6 @@
       Title="EmployeePage">
 
     <Border 
-            Margin="6"
             CornerRadius="6"
             BorderBrush="Black"
             Background="{DynamicResource colorBlancoFondo}">

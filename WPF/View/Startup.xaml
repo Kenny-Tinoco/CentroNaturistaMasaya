@@ -10,10 +10,10 @@
 		xmlns:viewsMenus="clr-namespace:WPF.ViewsComponent.Menus"
 		xmlns:viewsHomeModule="clr-namespace:WPF.View.HomeModule"
 		xmlns:viewsProductModule="clr-namespace:WPF.View.ProductModule"
-		xmlns:viewsProviderModule="clr-namespace:WPF.View.ProviderModule"
 		xmlns:viewsPurchaseModule="clr-namespace:WPF.View.PurchaseModule"
 		xmlns:viewsEmployeeModule="clr-namespace:WPF.View.EmployeeModule"
 		xmlns:viewsSaleModule="clr-namespace:WPF.View.SaleModule"
+		xmlns:viewsConsultationModule="clr-namespace:WPF.View.ConsultationModule"
 		xmlns:local="clr-namespace:WPF.View"
 		mc:Ignorable="d"
 		WindowStyle="None"
@@ -26,8 +26,14 @@
 			<DataTemplate DataType="{x:Type viewmodel:LoginViewModel}">
 				<local:Login />
 			</DataTemplate>
-			<DataTemplate DataType="{x:Type componentsViewModel:ProductWindowsViewModel}">
-				<viewsProductModule:ProductMainView />
+			<DataTemplate DataType="{x:Type componentsViewModel:ProductModuleViewModel}">
+				<viewsProductModule:ProductModuleView />
+			</DataTemplate>
+			<DataTemplate DataType="{x:Type componentsViewModel:PurchaseModuleViewModel}">
+				<viewsPurchaseModule:PurchaseModuleView />
+			</DataTemplate>
+			<DataTemplate DataType="{x:Type componentsViewModel:ConsultationModuleViewModel}">
+				<viewsConsultationModule:ConsultationModuleView />
 			</DataTemplate>
 			<DataTemplate DataType="{x:Type viewmodel:HomeViewModel}">
 				<viewsHomeModule:HomeView />
@@ -51,13 +57,13 @@
 				<viewsProductModule:ProductModal />
 			</DataTemplate>
 			<DataTemplate DataType="{x:Type viewmodel:StockKeepingViewModel}">
-				<viewsProductModule:StockKeepingModal/>
+				<viewsProductModule:StockKeepingModal />
 			</DataTemplate>
 			<DataTemplate DataType="{x:Type viewmodel:ProviderViewModel}">
-				<viewsProviderModule:ProviderPage />
+				<viewsPurchaseModule:ProviderPage />
 			</DataTemplate>
 			<DataTemplate DataType="{x:Type viewmodel:ProviderModalFormViewModel}">
-				<viewsProviderModule:ProviderModal />
+				<viewsPurchaseModule:ProviderModal />
 			</DataTemplate>
 			<DataTemplate DataType="{x:Type viewmodel:EmployeeViewModel}">
 				<viewsEmployeeModule:EmployeePage />
@@ -79,6 +85,18 @@
 			</DataTemplate>
 			<DataTemplate DataType="{x:Type viewmodel:BuyProductsViewModel}">
 				<viewsPurchaseModule:BuyProductPage />
+			</DataTemplate>
+			<DataTemplate DataType="{x:Type viewmodel:ConsultationViewModel}">
+				<viewsConsultationModule:ConsultationPage/>
+			</DataTemplate>
+			<DataTemplate DataType="{x:Type viewmodel:PatientConsultationViewModel}">
+				<viewsConsultationModule:PatientConsultation/>
+			</DataTemplate>
+			<DataTemplate DataType="{x:Type viewmodel:PatientViewModel}">
+				<viewsConsultationModule:PatientModule/>
+			</DataTemplate>
+			<DataTemplate DataType="{x:Type viewmodel:PatientModalFormViewModel}">
+				<viewsConsultationModule:PatientModal />
 			</DataTemplate>
 		</Grid.Resources>
 
@@ -183,9 +201,7 @@
 			  Grid.RowSpan="2"
 			  Grid.Column="0"
 			  Background="{DynamicResource colorSecondary}">
-
 			<viewsMenus:NavigationMenu DataContext="{Binding navigationMenuViewModel}" />
-
 		</Grid>
 
 		<custom:Modal Panel.ZIndex="1"
@@ -199,12 +215,18 @@
 
 		</custom:Modal>
 
-		<Frame Grid.Row="1"
-			   Grid.RowSpan="2"
-			   Grid.Column="1"
-			   NavigationUIVisibility="Hidden"
-			   Background="{DynamicResource colorPrimary}"
-			   Content="{Binding currentViewModel}" />
+		<Grid Grid.Row="1"
+			  Grid.RowSpan="2"
+			  Grid.Column="1"
+			  Background="{DynamicResource colorPrimary}">
+			<Border Margin="6"
+					CornerRadius="6"
+					BorderBrush="Black"
+					Background="White">
+				<Frame NavigationUIVisibility="Hidden"
+					   Content="{Binding currentViewModel}" />
+			</Border>
+		</Grid>
 
 	</Grid>
 </Window>
